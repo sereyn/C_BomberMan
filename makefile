@@ -7,6 +7,10 @@ all: main
 start: main
 	./$<
 
+startu: main
+	touch main.c
+	make start
+
 main: main.c
-	$(CC) $(FLAGS) $< $(POSTFLAGS) -o $@
+	$(CC) $(FLAGS) *.c $(POSTFLAGS) -o $@
 
