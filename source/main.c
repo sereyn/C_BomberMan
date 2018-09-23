@@ -37,7 +37,7 @@ int main(void){
 	player_one = newPlayer();
 
 	/* Blocks */
-	sprBlock = newSprite(&sprites, "resources/sprites/block.png", gridSize, gridSize);
+	sprBlock = newSprite(&sprites, "block.png", gridSize, gridSize);
 	blocks = initBlocks(sprBlock);
 	newBlock(&blocks, 3, 1);
 	newBlock(&blocks, 1, 3);
