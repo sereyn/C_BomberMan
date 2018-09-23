@@ -50,6 +50,12 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 # Dependencies
 
+$(OBJ_DIR)/main.o: $(SRC_DIR)/player.h $(SRC_DIR)/files.h $(SRC_DIR)/blocks.h $(SRC_DIR)/sprites.h
+
 $(OBJ_DIR)/player.o: $(SRC_DIR)/player.h
 
-$(OBJ_DIR)/main.o: $(SRC_DIR)/player.h
+$(OBJ_DIR)/files.o: $(SRC_DIR)/files.h
+
+$(OBJ_DIR)/blocks.o: $(SRC_DIR)/blocks.h
+
+$(OBJ_DIR)/sprites.o: $(SRC_DIR)/sprites.h
