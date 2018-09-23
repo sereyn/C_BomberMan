@@ -10,9 +10,9 @@ Player newPlayer(){
 
 void updatePlayer(Player *player){
 	/* Move the player according to the user inputs */
-	int xSpeed = MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT)-MLV_get_keyboard_state(MLV_KEYBOARD_LEFT);
+	int xSpeed = MLV_get_keyboard_state(MLV_KEYBOARD_LEFT)-MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT);
 	int ySpeed = MLV_get_keyboard_state(MLV_KEYBOARD_UP)-MLV_get_keyboard_state(MLV_KEYBOARD_DOWN);
-	player->x -= player->speed*xSpeed;
+	player->x += player->speed*xSpeed;
 	player->y += player->speed*ySpeed;
 
 	/* Render the player */

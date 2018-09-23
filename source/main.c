@@ -8,12 +8,6 @@ void exitCallback(void *data){
 	*closed = 1;
 }
 
-int escapeKeyPressed(){
-	MLV_Keyboard_button endKey;
-	MLV_get_event(&endKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-	return endKey == MLV_KEYBOARD_ESCAPE;
-}
-
 int main(void){
 	/* Declare variables */
 	int closed = 0;
@@ -33,7 +27,7 @@ int main(void){
 	player_one = newPlayer();
 
 	/* Loop until the user quits */
-	while(!escapeKeyPressed() && !closed){
+	while(MLV_get_keyboard_state(MLV_KEYBOARD_ESCAPE) && !closed){
 		/* Clear the window */
 		MLV_clear_window(MLV_COLOR_BLACK);
 
