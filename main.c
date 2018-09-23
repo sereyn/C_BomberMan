@@ -1,30 +1,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <MLV/MLV_all.h>
-
-#include "window.h"
 #include "player.h"
 
-int main(int argc, char *argv[]){
-  int game_running = 0;
-  Player player_one = newPlayer();
+void exitCallback(void *data){
+	int *closed = (int*) data;
+	*closed = 1;
+}
 
-  printf("loading\n\n");
+int escapeKeyPressed(){
+	MLV_Keyboard_button endKey;
+	MLV_get_event(&endKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	return endKey == MLV_KEYBOARD_ESCAPE;
+}
 
-  MLV_create_window("BomberMan - Title screen", "BomberMan", 500, 500);
-  MLV_change_frame_rate(FPS);
+int main(void){
+	/* Declare variables */
+	int closed = 0;
+	Player player_one;
 
-  game_running = 1;
+	/* Output loading */
+	fprintf(stdout, "Loading...\n\n");
 
-  while(game_running){
-     MLV_clear_window(MLV_COLOR_BLACK);
+	/* Catches whenever the user quits the program */
+	MLV_execute_at_exit(exitCallback, &closed);
 
-     updatePlayer(&player_one);
-     
-     MLV_actualise_window();
-     MLV_delay_according_to_frame_rate();
-  }
+	/* Initialize the window and set its FPS to 60 */
+	MLV_create_window("BomberMan", "BomberMan", 800, 608);
+	MLV_change_frame_rate(60);
 
-  
-  exit(EXIT_SUCCESS);
+	/* Initialize the player_one */
+	player_one = newPlayer();
+
+	/* Loop until the user quits */
+	while(!escapeKeyPressed() && !closed){
+		/* Clear the window */
+		MLV_clear_window(MLV_COLOR_BLACK);
+
+		/* Update */
+		updatePlayer(&player_one);
+		
+		/* Show the refreshed window and wait 1/FPS seconds */
+		MLV_actualise_window();
+		MLV_delay_according_to_frame_rate();
+	}
+
+	/* Free the allocated space */
+	MLV_free_window();
+
+	/* It's over (if that line doesn't show up after the execution, something went wrong) */
+	fprintf(stdout, "Terminated successfully\n");
+	exit(EXIT_SUCCESS);
 }
