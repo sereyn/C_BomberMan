@@ -10,6 +10,7 @@ EXEC=$(RELEASE_DIR)/bomberman
 SRC=$(shell find $(SRC_DIR) -name "*.c")
 OBJ=$(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 
+
 # makefile functions
 
 build_and_run:
@@ -17,7 +18,7 @@ build_and_run:
 	@make run --no-print-directory
 
 build:
-	@mkdir $(OBJ_DIR) $(RELEASE_DIR)
+	@mkdir -p $(OBJ_DIR) $(RELEASE_DIR)
 	@echo "Building project..."
 	@make $(EXEC)
 	@echo "Project built"
