@@ -1,9 +1,15 @@
 # BomberMan
-3rd semester UJM project written in C powered by MLV Library.
 
-### Run project
-type `make start` in your command line from the project folder's root 
-  
-or `make startu` for **start** and **u**pdate changes,  
-created because of a problem with make changes detection system  
-(Debug only)
+Third semester's college project written in C, powered by MLV and SDL libraries.
+
+
+### Run the project
+
+Use `make` from the root folder to build and run the project.
+
+
+### Specific makefile options
+
+`make rebuild` Rebuild all the files,
+`make clean` Clean all the files,
+`make run` Run only, doesn't compile the changes.

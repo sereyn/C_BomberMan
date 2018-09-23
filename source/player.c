@@ -16,5 +16,5 @@ void updatePlayer(Player *player){
 	player->y += player->speed*ySpeed;
 
 	/* Render the player */
-	MLV_draw_filled_rectangle(player->x, player->y, 50, 50, MLV_COLOR_RED);
+	MLV_draw_filled_rectangle(player->x, player->y, 50, 50, MLV_COLOR_WHITE);
 }

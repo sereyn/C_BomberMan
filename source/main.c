@@ -26,7 +26,7 @@ int main(void){
 	MLV_execute_at_exit(exitCallback, &closed);
 
 	/* Initialize the window and set its FPS to 60 */
-	MLV_create_window("BomberMan", "BomberMan", 800, 608);
+	MLV_create_window("Bomberman", "Bomberman", 800, 608);
 	MLV_change_frame_rate(60);
 
 	/* Initialize the player_one */
