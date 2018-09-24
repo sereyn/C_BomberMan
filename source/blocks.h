@@ -2,14 +2,10 @@
 #define BLOCKS
 
 #include <MLV/MLV_all.h>
+#include "utils.h"
 
 typedef struct {
-	int x;
-	int y;
-} Block;
-
-typedef struct {
-	Block *list;
+	Coord *list;
 	int length;
 	MLV_Image *sprite;
 	int size;

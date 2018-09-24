@@ -9,14 +9,14 @@ Blocks initBlocks(MLV_Image *sprite){
 }
 
 void newBlock(Blocks *blocks, int x, int y){
-	Block block;
-	block.x = x;
-	block.y = y;
+	Coord position;
+	position.x = x;
+	position.y = y;
 	if(blocks->length == 0)
-		blocks->list = malloc(sizeof(Block));
+		blocks->list = malloc(sizeof(Coord));
 	else
-		blocks->list = realloc(blocks->list, (blocks->length+1)*sizeof(Block));
-	blocks->list[blocks->length++] = block;
+		blocks->list = realloc(blocks->list, (blocks->length+1)*sizeof(Coord));
+	blocks->list[blocks->length++] = position;
 }
 
 void drawBlocks(Blocks blocks){

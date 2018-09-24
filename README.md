@@ -1,4 +1,4 @@
-# BomberMan
+# Bomberman
 
 Third semester's college project written in C, powered by MLV and SDL libraries.
 

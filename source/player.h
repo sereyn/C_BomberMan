@@ -2,13 +2,11 @@
 #define PLAYER
 
 #include <MLV/MLV_all.h>
+#include "utils.h"
 
 typedef struct {
-	/* Pixel position */
-	int x;
-	int y;
+	Coord position;
 	int test;
-	/* Speed in px/frame */
 	int speed;
 } Player;
 

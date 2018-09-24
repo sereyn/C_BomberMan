@@ -44,18 +44,20 @@ clean:
 $(EXEC): $(OBJ)
 	$(CC) $(FLAGS) -o $@ $^ $(POSTFLAGS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(SRC_DIR)/%.h
 	$(CC) $(FLAGS) -o $@ -c $< $(POSTFLAGS)
 
 
 # Dependencies
 
-$(OBJ_DIR)/main.o: $(SRC_DIR)/player.h $(SRC_DIR)/files.h $(SRC_DIR)/blocks.h $(SRC_DIR)/sprites.h
+$(OBJ_DIR)/main.o: $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h
 
-$(OBJ_DIR)/player.o: $(SRC_DIR)/player.h
+$(OBJ_DIR)/player.o: $(SRC_DIR)/utils.h
 
-$(OBJ_DIR)/files.o: $(SRC_DIR)/files.h
+$(OBJ_DIR)/blocks.o: $(SRC_DIR)/utils.h
 
-$(OBJ_DIR)/blocks.o: $(SRC_DIR)/blocks.h
+$(OBJ_DIR)/floors.o: $(SRC_DIR)/utils.h
 
-$(OBJ_DIR)/sprites.o: $(SRC_DIR)/sprites.h
+$(OBJ_DIR)/editor.o: $(SRC_DIR)/bomberman.h $(SRC_DIR)/blocks.h $(SRC_DIR)/floors.h $(SRC_DIR)/files.h
+
+$(OBJ_DIR)/bomberman.o: $(SRC_DIR)/floors.h $(SRC_DIR)/blocks.h $(SRC_DIR)/sprites.h $(SRC_DIR)/player.h
