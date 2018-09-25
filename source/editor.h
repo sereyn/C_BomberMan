@@ -1,8 +1,7 @@
 #ifndef EDITOR
 #define EDITOR
 
-#include "blocks.h"
-#include "floors.h"
+#include "objects.h"
 #include "files.h"
 #include "bomberman.h"
 

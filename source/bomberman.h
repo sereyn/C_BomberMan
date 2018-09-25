@@ -2,15 +2,14 @@
 #define BOMBERMAN
 
 #include "sprites.h"
-#include "floors.h"
-#include "blocks.h"
+#include "objects.h"
 #include "player.h"
 
 typedef struct {
 	MLV_Image *sprBlock, *sprFloor;
 	Sprites sprites;
-	Floors floors;
-	Blocks blocks;
+	Objects floors;
+	Objects blocks;
 	Player player;
 	int gridSize;
 } Bomberman;

@@ -6,18 +6,18 @@ Bomberman initBomberman(){
 	bbm.sprites = initSprites();
 	bbm.sprBlock = newSprite(&(bbm.sprites), "block.png", bbm.gridSize, bbm.gridSize);
 	bbm.sprFloor = newSprite(&(bbm.sprites), "floor.png", bbm.gridSize, bbm.gridSize);
-	bbm.floors = initFloors(bbm.sprFloor);
-	bbm.blocks = initBlocks(bbm.sprBlock);
+	bbm.floors = initObjects(bbm.sprFloor);
+	bbm.blocks = initObjects(bbm.sprBlock);
 	return bbm;
 }
 
 void drawAll(const Bomberman bbm){
-	drawFloors(bbm.floors);
-	drawBlocks(bbm.blocks);
+	drawObjects(bbm.floors);
+	drawObjects(bbm.blocks);
 }
 
 void freeBomberman(Bomberman bbm){
-	freeFloors(bbm.floors);
+	freeObjects(bbm.floors);
+	freeObjects(bbm.blocks);
 	freeSprites(bbm.sprites);
-	freeBlocks(bbm.blocks);
 }
