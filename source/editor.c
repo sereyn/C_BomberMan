@@ -35,7 +35,10 @@ void editorLoop(Bomberman *bbm){
 	  }
 	}
 	if(blockClickedFound){
-	  bbm->blocks.list = realloc(bbm->blocks.list, --bbm->blocks.length);
+      for(i = 0; i < bbm->blocks.length; i++){
+        printf("%d ; %d\n", bbm->blocks.list[i].x, bbm->blocks.list[i].y);
+      }
+	  /*bbm->blocks.list = realloc(bbm->blocks.list, --bbm->blocks.length);*/
 	}
   }
   }
