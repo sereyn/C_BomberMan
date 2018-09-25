@@ -2,8 +2,8 @@
 #define UTILS
 
 typedef struct {
-	int x;
-	int y;
+  int x;
+  int y;
 } Coord;
 
 #endif /* UTILS */

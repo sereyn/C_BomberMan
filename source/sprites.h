@@ -5,8 +5,8 @@
 #include <string.h>
 
 typedef struct {
-	MLV_Image **list;
-	int length;
+  MLV_Image **list;
+  int length;
 } Sprites;
 
 Sprites initSprites();

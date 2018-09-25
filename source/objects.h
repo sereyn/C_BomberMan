@@ -5,10 +5,10 @@
 #include "utils.h"
 
 typedef struct {
-	Coord *list;
-	int length;
-	MLV_Image *sprite;
-	Coord dimensions;
+  Coord *list;
+  int length;
+  MLV_Image *sprite;
+  Coord dimensions;
 } Objects;
 
 Objects initObjects(MLV_Image *sprite);

@@ -6,12 +6,12 @@
 #include "player.h"
 
 typedef struct {
-	MLV_Image *sprBlock, *sprFloor;
-	Sprites sprites;
-	Objects floors;
-	Objects blocks;
-	Player player;
-	int gridSize;
+  MLV_Image *sprBlock, *sprFloor;
+  Sprites sprites;
+  Objects floors;
+  Objects blocks;
+  Player player;
+  int gridSize;
 } Bomberman;
 
 Bomberman initBomberman();

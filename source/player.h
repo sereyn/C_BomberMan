@@ -5,8 +5,8 @@
 #include "utils.h"
 
 typedef struct {
-	Coord position;
-	int speed;
+  Coord position;
+  int speed;
 } Player;
 
 Player newPlayer();
