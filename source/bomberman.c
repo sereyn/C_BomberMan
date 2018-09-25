@@ -1,23 +1,30 @@
 #include "bomberman.h"
 
-Bomberman initBomberman(){
-	Bomberman bbm;
-	bbm.gridSize = 40;
-	bbm.sprites = initSprites();
-	bbm.sprBlock = newSprite(&(bbm.sprites), "block.png", bbm.gridSize, bbm.gridSize);
-	bbm.sprFloor = newSprite(&(bbm.sprites), "floor.png", bbm.gridSize, bbm.gridSize);
-	bbm.floors = initFloors(bbm.sprFloor);
-	bbm.blocks = initBlocks(bbm.sprBlock);
-	return bbm;
+Bomberman initBomberman(int gridSize){
+  Bomberman bbm;
+  bbm.gridSize = gridSize;
+  /*
+    Initialise the sprites
+    Then load the sprites using newSprite
+  */
+  bbm.sprites = initSprites();
+  bbm.sprBlock = newSprite(&(bbm.sprites), "block.png", bbm.gridSize, bbm.gridSize);
+  bbm.sprFloor = newSprite(&(bbm.sprites), "floor.png", bbm.gridSize, bbm.gridSize);
+  /* Initialise the objects according to their sprites */
+  bbm.floors = initObjects(bbm.sprFloor);
+  bbm.blocks = initObjects(bbm.sprBlock);
+  return bbm;
 }
 
 void drawAll(const Bomberman bbm){
-	drawFloors(bbm.floors);
-	drawBlocks(bbm.blocks);
+  /* Draw all the objects */
+  drawObjects(bbm.floors);
+  drawObjects(bbm.blocks);
 }
 
 void freeBomberman(Bomberman bbm){
-	freeFloors(bbm.floors);
-	freeSprites(bbm.sprites);
-	freeBlocks(bbm.blocks);
+  /* Free all the allocated memory bomberman knows about */
+  freeObjects(bbm.floors);
+  freeObjects(bbm.blocks);
+  freeSprites(bbm.sprites);
 }
