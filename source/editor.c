@@ -27,11 +27,10 @@ void editorLoop(Bomberman *bbm){
   if(!MLV_get_mouse_button_state(MLV_BUTTON_RIGHT)){
 	MLV_get_mouse_position(&mouseX, &mouseY);
 	/* TODO: Create remove block function */
-	for(i=0; i<bbm->blocks.length; i++){
+	for(i = 0; i < bbm->blocks.length; i++){
 	  if(blockClickedFound){
 		bbm->blocks.list[i-1] = bbm->blocks.list[i];
-	  }
-	  if((int)(mouseX)/bbm->gridSize == bbm->blocks.list[i].x && (int)(mouseY)/bbm->gridSize == bbm->blocks.list[i].y){
+	  }else if((int)(mouseX/bbm->gridSize) == bbm->blocks.list[i].x && (int)(mouseY/bbm->gridSize) == bbm->blocks.list[i].y){
 		blockClickedFound = 1;
 	  }
 	}
@@ -39,4 +38,4 @@ void editorLoop(Bomberman *bbm){
 	  bbm->blocks.list = realloc(bbm->blocks.list, --bbm->blocks.length);
 	}
   }
-}
+  }
