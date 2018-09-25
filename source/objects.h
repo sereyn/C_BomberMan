@@ -15,6 +15,8 @@ Objects initObjects(MLV_Image *sprite);
 
 void newObject(Objects *objects, int x, int y);
 
+void deleteObject(Objects *objects, int index);
+
 void drawObjects(Objects objects);
 
 void freeObjects(Objects objects);

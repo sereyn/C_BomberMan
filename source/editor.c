@@ -17,9 +17,21 @@ void initEditor(Bomberman *bbm){
 }
 
 void editorLoop(Bomberman *bbm){
-  int mouseX, mouseY;
-  if(!MLV_get_mouse_button_state(MLV_BUTTON_LEFT)){
-    MLV_get_mouse_position(&mouseX, &mouseY);
-    newObject(&(bbm->blocks), (mouseX)/bbm->gridSize, (mouseY)/bbm->gridSize);
+  int mouseX, mouseY, i;
+  int marginTop = 3;
+  MLV_get_mouse_position(&mouseX, &mouseY);
+  if(mouseX > bbm->gridSize && mouseX < MLV_get_window_width()-bbm->gridSize
+  && mouseY > (1+marginTop)*bbm->gridSize && mouseY < MLV_get_window_height()-bbm->gridSize){
+    if(!MLV_get_mouse_button_state(MLV_BUTTON_LEFT)){
+      newObject(&(bbm->blocks), (mouseX)/bbm->gridSize, (mouseY)/bbm->gridSize);
+    }
+    if(!MLV_get_mouse_button_state(MLV_BUTTON_RIGHT)){
+      for(i = 0; i < bbm->blocks.length; ++i){
+        if(mouseX/bbm->gridSize == bbm->blocks.list[i].x
+        && mouseY/bbm->gridSize == bbm->blocks.list[i].y){
+          deleteObject(&(bbm->blocks), i);
+        }
+      }
+    }
   }
 }

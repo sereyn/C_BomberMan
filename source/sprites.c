@@ -14,9 +14,9 @@ MLV_Image *newSprite(Sprites *sprites, char *fileName, int width, int height){
   sprite = MLV_load_image(path);
   MLV_resize_image_with_proportions(sprite, width, height);
   if(sprites->length == 0)
-    sprites->list = malloc(sizeof(MLV_Image *));
+    sprites->list = malloc(sizeof(*(sprites->list)));
   else
-    sprites->list = realloc(sprites->list, (sprites->length+1)*sizeof(MLV_Image *));
+    sprites->list = realloc(sprites->list, (sprites->length+1)*sizeof(*(sprites->list)));
   sprites->list[sprites->length++] = sprite;
   return sprite;
 }

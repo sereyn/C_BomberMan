@@ -14,10 +14,19 @@ void newObject(Objects *objects, int x, int y){
   position.x = x;
   position.y = y;
   if(objects->length == 0)
-    objects->list = malloc(sizeof(Coord));
+    objects->list = malloc(sizeof(*(objects->list)));
   else
-    objects->list = realloc(objects->list, (objects->length+1)*sizeof(Coord));
+    objects->list = realloc(objects->list, (objects->length+1)*sizeof(*(objects->list)));
   objects->list[objects->length++] = position;
+}
+
+void deleteObject(Objects *objects, int index){
+  int i = index;
+  if(index < 0 || index >= objects->length)
+    exit(EXIT_FAILURE);
+  for(; i < objects->length-1; ++i)
+    objects->list[i] = objects->list[i+1];
+  objects->list = realloc(objects->list, (--objects->length)*sizeof(*(objects->list)));
 }
 
 void drawObjects(Objects objects){
