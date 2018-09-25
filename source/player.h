@@ -6,7 +6,6 @@
 
 typedef struct {
 	Coord position;
-	int test;
 	int speed;
 } Player;
 

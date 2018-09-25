@@ -22,8 +22,8 @@ int main(void){
 	while(MLV_get_keyboard_state(MLV_KEYBOARD_ESCAPE) && !closed){
 		MLV_clear_window(MLV_COLOR_BLACK);
 
-		drawAll(bomberman);
 		editorLoop(&bomberman);
+		drawAll(bomberman);
 
 		MLV_actualise_window();
 		MLV_delay_according_to_frame_rate();

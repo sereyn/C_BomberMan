@@ -9,7 +9,7 @@ void saveFile(){
 }
 
 void loadFile(){
-	FILE *level = fopen("level", "rd");
+	FILE *level = fopen("level", "rb");
 	if(!level)
 		exit(EXIT_FAILURE);
 	/* To be continued */
