@@ -5,7 +5,7 @@ FLAGS=-W -Wall -std=c89 -pedantic -O3 `pkg-config --cflags MLV`
 POSTFLAGS=`pkg-config --libs-only-l MLV`
 SRC_DIR=./source
 OBJ_DIR=./build
-RELEASE_DIR=./release
+RELEASE_DIR=./bin
 EXEC=$(RELEASE_DIR)/bomberman
 SRC=$(shell find $(SRC_DIR) -name "*.c")
 OBJ=$(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
