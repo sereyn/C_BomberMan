@@ -27,7 +27,7 @@ void deleteObject(Objects *objects, int index){
   int i = index;
   /* If the user asks to remove an object with a negative or too high index, something went wrong */
   if(index < 0 || index >= objects->length){
-    fprintf(stdout, "Error: cannot remove the object %d in a list of length %d!\n", index, objects->length);
+    debug(0, "Error: cannot remove the object %d in a list of length %d!\n", index, objects->length);
     exit(EXIT_FAILURE);
   }
   /*

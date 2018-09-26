@@ -2,7 +2,6 @@
 #define OBJECTS
 
 #include <MLV/MLV_all.h>
-#include <stdio.h>
 #include "utils.h"
 
 /*

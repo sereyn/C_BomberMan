@@ -16,10 +16,11 @@ typedef struct {
   Objects blocks;
   Player player;
   int gridSize;
+  Coord gridDimensions;
 } Bomberman;
 
 /* Initialises a Bomberman instance */
-Bomberman initBomberman(int gridSize);
+Bomberman initBomberman(int gridSize, Coord gridDimensions);
 
 /* Draws the whole game */
 void drawAll(const Bomberman bbm);

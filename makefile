@@ -50,7 +50,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 # Dependencies
 
-$(OBJ_DIR)/main.o: $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h
+$(OBJ_DIR)/main.o: $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h $(SRC_DIR)/utils.h
 
 $(OBJ_DIR)/player.o: $(SRC_DIR)/player.h $(SRC_DIR)/utils.h
 
@@ -63,3 +63,5 @@ $(OBJ_DIR)/files.o: $(SRC_DIR)/files.h
 $(OBJ_DIR)/sprites.o: $(SRC_DIR)/sprites.h
 
 $(OBJ_DIR)/objects.o: $(SRC_DIR)/objects.h
+
+$(OBJ_DIR)/utils.o: $(SRC_DIR)/utils.h

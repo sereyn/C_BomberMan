@@ -1,8 +1,9 @@
 #include "bomberman.h"
 
-Bomberman initBomberman(int gridSize){
+Bomberman initBomberman(int gridSize, Coord gridDimensions){
   Bomberman bbm;
   bbm.gridSize = gridSize;
+  bbm.gridDimensions = gridDimensions;
   /*
     Initialise the sprites
     Then load the sprites using newSprite

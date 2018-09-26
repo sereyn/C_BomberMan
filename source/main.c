@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "utils.h"
 #include <MLV/MLV_all.h>
 #include "bomberman.h"
 #include "editor.h"
@@ -17,21 +17,27 @@ void exitCallback(void *data){
 }
 
 int main(void){
-  int closed = 0, gridSize = 30;
+  int closed = 0, gridSize = 35;
+  Coord gridDimensions = {21, 13};
   Bomberman bomberman;
+  debug(0, "Loading...\n");
   /* We call an MLV function which takes a callback meant to switch closed to 1 */
   MLV_execute_at_exit(exitCallback, &closed);
   /*
     We create the game window with a 21x16 grid's dimension
     Then we set its frame rate to 60
+    The "+3" means there are 3 free lines at the top
   */
-  MLV_create_window("Bomberman", "Bomberman", gridSize*21, gridSize*16);
+  MLV_create_window("Bomberman", "Bomberman",
+    gridSize*gridDimensions.x,
+    gridSize*(gridDimensions.y+3)
+  );
   MLV_change_frame_rate(60);
   /*
     We initialise bomberman
     This has to be done after the window creation because it prepares the sprites
   */
-  bomberman = initBomberman(gridSize);
+  bomberman = initBomberman(gridSize, gridDimensions);
   /* We initialise the editor */
   initEditor(&bomberman);
   /*
@@ -54,6 +60,6 @@ int main(void){
   freeBomberman(bomberman);
   MLV_free_window();
   /* If that line doesn't show up, then something went wrong */
-  fprintf(stdout, "Terminated successfully\n");
+  debug(0, "Terminated successfully\n");
   exit(EXIT_SUCCESS);
 }
