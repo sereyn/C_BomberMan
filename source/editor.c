@@ -54,8 +54,10 @@ void editorLoop(Bomberman *bbm){
         If the right click is pressed,
         we loop through every block and check if the mouse is over it
         If that's the case, then we remove that block
+        Also we do that loop backward because we pop out the element from the list
+        Otherwise, if there were 2 neighbour blocks to remove, we would skip the second one
       */
-      for(i = 0; i < bbm->blocks.length; ++i){
+      for(i = bbm->blocks.length-1; i >= 0 ; --i){
         if(mouseX/bbm->gridSize == bbm->blocks.list[i].x/bbm->gridSize
         && mouseY/bbm->gridSize == bbm->blocks.list[i].y/bbm->gridSize){
           deleteObject(&(bbm->blocks), i);
