@@ -29,19 +29,19 @@ void deleteObject(Objects *objects, int index){
   /* If the user asks to remove an object with a negative or too high index, something went wrong */
   if(index < 0 || index >= objects->length){
     debug(0, "Error: cannot remove the object %d in a list of length %d!\n", index, objects->length);
-    exit(EXIT_FAILURE);
+  }else{
+    /*
+      We loop from the index-th object the last one
+      For each iteration, we make the object being equal to its next one
+    */
+    for(; i < objects->length-1; ++i)
+      objects->list[i] = objects->list[i+1];
+    /*
+      We then have a not desired object at the list's end so we realloc the list to free it
+      Also we decrement the length
+    */
+    objects->list = realloc(objects->list, (--objects->length)*sizeof(*(objects->list)));
   }
-  /*
-    We loop from the index-th object the last one
-    For each iteration, we make the object being equal to its next one
-  */
-  for(; i < objects->length-1; ++i)
-    objects->list[i] = objects->list[i+1];
-  /*
-    We then have a not desired object at the list's end so we realloc the list to free it
-    Also we decrement the length
-  */
-  objects->list = realloc(objects->list, (--objects->length)*sizeof(*(objects->list)));
 }
 
 void drawObjects(Objects objects, TermGrid termGrid){

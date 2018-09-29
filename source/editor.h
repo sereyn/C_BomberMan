@@ -10,7 +10,7 @@
 /* A structure to save editor's current state */
 typedef struct{
 	/* The tool the user will paint the map with */
-	Objects *tool;
+	Objects *item;
 } Editor;
 
 /* Initialises the editor */

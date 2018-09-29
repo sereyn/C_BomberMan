@@ -29,7 +29,7 @@ Editor initEditor(Bomberman *bbm){
   newObject(&(bbm->blocks), 3*size, 1*size);
 
   /* Set default tool */
-  editor.tool = &bbm->blocks;
+  editor.item = &bbm->blocks;
 
   return editor;
 }
@@ -48,12 +48,14 @@ void editorLoop(Bomberman *bbm, Editor *editor){
   if(mouseX > bbm->gridSize && mouseX < winWidth-bbm->gridSize
 	 && mouseY > (1+marginTop)*bbm->gridSize && mouseY < winHeight-bbm->gridSize){
     if(!MLV_get_mouse_button_state(MLV_BUTTON_LEFT)){
-      /* When left click is pressed, the user paint */
-      /* Check if there is another same object here */
-      for(i = 0; i < editor->tool->length; i++){
-        if(mouseX/bbm->gridSize*bbm->gridSize == editor->tool->list[i].x
-          && mouseY/bbm->gridSize*bbm->gridSize == editor->tool->list[i].y){
-          /* if there is one, abort creation */
+      /*
+        When left click is pressed, the user paints
+        Check if there is another same object here
+      */
+      for(i = 0; i < editor->item->length; i++){
+        if(mouseX/bbm->gridSize*bbm->gridSize == editor->item->list[i].x
+          && mouseY/bbm->gridSize*bbm->gridSize == editor->item->list[i].y){
+          /* If there is one, abort creation */
           return;
         }
       }
@@ -62,14 +64,14 @@ void editorLoop(Bomberman *bbm, Editor *editor){
         since they are all integers, it maps the coordinates to the grid
       */
       newObject(
-        editor->tool,
+        editor->item,
         mouseX/bbm->gridSize*bbm->gridSize,
         mouseY/bbm->gridSize*bbm->gridSize
       );
-      debug(1, "New block:\nx=%d\ny=%d\nblocks' length=%d\n\n",
+      debug(1, "New item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
         mouseX/bbm->gridSize,
         mouseY/bbm->gridSize,
-        bbm->blocks.length
+        editor->item->length
       );
     }
     if(!MLV_get_mouse_button_state(MLV_BUTTON_RIGHT)){
@@ -84,10 +86,10 @@ void editorLoop(Bomberman *bbm, Editor *editor){
         if(mouseX/bbm->gridSize == bbm->blocks.list[i].x/bbm->gridSize
         && mouseY/bbm->gridSize == bbm->blocks.list[i].y/bbm->gridSize){
           deleteObject(&(bbm->blocks), i);
-          debug(1, "Deleted block:\nx=%d\ny=%d\nblocks' length=%d\n\n",
+          debug(1, "Deleted item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
             mouseX/bbm->gridSize,
             mouseY/bbm->gridSize,
-            bbm->blocks.length
+            editor->item->length
           );
         }
       }
@@ -104,9 +106,9 @@ void editorLoop(Bomberman *bbm, Editor *editor){
      if(!MLV_get_mouse_button_state(MLV_BUTTON_LEFT)){
       /* Check which button has been clicked and change the selected tool*/
       if(mouseX >= bbm->gridSize && mouseX <= 2*bbm->gridSize){
-        editor->tool = &(bbm->boxes);
+        editor->item = &(bbm->boxes);
       }else if(mouseX >= 3*bbm->gridSize && mouseX <= 4*bbm->gridSize){
-        editor->tool = &(bbm->blocks);
+        editor->item = &(bbm->blocks);
       }
     }
   }
