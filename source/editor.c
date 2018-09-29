@@ -47,8 +47,16 @@ void editorLoop(Bomberman *bbm, Editor *editor){
   if(mouseX > bbm->gridSize && mouseX < winWidth-bbm->gridSize
 	 && mouseY > (1+marginTop)*bbm->gridSize && mouseY < winHeight-bbm->gridSize){
     if(!MLV_get_mouse_button_state(MLV_BUTTON_LEFT)){
+      /* When left click is pressed, the user paint */
+      /* Check if there is another same object here */
+      for(i = 0; i < editor->tool->length; i++){
+        if(mouseX/bbm->gridSize*bbm->gridSize == editor->tool->list[i].x
+          && mouseY/bbm->gridSize*bbm->gridSize == editor->tool->list[i].y){
+          /* if there is one, abort creation */
+          return;
+        }
+      }
       /*
-        If the left click is pressed,
         we create a block which correspond to the selected tool at the mouse coordinates divided then multiplied by gridSize
         since they are all integers, it maps the coordinates to the grid
       */

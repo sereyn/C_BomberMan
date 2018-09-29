@@ -11,6 +11,7 @@ Objects initObjects(MLV_Image *sprite){
 }
 
 void newObject(Objects *objects, int x, int y){
+  int i;
   /* First we create a new position which represents the new object */
   Coord position;
   position.x = x;
