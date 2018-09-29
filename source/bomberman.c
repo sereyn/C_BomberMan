@@ -13,9 +13,11 @@ Bomberman initBomberman(int gridSize, Coord gridDimensions){
   bbm.sprites = initSprites();
   bbm.sprBlock = newSprite(&(bbm.sprites), "block.png", bbm.gridSize, bbm.gridSize);
   bbm.sprFloor = newSprite(&(bbm.sprites), "floor.png", bbm.gridSize, bbm.gridSize);
+  bbm.sprBox = newSprite(&(bbm.sprites), "box.png", bbm.gridSize, bbm.gridSize);
   /* Initialise the objects according to their sprites */
   bbm.floors = initObjects(bbm.sprFloor, 'F');
   bbm.blocks = initObjects(bbm.sprBlock, 'B');
+  bbm.boxes = initObjects(bbm.sprBox, 'C');
   /* Initialise the termGrid */
   bbm.termGrid = initTermGrid(gridSize, gridDimensions);
   return bbm;
@@ -27,6 +29,7 @@ void drawAll(const Bomberman bbm){
   /* Draw all the objects (which will also prepare the termGrid) */
   drawObjects(bbm.floors, bbm.termGrid);
   drawObjects(bbm.blocks, bbm.termGrid);
+  drawObjects(bbm.boxes, bbm.termGrid);
   /* Draw the equivalent result into the terminal */
   drawTermGrid(bbm.termGrid);
 }
@@ -36,6 +39,7 @@ void freeBomberman(Bomberman bbm){
   /* Free all the allocated memory bomberman knows about */
   freeObjects(bbm.floors);
   freeObjects(bbm.blocks);
+  freeObjects(bbm.boxes);
   freeSprites(bbm.sprites);
   freeTermGrid(bbm.termGrid);
 }

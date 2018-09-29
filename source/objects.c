@@ -48,12 +48,16 @@ void drawObjects(Objects objects, TermGrid termGrid){
   /*
     We loop through all the objects to draw them all
   */
-  int i = 0, x, y;
+  int i = 0, x, y, termX, termY;
   for(; i < objects.length; ++i){
     x = objects.list[i].x;
     y = objects.list[i].y;
     MLV_draw_image(objects.sprite, x, y);
-    termGrid.grid[y/termGrid.size-termGrid.marginTop][x/termGrid.size] = objects.termChar;
+    termX = x/termGrid.size;
+    termY = y/termGrid.size-termGrid.marginTop;
+    /* We don't draw the objects in the hub */
+    if(termY > -1)
+      termGrid.grid[termY][termX] = objects.termChar;
   }
 }
 

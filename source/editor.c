@@ -1,6 +1,7 @@
 #include "editor.h"
 
-void initEditor(Bomberman *bbm){
+Editor initEditor(Bomberman *bbm){
+  Editor editor;
   int i, j;
   int winWidth = MLV_get_window_width(), winHeight = MLV_get_window_height();
   /* We let size be the gridSize of bomberman for shorter and clearer code */
@@ -23,9 +24,17 @@ void initEditor(Bomberman *bbm){
         newObject(&(bbm->floors), i, j);
     }
   }
+  /* We create the editor's toolbar */
+  newObject(&(bbm->boxes), 1*size, 1*size);
+  newObject(&(bbm->blocks), 3*size, 1*size);
+
+  /* Set default tool */
+  editor.tool = &bbm->blocks;
+
+  return editor;
 }
 
-void editorLoop(Bomberman *bbm){
+void editorLoop(Bomberman *bbm, Editor *editor){
   int mouseX, mouseY, i;
   int winWidth = MLV_get_window_width(), winHeight = MLV_get_window_height();
   /* We evaluate the marginTop */
@@ -37,15 +46,23 @@ void editorLoop(Bomberman *bbm){
     (edge blocks excluded, as we don't want the user to edit those ones)
   */
   if(mouseX > bbm->gridSize && mouseX < winWidth-bbm->gridSize
-  && mouseY > (1+marginTop)*bbm->gridSize && mouseY < winHeight-bbm->gridSize){
+	 && mouseY > (1+marginTop)*bbm->gridSize && mouseY < winHeight-bbm->gridSize){
     if(!MLV_get_mouse_button_state(MLV_BUTTON_LEFT)){
+      /* When left click is pressed, the user paint */
+      /* Check if there is another same object here */
+      for(i = 0; i < editor->tool->length; i++){
+        if(mouseX/bbm->gridSize*bbm->gridSize == editor->tool->list[i].x
+          && mouseY/bbm->gridSize*bbm->gridSize == editor->tool->list[i].y){
+          /* if there is one, abort creation */
+          return;
+        }
+      }
       /*
-        If the left click is pressed,
-        we create a block at the mouse coordinates divided then multiplied by gridSize
+        we create a block which correspond to the selected tool at the mouse coordinates divided then multiplied by gridSize
         since they are all integers, it maps the coordinates to the grid
       */
       newObject(
-        &(bbm->blocks),
+        editor->tool,
         mouseX/bbm->gridSize*bbm->gridSize,
         mouseY/bbm->gridSize*bbm->gridSize
       );
@@ -73,6 +90,23 @@ void editorLoop(Bomberman *bbm){
             bbm->blocks.length
           );
         }
+      }
+      /* The same with boxes , TODO: Change that*/
+      for(i = bbm->boxes.length-1; i >= 0 ; --i){
+        if(mouseX/bbm->gridSize == bbm->boxes.list[i].x/bbm->gridSize
+        && mouseY/bbm->gridSize == bbm->boxes.list[i].y/bbm->gridSize){
+          deleteObject(&(bbm->boxes), i);
+        }
+      }
+    }
+    /* Check if the user click in the toolbar */
+  }else if(mouseY >= bbm->gridSize && mouseY < marginTop*bbm->gridSize - bbm->gridSize){
+     if(!MLV_get_mouse_button_state(MLV_BUTTON_LEFT)){
+      /* Check which button has been clicked and change the selected tool*/
+      if(mouseX >= bbm->gridSize && mouseX <= 2*bbm->gridSize){
+        editor->tool = &(bbm->boxes);
+      }else if(mouseX >= 3*bbm->gridSize && mouseX <= 4*bbm->gridSize){
+        editor->tool = &(bbm->blocks);
       }
     }
   }
