@@ -89,7 +89,7 @@ void editorLoop(Bomberman *bbm, Editor *editor){
           debug(1, "Deleted item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
             mouseX/bbm->gridSize,
             mouseY/bbm->gridSize,
-            editor->item->length
+            bbm->blocks.length
           );
         }
       }
@@ -98,6 +98,11 @@ void editorLoop(Bomberman *bbm, Editor *editor){
         if(mouseX/bbm->gridSize == bbm->boxes.list[i].x/bbm->gridSize
         && mouseY/bbm->gridSize == bbm->boxes.list[i].y/bbm->gridSize){
           deleteObject(&(bbm->boxes), i);
+          debug(1, "Deleted item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
+            mouseX/bbm->gridSize,
+            mouseY/bbm->gridSize,
+            bbm->boxes.length
+          );
         }
       }
     }
