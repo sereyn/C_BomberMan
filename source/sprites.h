@@ -3,6 +3,7 @@
 
 #include <MLV/MLV_all.h>
 #include <string.h>
+#include <stdlib.h>
 
 /*
   We define a Sprites structure

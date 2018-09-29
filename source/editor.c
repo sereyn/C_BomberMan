@@ -11,6 +11,7 @@ void initEditor(Bomberman *bbm){
   */
   int marginTop = winHeight/bbm->gridSize-bbm->gridDimensions.y;
   /* We loop through the whole board */
+  debug(1, "Filling the editor grid\n");
   for(i = 0; i < winWidth; i += size){
     for(j = marginTop*size; j < winHeight; j += size){
       /* If we are at the edge of the board, we create a block */
@@ -48,6 +49,11 @@ void editorLoop(Bomberman *bbm){
         mouseX/bbm->gridSize*bbm->gridSize,
         mouseY/bbm->gridSize*bbm->gridSize
       );
+      debug(1, "New block:\nx=%d\ny=%d\nblocks' length=%d\n\n",
+        mouseX/bbm->gridSize,
+        mouseY/bbm->gridSize,
+        bbm->blocks.length
+      );
     }
     if(!MLV_get_mouse_button_state(MLV_BUTTON_RIGHT)){
       /*
@@ -61,6 +67,11 @@ void editorLoop(Bomberman *bbm){
         if(mouseX/bbm->gridSize == bbm->blocks.list[i].x/bbm->gridSize
         && mouseY/bbm->gridSize == bbm->blocks.list[i].y/bbm->gridSize){
           deleteObject(&(bbm->blocks), i);
+          debug(1, "Deleted block:\nx=%d\ny=%d\nblocks' length=%d\n\n",
+            mouseX/bbm->gridSize,
+            mouseY/bbm->gridSize,
+            bbm->blocks.length
+          );
         }
       }
     }

@@ -1,9 +1,10 @@
 #include "objects.h"
 
-Objects initObjects(MLV_Image *sprite){
+Objects initObjects(MLV_Image *sprite, char termChar){
   Objects objects;
   objects.length = 0;
   objects.sprite = sprite;
+  objects.termChar = termChar;
   /* For the dimensions, we simply get the ones of the given sprite */
   objects.dimensions.x = MLV_get_image_width(sprite);
   objects.dimensions.y = MLV_get_image_height(sprite);
@@ -43,17 +44,16 @@ void deleteObject(Objects *objects, int index){
   objects->list = realloc(objects->list, (--objects->length)*sizeof(*(objects->list)));
 }
 
-void drawObjects(Objects objects){
+void drawObjects(Objects objects, TermGrid termGrid){
   /*
     We loop through all the objects to draw them all
   */
-  int i = 0;
+  int i = 0, x, y;
   for(; i < objects.length; ++i){
-    MLV_draw_image(
-      objects.sprite,
-      objects.list[i].x,
-      objects.list[i].y
-    );
+    x = objects.list[i].x;
+    y = objects.list[i].y;
+    MLV_draw_image(objects.sprite, x, y);
+    termGrid.grid[y/termGrid.size-termGrid.marginTop][x/termGrid.size] = objects.termChar;
   }
 }
 

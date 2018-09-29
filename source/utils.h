@@ -5,6 +5,7 @@
   We use this file to define some convenient structures or functions
 */
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 #define DEBUG_LEVEL 10
 

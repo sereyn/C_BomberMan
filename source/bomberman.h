@@ -4,6 +4,8 @@
 #include "sprites.h"
 #include "objects.h"
 #include "player.h"
+#include "utils.h"
+#include "termgrid.h"
 
 /*
   Define the Bomberman structure
@@ -17,6 +19,7 @@ typedef struct {
   Player player;
   int gridSize;
   Coord gridDimensions;
+  TermGrid termGrid;
 } Bomberman;
 
 /* Initialises a Bomberman instance */

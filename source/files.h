@@ -1,7 +1,7 @@
 #ifndef FILES
 #define FILES
 
-#include <stdio.h>
+#include "utils.h"
 #include <stdlib.h>
 
 /* Saves a level */

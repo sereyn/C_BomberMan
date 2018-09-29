@@ -1,9 +1,11 @@
 #ifndef EDITOR
 #define EDITOR
 
+#include <MLV/MLV_all.h>
 #include "objects.h"
 #include "files.h"
 #include "bomberman.h"
+#include "utils.h"
 
 /* Initialises the editor */
 void initEditor(Bomberman *bbm);
