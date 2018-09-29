@@ -20,6 +20,7 @@ int main(void){
   int closed = 0, gridSize = 35;
   Coord gridDimensions = {21, 13};
   Bomberman bomberman;
+  Editor editor;
   debug(0, "Loading...\n");
   /* We call an MLV function which takes a callback meant to switch closed to 1 */
   MLV_execute_at_exit(exitCallback, &closed);
@@ -39,7 +40,7 @@ int main(void){
   */
   bomberman = initBomberman(gridSize, gridDimensions);
   /* We initialise the editor */
-  initEditor(&bomberman);
+  editor = initEditor(&bomberman);
   /*
     Game loop:
     This while keeps looping until the user presses escape or the cross button
@@ -47,7 +48,7 @@ int main(void){
   while(MLV_get_keyboard_state(MLV_KEYBOARD_ESCAPE) && !closed){
     MLV_clear_window(MLV_COLOR_BLACK);
 
-    editorLoop(&bomberman);
+    editorLoop(&bomberman, &editor);
     drawAll(bomberman);
 
     MLV_actualise_window();

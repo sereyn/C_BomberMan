@@ -11,9 +11,11 @@ Bomberman initBomberman(int gridSize, Coord gridDimensions){
   bbm.sprites = initSprites();
   bbm.sprBlock = newSprite(&(bbm.sprites), "block.png", bbm.gridSize, bbm.gridSize);
   bbm.sprFloor = newSprite(&(bbm.sprites), "floor.png", bbm.gridSize, bbm.gridSize);
+  bbm.sprBox = newSprite(&(bbm.sprites), "box.png", bbm.gridSize, bbm.gridSize);
   /* Initialise the objects according to their sprites */
   bbm.floors = initObjects(bbm.sprFloor);
   bbm.blocks = initObjects(bbm.sprBlock);
+  bbm.boxes = initObjects(bbm.sprBox);
   return bbm;
 }
 
@@ -21,11 +23,13 @@ void drawAll(const Bomberman bbm){
   /* Draw all the objects */
   drawObjects(bbm.floors);
   drawObjects(bbm.blocks);
+  drawObjects(bbm.boxes);
 }
 
 void freeBomberman(Bomberman bbm){
   /* Free all the allocated memory bomberman knows about */
   freeObjects(bbm.floors);
   freeObjects(bbm.blocks);
+  freeObjects(bbm.boxes);
   freeSprites(bbm.sprites);
 }
