@@ -1,16 +1,16 @@
 #include "editor.h"
 
-Editor initEditor(Bomberman *bbm){
-  Editor editor;
+Editor *initEditor(Bomberman *bbm){
+  Editor *editor = malloc(sizeof(Editor));
   int i, j;
   int winWidth = MLV_get_window_width(), winHeight = MLV_get_window_height();
-  /* We let size be the gridSize of bomberman for shorter and clearer code */
-  int size = bbm->gridSize;
+  /* We let size be bbm->grid->size for shorter and clearer code */
+  int size = bbm->grid->size;
   /*
     We evaluate the marginTop
     It represents the number of blocks to skip at the top of the grid
   */
-  int marginTop = winHeight/bbm->gridSize-bbm->gridDimensions.y;
+  int marginTop = winHeight/bbm->grid->size-bbm->grid->dimensions->y;
   /* We loop through the whole board */
   debug(1, "Filling the editor grid\n");
   for(i = 0; i < winWidth; i += size){
@@ -18,18 +18,18 @@ Editor initEditor(Bomberman *bbm){
       /* If we are at the edge of the board, we create a block */
       if(i == 0 || j == marginTop*size
       || i == winWidth-size || j == winHeight-size)
-        newObject(&(bbm->blocks), i, j);
+        newObject(bbm->blocks, newCoord(i, j));
       /* Otherwise we create a floor */
       else
-        newObject(&(bbm->floors), i, j);
+        newObject(bbm->floors, newCoord(i, j));
     }
   }
   /* We create the editor's toolbar */
-  newObject(&(bbm->boxes), 1*size, 1*size);
-  newObject(&(bbm->blocks), 3*size, 1*size);
+  newObject(bbm->boxes, newCoord(1*size, 1*size));
+  newObject(bbm->blocks, newCoord(3*size, 1*size));
 
   /* Set default tool */
-  editor.item = &bbm->blocks;
+  editor->item = bbm->blocks;
 
   return editor;
 }
@@ -38,39 +38,38 @@ void editorLoop(Bomberman *bbm, Editor *editor){
   int mouseX, mouseY, i;
   int winWidth = MLV_get_window_width(), winHeight = MLV_get_window_height();
   /* We evaluate the marginTop */
-  int marginTop = winHeight/bbm->gridSize-bbm->gridDimensions.y;
+  int marginTop = winHeight/bbm->grid->size-bbm->grid->dimensions->y;
   /* We store the mouse position into mouseX and mouseY variables */
   MLV_get_mouse_position(&mouseX, &mouseY);
   /*
     We check if the mouse cursor is inside the board
     (edge blocks excluded, as we don't want the user to edit those ones)
   */
-  if(mouseX > bbm->gridSize && mouseX < winWidth-bbm->gridSize
-	 && mouseY > (1+marginTop)*bbm->gridSize && mouseY < winHeight-bbm->gridSize){
+  if(mouseX > bbm->grid->size && mouseX < winWidth-bbm->grid->size
+	 && mouseY > (1+marginTop)*bbm->grid->size && mouseY < winHeight-bbm->grid->size){
     if(!MLV_get_mouse_button_state(MLV_BUTTON_LEFT)){
       /*
         When left click is pressed, the user paints
         Check if there is another same object here
       */
       for(i = 0; i < editor->item->length; i++){
-        if(mouseX/bbm->gridSize*bbm->gridSize == editor->item->list[i].x
-          && mouseY/bbm->gridSize*bbm->gridSize == editor->item->list[i].y){
+        if(mouseX/bbm->grid->size*bbm->grid->size == editor->item->list[i]->x
+          && mouseY/bbm->grid->size*bbm->grid->size == editor->item->list[i]->y){
           /* If there is one, abort creation */
           return;
         }
       }
       /*
-        we create a block which correspond to the selected tool at the mouse coordinates divided then multiplied by gridSize
+        we create a block which corresponds to the selected tool at the mouse coordinates divided then multiplied by grid->size
         since they are all integers, it maps the coordinates to the grid
       */
-      newObject(
-        editor->item,
-        mouseX/bbm->gridSize*bbm->gridSize,
-        mouseY/bbm->gridSize*bbm->gridSize
-      );
+      newObject(editor->item, newCoord(
+        mouseX/bbm->grid->size*bbm->grid->size,
+        mouseY/bbm->grid->size*bbm->grid->size
+      ));
       debug(1, "New item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
-        mouseX/bbm->gridSize,
-        mouseY/bbm->gridSize,
+        mouseX/bbm->grid->size,
+        mouseY/bbm->grid->size,
         editor->item->length
       );
     }
@@ -82,38 +81,38 @@ void editorLoop(Bomberman *bbm, Editor *editor){
         Also we do that loop backward because we pop out the element from the list
         Otherwise, if there were 2 neighbour blocks to remove, we would skip the second one
       */
-      for(i = bbm->blocks.length-1; i >= 0 ; --i){
-        if(mouseX/bbm->gridSize == bbm->blocks.list[i].x/bbm->gridSize
-        && mouseY/bbm->gridSize == bbm->blocks.list[i].y/bbm->gridSize){
-          deleteObject(&(bbm->blocks), i);
+      for(i = bbm->blocks->length-1; i >= 0 ; --i){
+        if(mouseX/bbm->grid->size == bbm->blocks->list[i]->x/bbm->grid->size
+        && mouseY/bbm->grid->size == bbm->blocks->list[i]->y/bbm->grid->size){
+          deleteObject(bbm->blocks, i);
           debug(1, "Deleted item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
-            mouseX/bbm->gridSize,
-            mouseY/bbm->gridSize,
-            bbm->blocks.length
+            mouseX/bbm->grid->size,
+            mouseY/bbm->grid->size,
+            bbm->blocks->length
           );
         }
       }
       /* The same with boxes , TODO: Change that*/
-      for(i = bbm->boxes.length-1; i >= 0 ; --i){
-        if(mouseX/bbm->gridSize == bbm->boxes.list[i].x/bbm->gridSize
-        && mouseY/bbm->gridSize == bbm->boxes.list[i].y/bbm->gridSize){
-          deleteObject(&(bbm->boxes), i);
+      for(i = bbm->boxes->length-1; i >= 0 ; --i){
+        if(mouseX/bbm->grid->size == bbm->boxes->list[i]->x/bbm->grid->size
+        && mouseY/bbm->grid->size == bbm->boxes->list[i]->y/bbm->grid->size){
+          deleteObject(bbm->boxes, i);
           debug(1, "Deleted item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
-            mouseX/bbm->gridSize,
-            mouseY/bbm->gridSize,
-            bbm->boxes.length
+            mouseX/bbm->grid->size,
+            mouseY/bbm->grid->size,
+            bbm->boxes->length
           );
         }
       }
     }
     /* Check if the user click in the toolbar */
-  }else if(mouseY >= bbm->gridSize && mouseY < marginTop*bbm->gridSize - bbm->gridSize){
+  }else if(mouseY >= bbm->grid->size && mouseY < marginTop*bbm->grid->size - bbm->grid->size){
      if(!MLV_get_mouse_button_state(MLV_BUTTON_LEFT)){
       /* Check which button has been clicked and change the selected tool*/
-      if(mouseX >= bbm->gridSize && mouseX <= 2*bbm->gridSize){
-        editor->item = &(bbm->boxes);
-      }else if(mouseX >= 3*bbm->gridSize && mouseX <= 4*bbm->gridSize){
-        editor->item = &(bbm->blocks);
+      if(mouseX >= bbm->grid->size && mouseX <= 2*bbm->grid->size){
+        editor->item = bbm->boxes;
+      }else if(mouseX >= 3*bbm->grid->size && mouseX <= 4*bbm->grid->size){
+        editor->item = bbm->blocks;
       }
     }
   }

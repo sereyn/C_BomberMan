@@ -23,4 +23,6 @@ typedef struct {
   int y;
 } Coord;
 
+Coord *newCoord(int x, int y);
+
 #endif /* UTILS */

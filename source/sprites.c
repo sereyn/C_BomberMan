@@ -1,8 +1,9 @@
 #include "sprites.h"
 
-Sprites initSprites(){
-  Sprites sprites;
-  sprites.length = 0;
+Sprites *initSprites(){
+  Sprites *sprites = malloc(sizeof(Sprites));
+  sprites->length = 0;
+  sprites->list = NULL;
   return sprites;
 }
 
@@ -22,16 +23,16 @@ MLV_Image *newSprite(Sprites *sprites, char *fileName, int width, int height){
     We ask for 1 more slot of memory for our list to save the new sprite
     Then we save that sprite at the end of the list and increment the length
   */
-  sprites->list = realloc(sprites->list, (sprites->length+1)*sizeof(*(sprites->list)));
+  sprites->list = realloc(sprites->list, (sprites->length+1)*sizeof(MLV_Image *));
   sprites->list[sprites->length++] = sprite;
   return sprite;
 }
 
-void freeSprites(Sprites sprites){
+void freeSprites(Sprites *sprites){
   /* Loops through all the sprites to free them */
   int i = 0;
-  for(; i < sprites.length; ++i)
-    MLV_free_image(sprites.list[i]);
+  for(; i < sprites->length; ++i)
+    MLV_free_image(sprites->list[i]);
   /* Then frees the array itself */
-  free(sprites.list);
+  free(sprites->list);
 }

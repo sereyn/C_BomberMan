@@ -1,7 +1,8 @@
-#include "utils.h"
 #include <MLV/MLV_all.h>
+#include "utils.h"
 #include "bomberman.h"
 #include "editor.h"
+#include "grid.h"
 
 /*
   exitCallback's prototype must be void fun(void *)
@@ -17,30 +18,32 @@ void exitCallback(void *data){
 }
 
 int main(void){
-  int closed = 0, gridSize = 35;
-  Coord gridDimensions = {21, 13};
-  Bomberman bomberman;
-  Editor editor;
+  int closed = 0;
+  /* Creates a grid of 35px per block, dimensions 21x13 and a marginTop of 3*/
+  Grid *grid = initGrid(35, newCoord(21, 13), 3);
+  Bomberman *bomberman;
+  Editor *editor;
   debug(0, "Loading...\n");
   /* We call an MLV function which takes a callback meant to switch closed to 1 */
   MLV_execute_at_exit(exitCallback, &closed);
   /*
-    We create the game window with a 21x16 grid's dimension
+    We create the game window with the grid's dimensions
     Then we set its frame rate to 60
-    The "+3" means there are 3 free lines at the top
+    The "+3" means there let 3 free lines at the top for hub purpose
   */
   MLV_create_window("Bomberman", "Bomberman",
-    gridSize*gridDimensions.x,
-    gridSize*(gridDimensions.y+3)
+    grid->size*grid->dimensions->x,
+    grid->size*(grid->dimensions->y+grid->marginTop)
   );
   MLV_change_frame_rate(60);
   /*
     We initialise bomberman
     This has to be done after the window creation because it prepares the sprites
+    (we don't need to free the grid since freeBomberman will do it for us)
   */
-  bomberman = initBomberman(gridSize, gridDimensions);
+  bomberman = initBomberman(grid);
   /* We initialise the editor */
-  editor = initEditor(&bomberman);
+  editor = initEditor(bomberman);
   /*
     Game loop:
     This while keeps looping until the user presses escape or the cross button
@@ -48,7 +51,7 @@ int main(void){
   while(MLV_get_keyboard_state(MLV_KEYBOARD_ESCAPE) && !closed){
     MLV_clear_window(MLV_COLOR_BLACK);
 
-    editorLoop(&bomberman, &editor);
+    editorLoop(bomberman, editor);
     drawAll(bomberman);
 
     MLV_actualise_window();
@@ -58,6 +61,7 @@ int main(void){
     Once the code reaches this point, the game is over
     We need to free all the memory allocated during the game process
   */
+  free(editor);
   freeBomberman(bomberman);
   MLV_free_window();
   /* If that line doesn't show up, then something went wrong */

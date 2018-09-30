@@ -1,7 +1,7 @@
 # Declare variables
 
 CC=gcc
-FLAGS=-W -Wall -std=c89 -pedantic -O3 `pkg-config --cflags MLV`
+FLAGS=-W -Wall -Wextra -g -std=c89 -pedantic -O3 `pkg-config --cflags MLV`
 POSTFLAGS=`pkg-config --libs-only-l MLV`
 SRC_DIR=./source
 OBJ_DIR=./build
@@ -27,6 +27,10 @@ run:
 	@echo "Running project..."
 	$(EXEC)
 
+debug:
+	@echo "Debugging project... (type run)"
+	@gdb $(EXEC)
+
 rebuild:
 	@make clean --no-print-directory
 	@make build --no-print-directory
@@ -50,20 +54,20 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 # Dependencies
 
-$(OBJ_DIR)/main.o: $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h $(SRC_DIR)/utils.h
+$(OBJ_DIR)/main.o: $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h $(SRC_DIR)/utils.h $(SRC_DIR)/grid.h
 
 $(OBJ_DIR)/player.o: $(SRC_DIR)/player.h $(SRC_DIR)/utils.h
 
 $(OBJ_DIR)/editor.o: $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h $(SRC_DIR)/objects.h $(SRC_DIR)/files.h $(SRC_DIR)/utils.h
 
-$(OBJ_DIR)/bomberman.o: $(SRC_DIR)/bomberman.h $(SRC_DIR)/objects.h $(SRC_DIR)/sprites.h $(SRC_DIR)/player.h $(SRC_DIR)/utils.h $(SRC_DIR)/termgrid.h
+$(OBJ_DIR)/bomberman.o: $(SRC_DIR)/bomberman.h $(SRC_DIR)/objects.h $(SRC_DIR)/sprites.h $(SRC_DIR)/utils.h $(SRC_DIR)/grid.h
 
 $(OBJ_DIR)/files.o: $(SRC_DIR)/files.h $(SRC_DIR)/utils.h
 
 $(OBJ_DIR)/sprites.o: $(SRC_DIR)/sprites.h
 
-$(OBJ_DIR)/objects.o: $(SRC_DIR)/objects.h $(SRC_DIR)/utils.h $(SRC_DIR)/termgrid.h
+$(OBJ_DIR)/objects.o: $(SRC_DIR)/objects.h $(SRC_DIR)/utils.h $(SRC_DIR)/grid.h
 
 $(OBJ_DIR)/utils.o: $(SRC_DIR)/utils.h
 
-$(OBJ_DIR)/termgrid.o: $(SRC_DIR)/termgrid.h $(SRC_DIR)/utils.h
+$(OBJ_DIR)/grid.o: $(SRC_DIR)/grid.h $(SRC_DIR)/utils.h

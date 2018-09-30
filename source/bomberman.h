@@ -3,9 +3,8 @@
 
 #include "sprites.h"
 #include "objects.h"
-#include "player.h"
 #include "utils.h"
-#include "termgrid.h"
+#include "grid.h"
 
 /*
   Define the Bomberman structure
@@ -13,23 +12,20 @@
 */
 typedef struct {
   MLV_Image *sprBlock, *sprFloor, *sprBox;
-  Sprites sprites;
-  Objects floors;
-  Objects blocks;
-  Objects boxes;
-  Player player;
-  int gridSize;
-  Coord gridDimensions;
-  TermGrid termGrid;
+  Sprites *sprites;
+  Objects *floors;
+  Objects *blocks;
+  Objects *boxes;
+  Grid *grid;
 } Bomberman;
 
 /* Initialises a Bomberman instance */
-Bomberman initBomberman(int gridSize, Coord gridDimensions);
+Bomberman *initBomberman(Grid *grid);
 
 /* Draws the whole game */
-void drawAll(const Bomberman bbm);
+void drawAll(Bomberman *bbm);
 
 /* This function's purpose is to free the allocated memory the structure knows about */
-void freeBomberman(Bomberman bbm);
+void freeBomberman(Bomberman *bbm);
 
 #endif /* BOMBERMAN */

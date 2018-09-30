@@ -14,7 +14,7 @@ typedef struct{
 } Editor;
 
 /* Initialises the editor */
-Editor initEditor(Bomberman *bbm);
+Editor *initEditor(Bomberman *bbm);
 
 /* Has to be executed in a game loop: main function of the editor */
 void editorLoop(Bomberman *bbm, Editor *editor);

@@ -15,12 +15,12 @@ typedef struct {
   int length;
 } Sprites;
 
-Sprites initSprites();
+Sprites *initSprites();
 
 /* Creates a new sprite from the image file fileName and resize it */
 MLV_Image *newSprite(Sprites *sprites, char *fileName, int width, int height);
 
 /* Frees the sprites (the whole purpose) */
-void freeSprites(Sprites sprites);
+void freeSprites(Sprites *sprites);
 
 #endif /* SPRITES */

@@ -15,3 +15,10 @@ void debug(int level, char *format, ...){
     va_end(args);
   }
 }
+
+Coord *newCoord(int x, int y){
+  Coord *coord = malloc(sizeof(Coord));
+  coord->x = x;
+  coord->y = y;
+  return coord;
+}
