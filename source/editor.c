@@ -1,16 +1,18 @@
 #include "editor.h"
 
-Editor initEditor(Bomberman *bbm){
-  Editor editor;
+Editor *initEditor(Grid *grid){
+  Editor *editor;
   int i, j;
   int winWidth = MLV_get_window_width(), winHeight = MLV_get_window_height();
   /* We let size be the gridSize of bomberman for shorter and clearer code */
-  int size = bbm->gridSize;
+  int size = grid->size;
   /*
     We evaluate the marginTop
     It represents the number of blocks to skip at the top of the grid
   */
-  int marginTop = winHeight/bbm->gridSize-bbm->gridDimensions.y;
+  int marginTop = winHeight/size-grid->dimensions.y;
+  /* Set editor's values */
+  editor->length = 0;
   /* We loop through the whole board */
   debug(1, "Filling the editor grid\n");
   for(i = 0; i < winWidth; i += size){
@@ -25,13 +27,17 @@ Editor initEditor(Bomberman *bbm){
     }
   }
   /* We create the editor's toolbar */
-  newObject(&(bbm->boxes), 1*size, 1*size);
-  newObject(&(bbm->blocks), 3*size, 1*size);
+  newItem(editor, &(bbm->boxes), 1*size, 1*size);
+  newItem(editor, &(bbm->blocks), 3*size, 1*size);
 
   /* Set default tool */
-  editor.item = &bbm->blocks;
+  editor->item = &bbm->blocks;
 
   return editor;
+}
+
+void destroyEditor(Editor *editor){
+  free(editor->items);
 }
 
 void editorLoop(Bomberman *bbm, Editor *editor){
@@ -117,4 +123,12 @@ void editorLoop(Bomberman *bbm, Editor *editor){
       }
     }
   }
+}
+
+void newItem(Editor *editor, Objects *objects, int x, int y){
+  /* Add objects'pointer in the items array */
+  editor->items = realloc(editor->items, ++editor->length*sizeof(*(editor->items)));
+  editor->items[editor->length-1] = objects;
+  /* Add the object on the map */
+  newObject(objects, x, y);
 }

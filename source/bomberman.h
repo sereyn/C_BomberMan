@@ -6,6 +6,8 @@
 #include "player.h"
 #include "utils.h"
 #include "termgrid.h"
+#include "editor.h"
+#include "grid.h"
 
 /*
   Define the Bomberman structure
@@ -18,8 +20,8 @@ typedef struct {
   Objects blocks;
   Objects boxes;
   Player player;
-  int gridSize;
-  Coord gridDimensions;
+  Editor *editor;
+  Grid grid;
   TermGrid termGrid;
 } Bomberman;
 

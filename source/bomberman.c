@@ -3,23 +3,25 @@
 Bomberman initBomberman(int gridSize, Coord gridDimensions){
   Bomberman bbm;
   debug(0, "Creating bomberman\n");
-  bbm.gridSize = gridSize;
-  bbm.gridDimensions = gridDimensions;
+  /* Init grid */
+  bbm.grid = initGrid(gridSize, gridDimensions);
   /*
     Initialise the sprites
     Then load the sprites using newSprite
   */
   debug(0, "Loading sprites...\n");
   bbm.sprites = initSprites();
-  bbm.sprBlock = newSprite(&(bbm.sprites), "block.png", bbm.gridSize, bbm.gridSize);
-  bbm.sprFloor = newSprite(&(bbm.sprites), "floor.png", bbm.gridSize, bbm.gridSize);
-  bbm.sprBox = newSprite(&(bbm.sprites), "box.png", bbm.gridSize, bbm.gridSize);
+  bbm.sprBlock = newSprite(&(bbm.sprites), "block.png", bbm.grid.size, bbm.grid.size);
+  bbm.sprFloor = newSprite(&(bbm.sprites), "floor.png", bbm.grid.size, bbm.grid.size);
+  bbm.sprBox = newSprite(&(bbm.sprites), "box.png", bbm.grid.size, bbm.grid.size);
   /* Initialise the objects according to their sprites */
   bbm.floors = initObjects(bbm.sprFloor, 'F');
   bbm.blocks = initObjects(bbm.sprBlock, 'B');
   bbm.boxes = initObjects(bbm.sprBox, 'C');
   /* Initialise the termGrid */
   bbm.termGrid = initTermGrid(gridSize, gridDimensions);
+  /* Initialise editor */
+  bbm.editor = initEditor(&bbm.grid);
   return bbm;
 }
 

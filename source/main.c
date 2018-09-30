@@ -39,8 +39,6 @@ int main(void){
     This has to be done after the window creation because it prepares the sprites
   */
   bomberman = initBomberman(gridSize, gridDimensions);
-  /* We initialise the editor */
-  editor = initEditor(&bomberman);
   /*
     Game loop:
     This while keeps looping until the user presses escape or the cross button
