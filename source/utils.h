@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#define DEBUG_LEVEL 3
+#define DEBUG_LEVEL 1
 
 /*
   debug is basically a copy of printf

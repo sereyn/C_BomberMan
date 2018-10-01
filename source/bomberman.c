@@ -13,10 +13,12 @@ Bomberman *initBomberman(Grid *grid){
   bbm->sprBlock = newSprite(bbm->sprites, "block.png", bbm->grid->size, bbm->grid->size);
   bbm->sprFloor = newSprite(bbm->sprites, "floor.png", bbm->grid->size, bbm->grid->size);
   bbm->sprBox = newSprite(bbm->sprites, "box.png", bbm->grid->size, bbm->grid->size);
+  bbm->sprSpike = newSprite(bbm->sprites, "spike.png", bbm->grid->size, bbm->grid->size);
   /* Initialise the objects according to their sprites */
   bbm->floors = initObjects(bbm->sprFloor, 'F');
   bbm->blocks = initObjects(bbm->sprBlock, 'B');
   bbm->boxes = initObjects(bbm->sprBox, 'C');
+  bbm->spikes = initObjects(bbm->sprSpike, 'S');
   return bbm;
 }
 
@@ -27,6 +29,7 @@ void drawAll(Bomberman *bbm){
   drawObjects(bbm->floors, bbm->grid);
   drawObjects(bbm->blocks, bbm->grid);
   drawObjects(bbm->boxes, bbm->grid);
+  drawObjects(bbm->spikes, bbm->grid);
   /* Prints the equivalent result into the terminal */
   printGrid(bbm->grid);
 }
@@ -37,6 +40,7 @@ void freeBomberman(Bomberman *bbm){
   freeObjects(bbm->floors);
   freeObjects(bbm->blocks);
   freeObjects(bbm->boxes);
+  freeObjects(bbm->spikes);
   freeSprites(bbm->sprites);
   freeGrid(bbm->grid);
 }

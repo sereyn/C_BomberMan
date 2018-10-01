@@ -12,4 +12,5 @@ Use `make` from the root folder to build and run the project.
 
 * `make rebuild` Rebuild all the files,
 * `make clean` Clean all the files,
-* `make run` Run only, doesn't compile the changes.
+* `make run` Run only, doesn't compile the changes,
+* `make debug` Run only but in debug mode, use `run` to start debugging and then `step` at each breakpoint.

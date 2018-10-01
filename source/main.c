@@ -20,7 +20,7 @@ void exitCallback(void *data){
 int main(void){
   int closed = 0;
   /* Creates a grid of 35px per block, dimensions 21x13 and a marginTop of 3*/
-  Grid *grid = initGrid(35, newCoord(21, 13), 3);
+  Grid *grid = initGrid(50, newCoord(21, 13), 3);
   Bomberman *bomberman;
   Editor *editor;
   debug(0, "Loading...\n");
@@ -29,7 +29,6 @@ int main(void){
   /*
     We create the game window with the grid's dimensions
     Then we set its frame rate to 60
-    The "+3" means there let 3 free lines at the top for hub purpose
   */
   MLV_create_window("Bomberman", "Bomberman",
     grid->size*grid->dimensions->x,
@@ -51,7 +50,7 @@ int main(void){
   while(MLV_get_keyboard_state(MLV_KEYBOARD_ESCAPE) && !closed){
     MLV_clear_window(MLV_COLOR_BLACK);
 
-    editorLoop(bomberman, editor);
+    editorLoop(editor, bomberman);
     drawAll(bomberman);
 
     MLV_actualise_window();
@@ -61,7 +60,7 @@ int main(void){
     Once the code reaches this point, the game is over
     We need to free all the memory allocated during the game process
   */
-  free(editor);
+  freeEditor(editor);
   freeBomberman(bomberman);
   MLV_free_window();
   /* If that line doesn't show up, then something went wrong */

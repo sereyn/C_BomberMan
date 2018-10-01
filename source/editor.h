@@ -7,16 +7,28 @@
 #include "bomberman.h"
 #include "utils.h"
 
-/* A structure to save editor's current state */
+typedef struct {
+	int length;
+	/* The full list of items available for the player */
+	Objects **list;
+	/* The current item the user will paint the map with */
+	Objects *current;
+} Items;
+
+/* Adds a new item into the */
+void newItem(Items *items, Objects *item);
+
 typedef struct{
-	/* The tool the user will paint the map with */
-	Objects *item;
+	Items *items;
 } Editor;
 
 /* Initialises the editor */
 Editor *initEditor(Bomberman *bbm);
 
 /* Has to be executed in a game loop: main function of the editor */
-void editorLoop(Bomberman *bbm, Editor *editor);
+void editorLoop(Editor *editor, Bomberman *bbm);
+
+/* Frees the allocated memory */
+void freeEditor(Editor *editor);
 
 #endif /* EDITOR */
