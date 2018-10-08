@@ -5,8 +5,8 @@ Bomberman *initBomberman(Grid *grid){
   debug(0, "Creating bomberman\n");
   bbm->grid = grid;
   /*
-    Initialise the sprites
-    Then load the sprites using newSprite
+    Initialises the sprites
+    Then loads the sprites using newSprite
   */
   debug(0, "Loading sprites...\n");
   bbm->sprites = initSprites();
@@ -14,11 +14,16 @@ Bomberman *initBomberman(Grid *grid){
   bbm->sprFloor = newSprite(bbm->sprites, "floor.png", bbm->grid->size, bbm->grid->size);
   bbm->sprBox = newSprite(bbm->sprites, "box.png", bbm->grid->size, bbm->grid->size);
   bbm->sprSpike = newSprite(bbm->sprites, "spike.png", bbm->grid->size, bbm->grid->size);
-  /* Initialise the objects according to their sprites */
+  bbm->sprArrow = newSprite(bbm->sprites, "arrow.png", bbm->grid->size, bbm->grid->size);
+  /* Initialises the objects according to their sprites */
   bbm->floors = initObjects(bbm->sprFloor, 'F');
   bbm->blocks = initObjects(bbm->sprBlock, 'B');
   bbm->boxes = initObjects(bbm->sprBox, 'C');
   bbm->spikes = initObjects(bbm->sprSpike, 'S');
+  /* Loads the font */
+  bbm->font = MLV_load_font("resources/fonts/font1.ttf", bbm->grid->size/2);
+  /* Loads the keys */
+  bbm->keys = initKeys();
   return bbm;
 }
 
@@ -42,5 +47,7 @@ void freeBomberman(Bomberman *bbm){
   freeObjects(bbm->boxes);
   freeObjects(bbm->spikes);
   freeSprites(bbm->sprites);
+  MLV_free_font(bbm->font);
+  freeKeys(bbm->keys);
   freeGrid(bbm->grid);
 }

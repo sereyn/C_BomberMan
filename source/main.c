@@ -3,6 +3,7 @@
 #include "bomberman.h"
 #include "editor.h"
 #include "grid.h"
+#include "keys.h"
 
 /*
   exitCallback's prototype must be void fun(void *)
@@ -19,8 +20,8 @@ void exitCallback(void *data){
 
 int main(void){
   int closed = 0;
-  /* Creates a grid of 35px per block, dimensions 21x13 and a marginTop of 3*/
-  Grid *grid = initGrid(50, newCoord(21, 13), 3);
+  /* Creates a grid of 40px per block, dimensions 21x13 and a marginTop of 3*/
+  Grid *grid = initGrid(40, newCoord(21, 13), 3);
   Bomberman *bomberman;
   Editor *editor;
   debug(0, "Loading...\n");
@@ -47,9 +48,10 @@ int main(void){
     Game loop:
     This while keeps looping until the user presses escape or the cross button
   */
-  while(MLV_get_keyboard_state(MLV_KEYBOARD_ESCAPE) && !closed){
+  while(!isPressed(bomberman->keys->escape) && !closed){
     MLV_clear_window(MLV_COLOR_BLACK);
 
+    updateKeys(bomberman->keys);
     editorLoop(editor, bomberman);
     drawAll(bomberman);
 

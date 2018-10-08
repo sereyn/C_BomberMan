@@ -1,12 +1,12 @@
 #include "editor.h"
 
-void newItem(Items *items, Objects *item){
-  /*
-    Increase the items length and capacity
-    Then sets its new free place to the desired new item
-  */
-  items->list = realloc(items->list, (++items->length)*sizeof(Objects *));
-  items->list[items->length-1] = item;
+int isForbiddenBlock(int x, int y, int w, int h){
+  /* We check if the block is in one of the spawn player zones */
+  int part1 = (x == 1 && y == 1) || (x == 1+1 && y == 1) || (x == 1 && y == 1+1);
+  int part2 = (x == w && y == 1) || (x == w-1 && y == 1) || (x == w && y == 1+1);
+  int part3 = (x == 1 && y == h) || (x == 1+1 && y == h) || (x == 1 && y == h-1);
+  int part4 = (x == w && y == h) || (x == w-1 && y == h) || (x == w && y == h-1);
+  return part1 || part2 || part3 || part4;
 }
 
 Editor *initEditor(Bomberman *bbm){
@@ -32,14 +32,14 @@ Editor *initEditor(Bomberman *bbm){
 
   /* Initialise the item list */
   editor->items = malloc(sizeof(Items));
-  editor->items->length = 0;
-  editor->items->list = NULL;
+  editor->items->length = 3;
+  editor->items->list = malloc(editor->items->length*sizeof(Objects *));
   /* Feeds the item list with the available items */
-  newItem(editor->items, bbm->blocks);
-  newItem(editor->items, bbm->boxes);
-  newItem(editor->items, bbm->spikes);
+  editor->items->list[0] = bbm->blocks;
+  editor->items->list[1] = bbm->boxes;
+  editor->items->list[2] = bbm->spikes;
   /* Sets the default item */
-  editor->items->current = editor->items->list[0];
+  editor->items->current = 0;
   /* We create the editor's toolbar */
   for(i = 0; i < editor->items->length; ++i)
     newObject(editor->items->list[i], newCoord((2*i+1)*size, size));
@@ -54,6 +54,17 @@ void editorLoop(Editor *editor, Bomberman *bbm){
   int size = bbm->grid->size;
   Coord *dims = bbm->grid->dimensions;
   int marginTop = bbm->grid->marginTop;
+  /* We draw the arrow on top of the selected item */
+  MLV_draw_image(bbm->sprArrow, (2*editor->items->current+1)*size, 0);
+  /* We draw the informative text */
+  MLV_draw_text_with_font(
+    dims->x/2*size,
+    size*.02,
+    "~ LEVEL EDITOR ~", bbm->font, MLV_COLOR_WHITE);
+  MLV_draw_text_with_font(
+    (dims->x/2-3)*size,
+    size*1.3,
+    "Make a level you like and save it with ctrl+S", bbm->font, MLV_COLOR_WHITE);
   /*
     We store the mouse position into mouseX and mouseY variables
     Also we divide them by size so that it maps to the grid
@@ -66,7 +77,8 @@ void editorLoop(Editor *editor, Bomberman *bbm){
     (edge blocks excluded, as we don't want the user to edit those ones)
   */
   if(mouseX > 0 && mouseX < dims->x-1
-	 && mouseY > marginTop && mouseY < marginTop+dims->y-1){
+	 && mouseY > marginTop && mouseY < marginTop+dims->y-1
+   && !isForbiddenBlock(mouseX, mouseY-marginTop, dims->x-2, dims->y-2)){
     if(leftPressed || rightPressed){
       /*
         We remove every object under the mouse position
@@ -87,23 +99,25 @@ void editorLoop(Editor *editor, Bomberman *bbm){
       }
       if(leftPressed){
         /* We create a block which corresponds to the selected tool at the mouse coordinates */
-        newObject(editor->items->current, newCoord(mouseX*size, mouseY*size));
+        newObject(editor->items->list[editor->items->current], newCoord(mouseX*size, mouseY*size));
         debug(1, "New item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
-          mouseX, mouseY, editor->items->current->length);
+          mouseX, mouseY, editor->items->list[editor->items->current]->length);
       }
     }
   }
-  /*
-    We check if the user clicks in the toolbar
-  */
+  /* We check if the user clicks in the toolbar */
   if(mouseY == 1){
     if(leftPressed){
       /* Loop through all the items to check if it has been clicked and change the current item */
       for(i = 0; i < editor->items->length; ++i){
         if(mouseX == 2*i+1)
-          editor->items->current = editor->items->list[i];
+          editor->items->current = i;
       }
     }
+  }
+  /* We check if the user pressed ctrl+S */
+  if(isPressed(bbm->keys->ctrl) && isJustPressed(bbm->keys->s)){
+    debug(0, "NEED TO SAVE\n");
   }
 }
 

@@ -6,21 +6,22 @@
 #include "files.h"
 #include "bomberman.h"
 #include "utils.h"
+#include "keys.h"
 
 typedef struct {
 	int length;
 	/* The full list of items available for the player */
 	Objects **list;
 	/* The current item the user will paint the map with */
-	Objects *current;
+	int current;
 } Items;
-
-/* Adds a new item into the */
-void newItem(Items *items, Objects *item);
 
 typedef struct{
 	Items *items;
 } Editor;
+
+/* Tells if a block is forbidden to the edition or not */
+int isForbiddenBlock(int x, int y, int w, int h);
 
 /* Initialises the editor */
 Editor *initEditor(Bomberman *bbm);

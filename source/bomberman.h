@@ -5,19 +5,22 @@
 #include "objects.h"
 #include "utils.h"
 #include "grid.h"
+#include "keys.h"
 
 /*
   Define the Bomberman structure
   It groups all the important stuff the game needs so that we can simply pass it as a parameter
 */
 typedef struct {
-  MLV_Image *sprBlock, *sprFloor, *sprBox, *sprSpike;
+  MLV_Image *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow;
   Sprites *sprites;
   Objects *floors;
   Objects *blocks;
   Objects *boxes;
   Objects *spikes;
   Grid *grid;
+  MLV_Font *font;
+  Keys *keys;
 } Bomberman;
 
 /* Initialises a Bomberman instance */
