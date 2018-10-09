@@ -48,8 +48,6 @@ Editor *initEditor(Bomberman *bbm){
 
 void editorLoop(Editor *editor, Bomberman *bbm){
   int mouseX, mouseY, i, j;
-  int leftPressed = !MLV_get_mouse_button_state(MLV_BUTTON_LEFT);
-  int rightPressed = !MLV_get_mouse_button_state(MLV_BUTTON_RIGHT);
   /* We create variables for shorter and clearer code */
   int size = bbm->grid->size;
   Coord *dims = bbm->grid->dimensions;
@@ -63,8 +61,12 @@ void editorLoop(Editor *editor, Bomberman *bbm){
     "~ LEVEL EDITOR ~", bbm->font, MLV_COLOR_WHITE);
   MLV_draw_text_with_font(
     (dims->x/2-3)*size,
-    size*1.3,
-    "Make a level you like and save it with ctrl+S", bbm->font, MLV_COLOR_WHITE);
+    size*1,
+    "Maintain [SHIFT] to create multiple blocks.", bbm->font, MLV_COLOR_WHITE);
+  MLV_draw_text_with_font(
+    (dims->x/2-2.2)*size,
+    size*2,
+    "Press [CTRL+S] to save your level.", bbm->font, MLV_COLOR_WHITE);
   /*
     We store the mouse position into mouseX and mouseY variables
     Also we divide them by size so that it maps to the grid
@@ -79,7 +81,10 @@ void editorLoop(Editor *editor, Bomberman *bbm){
   if(mouseX > 0 && mouseX < dims->x-1
 	 && mouseY > marginTop && mouseY < marginTop+dims->y-1
    && !isForbiddenBlock(mouseX, mouseY-marginTop, dims->x-2, dims->y-2)){
-    if(leftPressed || rightPressed){
+    /* We check if the mouse buttons are just down, or down while shift is pressed */
+    if(((isDown(bbm->inputs->lshift) || isDown(bbm->inputs->rshift))
+    && (isDown(bbm->inputs->lclick) || isDown(bbm->inputs->rclick)))
+    || (isJustDown(bbm->inputs->lclick) || isJustDown(bbm->inputs->rclick))){
       /*
         We remove every object under the mouse position
         For that purpose, we loop through every items,
@@ -97,7 +102,7 @@ void editorLoop(Editor *editor, Bomberman *bbm){
           }
         }
       }
-      if(leftPressed){
+      if(isDown(bbm->inputs->lclick)){
         /* We create a block which corresponds to the selected tool at the mouse coordinates */
         newObject(editor->items->list[editor->items->current], newCoord(mouseX*size, mouseY*size));
         debug(1, "New item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
@@ -107,7 +112,7 @@ void editorLoop(Editor *editor, Bomberman *bbm){
   }
   /* We check if the user clicks in the toolbar */
   if(mouseY == 1){
-    if(leftPressed){
+    if(isJustDown(bbm->inputs->lclick)){
       /* Loop through all the items to check if it has been clicked and change the current item */
       for(i = 0; i < editor->items->length; ++i){
         if(mouseX == 2*i+1)
@@ -116,7 +121,7 @@ void editorLoop(Editor *editor, Bomberman *bbm){
     }
   }
   /* We check if the user pressed ctrl+S */
-  if(isPressed(bbm->keys->ctrl) && isJustPressed(bbm->keys->s)){
+  if((isDown(bbm->inputs->lctrl) || isDown(bbm->inputs->rctrl)) && isJustDown(bbm->inputs->s)){
     debug(0, "NEED TO SAVE\n");
   }
 }

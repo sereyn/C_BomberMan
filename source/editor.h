@@ -6,7 +6,7 @@
 #include "files.h"
 #include "bomberman.h"
 #include "utils.h"
-#include "keys.h"
+#include "inputs.h"
 
 typedef struct {
 	int length;

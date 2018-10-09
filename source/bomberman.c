@@ -23,7 +23,7 @@ Bomberman *initBomberman(Grid *grid){
   /* Loads the font */
   bbm->font = MLV_load_font("resources/fonts/font1.ttf", bbm->grid->size/2);
   /* Loads the keys */
-  bbm->keys = initKeys();
+  bbm->inputs = initInputs();
   return bbm;
 }
 
@@ -48,6 +48,6 @@ void freeBomberman(Bomberman *bbm){
   freeObjects(bbm->spikes);
   freeSprites(bbm->sprites);
   MLV_free_font(bbm->font);
-  freeKeys(bbm->keys);
+  freeInputs(bbm->inputs);
   freeGrid(bbm->grid);
 }

@@ -3,7 +3,7 @@
 #include "bomberman.h"
 #include "editor.h"
 #include "grid.h"
-#include "keys.h"
+#include "inputs.h"
 
 /*
   exitCallback's prototype must be void fun(void *)
@@ -48,10 +48,10 @@ int main(void){
     Game loop:
     This while keeps looping until the user presses escape or the cross button
   */
-  while(!isPressed(bomberman->keys->escape) && !closed){
+  while(!isDown(bomberman->inputs->escape) && !closed){
     MLV_clear_window(MLV_COLOR_BLACK);
 
-    updateKeys(bomberman->keys);
+    updateInputs(bomberman->inputs);
     editorLoop(editor, bomberman);
     drawAll(bomberman);
 

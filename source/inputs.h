@@ -1,5 +1,5 @@
-#ifndef KEYS
-#define KEYS
+#ifndef INPUTS
+#define INPUTS
 
 #include <MLV/MLV_all.h>
 
@@ -13,25 +13,26 @@
 typedef struct {
   int state;
   int previousState;
-  MLV_Keyboard_button keyCode;
-} Key;
+  int inputCode;
+  int isKey;
+} Input;
 
 typedef struct {
-  Key *s, *ctrl, *escape;
-  Key **list;
+  Input *s, *lctrl, *rctrl, *escape, *lclick, *rclick, *lshift, *rshift;
+  Input **list;
   int length;
-} Keys;
+} Inputs;
 
-Key *newKey(Keys *keys, MLV_Keyboard_button keyCode);
+Input *newInput(Inputs *inputs, int inputCode, int isKey);
 
-int isPressed(Key *key);
+int isDown(Input *input);
 
-int isJustPressed(Key *key);
+int isJustDown(Input *input);
 
-Keys *initKeys();
+Inputs *initInputs();
 
-void updateKeys(Keys *keys);
+void updateInputs(Inputs *inputs);
 
-void freeKeys(Keys *keys);
+void freeInputs(Inputs *inputs);
 
-#endif /* KEYS */
+#endif /* INPUTS */

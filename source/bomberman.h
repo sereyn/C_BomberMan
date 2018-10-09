@@ -5,7 +5,7 @@
 #include "objects.h"
 #include "utils.h"
 #include "grid.h"
-#include "keys.h"
+#include "inputs.h"
 
 /*
   Define the Bomberman structure
@@ -20,7 +20,7 @@ typedef struct {
   Objects *spikes;
   Grid *grid;
   MLV_Font *font;
-  Keys *keys;
+  Inputs *inputs;
 } Bomberman;
 
 /* Initialises a Bomberman instance */
