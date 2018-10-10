@@ -62,7 +62,7 @@ $(OBJ_DIR)/editor.o: $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h $(SRC_DIR)/objec
 
 $(OBJ_DIR)/bomberman.o: $(SRC_DIR)/bomberman.h $(SRC_DIR)/objects.h $(SRC_DIR)/sprites.h $(SRC_DIR)/utils.h $(SRC_DIR)/grid.h $(SRC_DIR)/inputs.h
 
-$(OBJ_DIR)/files.o: $(SRC_DIR)/files.h $(SRC_DIR)/utils.h
+$(OBJ_DIR)/files.o: $(SRC_DIR)/files.h $(SRC_DIR)/utils.h $(SRC_DIR)/bomberman.h
 
 $(OBJ_DIR)/sprites.o: $(SRC_DIR)/sprites.h
 

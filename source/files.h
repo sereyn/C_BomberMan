@@ -1,13 +1,18 @@
 #ifndef FILES
 #define FILES
 
-#include "utils.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include "utils.h"
+#include "bomberman.h"
+#include "objects.h"
 
 /* Saves a level */
-void saveFile();
+void saveLevel(Bomberman *bbm);
 
 /* Loads a level */
-void loadFile();
+void loadLevel();
 
 #endif /* FILES */

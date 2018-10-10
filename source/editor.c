@@ -79,8 +79,8 @@ void editorLoop(Editor *editor, Bomberman *bbm){
     (edge blocks excluded, as we don't want the user to edit those ones)
   */
   if(mouseX > 0 && mouseX < dims->x-1
-	 && mouseY > marginTop && mouseY < marginTop+dims->y-1
-   && !isForbiddenBlock(mouseX, mouseY-marginTop, dims->x-2, dims->y-2)){
+  && mouseY > marginTop && mouseY < marginTop+dims->y-1
+  && !isForbiddenBlock(mouseX, mouseY-marginTop, dims->x-2, dims->y-2)){
     /* We check if the mouse buttons are just down, or down while shift is pressed */
     if(((isDown(bbm->inputs->lshift) || isDown(bbm->inputs->rshift))
     && (isDown(bbm->inputs->lclick) || isDown(bbm->inputs->rclick)))
@@ -122,7 +122,7 @@ void editorLoop(Editor *editor, Bomberman *bbm){
   }
   /* We check if the user pressed ctrl+S */
   if((isDown(bbm->inputs->lctrl) || isDown(bbm->inputs->rctrl)) && isJustDown(bbm->inputs->s)){
-    debug(0, "NEED TO SAVE\n");
+    saveLevel(bbm);
   }
 }
 
