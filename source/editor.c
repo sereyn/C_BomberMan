@@ -47,6 +47,7 @@ Editor *initEditor(Bomberman *bbm){
 }
 
 void editorLoop(Editor *editor, Bomberman *bbm){
+  Objects **allObjects;
   int mouseX, mouseY, i, j;
   /* We create variables for shorter and clearer code */
   int size = bbm->grid->size;
@@ -122,7 +123,15 @@ void editorLoop(Editor *editor, Bomberman *bbm){
   }
   /* We check if the user pressed ctrl+S */
   if((isDown(bbm->inputs->lctrl) || isDown(bbm->inputs->rctrl)) && isJustDown(bbm->inputs->s)){
-    debug(0, "NEED TO SAVE\n");
+    /* We fill the allObjects array */
+    allObjects = malloc(4 * sizeof(bbm->floors));
+    allObjects[0] = bbm->floors;
+    allObjects[1] = bbm->blocks;
+    allObjects[2] = bbm->boxes;
+    allObjects[3] = bbm->spikes;
+
+    saveFile(allObjects, 4);
+    free(allObjects);
   }
 }
 
