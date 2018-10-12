@@ -4,9 +4,10 @@
 #include "utils.h"
 #include "files.h"
 #include "objects.h"
+#include "player.h"
 
 typedef struct {
-  /**/
+  Player *players[4];
 } Game;
 
 /* Inits the game */

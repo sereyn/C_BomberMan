@@ -55,10 +55,10 @@ int main(void){
   while(!isDown(bomberman->inputs->escape) && !closed){
     MLV_clear_window(MLV_COLOR_BLACK);
 
+    drawAll(bomberman);
     updateInputs(bomberman->inputs);
     gameLoop(game, bomberman);
     /* editorLoop(editor, bomberman); */
-    drawAll(bomberman);
 
     MLV_actualise_window();
     MLV_delay_according_to_frame_rate();

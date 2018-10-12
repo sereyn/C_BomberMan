@@ -35,6 +35,21 @@ Inputs *initInputs(){
   inputs->rclick = newInput(inputs, MLV_BUTTON_RIGHT, 0);
   inputs->lshift = newInput(inputs, MLV_KEYBOARD_LSHIFT, 1);
   inputs->rshift = newInput(inputs, MLV_KEYBOARD_RSHIFT, 1);
+  inputs->up = newInput(inputs, MLV_KEYBOARD_UP, 1);
+  inputs->left = newInput(inputs, MLV_KEYBOARD_LEFT, 1);
+  inputs->down = newInput(inputs, MLV_KEYBOARD_DOWN, 1);
+  inputs->right = newInput(inputs, MLV_KEYBOARD_RIGHT, 1);
+  inputs->z = newInput(inputs, MLV_KEYBOARD_z, 1);
+  inputs->q = newInput(inputs, MLV_KEYBOARD_q, 1);
+  inputs->d = newInput(inputs, MLV_KEYBOARD_d, 1);
+  inputs->o = newInput(inputs, MLV_KEYBOARD_o, 1);
+  inputs->k = newInput(inputs, MLV_KEYBOARD_k, 1);
+  inputs->l = newInput(inputs, MLV_KEYBOARD_l, 1);
+  inputs->m = newInput(inputs, MLV_KEYBOARD_m, 1);
+  inputs->g = newInput(inputs, MLV_KEYBOARD_g, 1);
+  inputs->v = newInput(inputs, MLV_KEYBOARD_v, 1);
+  inputs->b = newInput(inputs, MLV_KEYBOARD_b, 1);
+  inputs->n = newInput(inputs, MLV_KEYBOARD_n, 1);
   return inputs;
 }
 

@@ -61,10 +61,11 @@ void loadLevel(Bomberman *bbm, int fileNumber){
   if(!lvl)
     exit(EXIT_FAILURE);
   for(i = 0; i < 3; ++i){
-    fscanf(lvl, "%c", &objChar);
-    if(objChar == "bcs"[i]){
-      while(fscanf(lvl, "%d;%d", &x, &y) == 2){
-        newObject(objList[i], newCoord(x*bbm->grid->size, y*bbm->grid->size));
+    if(fscanf(lvl, "%c", &objChar) == 1){
+      if(objChar == "bcs"[i]){
+        while(fscanf(lvl, "%d;%d", &x, &y) == 2){
+          newObject(objList[i], newCoord(x*bbm->grid->size, y*bbm->grid->size));
+        }
       }
     }
   }

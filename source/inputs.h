@@ -18,7 +18,8 @@ typedef struct {
 } Input;
 
 typedef struct {
-  Input *s, *lctrl, *rctrl, *escape, *lclick, *rclick, *lshift, *rshift;
+  Input *s, *lctrl, *rctrl, *escape, *lclick, *rclick, *lshift, *rshift,
+  *up, *left, *down, *right, *z, *q, *d, *o, *k, *l, *m, *g, *v, *b, *n;
   Input **list;
   int length;
 } Inputs;
