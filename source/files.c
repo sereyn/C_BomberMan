@@ -45,18 +45,29 @@ void saveLevel(Bomberman *bbm){
 }
 
 void loadLevel(Bomberman *bbm, int fileNumber){
-  int i, j, x, y;
+  int i, x, y;
+  char objChar;
   char *prefix = "resources/levels/lvl";
   char *suffix = ".txt";
   /* Same as in saveLevel */
   char *path = malloc((strlen(prefix)+strlen(prefix)+5)*sizeof(char));
   FILE *lvl;
+  Objects *objList[3];
+  objList[0] = bbm->blocks;
+  objList[1] = bbm->boxes;
+  objList[2] = bbm->spikes;
   sprintf(path, "%s%d%s", prefix, fileNumber, suffix);
   lvl = fopen(path, "r");
   if(!lvl)
     exit(EXIT_FAILURE);
-  debug(0, "Worked\n");
-  /**/
+  for(i = 0; i < 3; ++i){
+    fscanf(lvl, "%c", &objChar);
+    if(objChar == "bcs"[i]){
+      while(fscanf(lvl, "%d;%d", &x, &y) == 2){
+        newObject(objList[i], newCoord(x*bbm->grid->size, y*bbm->grid->size));
+      }
+    }
+  }
   fclose(lvl);
   free(path);
 }

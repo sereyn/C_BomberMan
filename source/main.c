@@ -44,9 +44,10 @@ int main(void){
     (we don't need to free the grid since freeBomberman will do it for us)
   */
   bomberman = initBomberman(grid);
+  /* We initialise the game */
+  game = initGame(bomberman);
   /* We initialise the editor */
   /* editor = initEditor(bomberman); */
-  game = initGame(bomberman);
   /*
     Game loop:
     This while keeps looping until the user presses escape or the cross button
