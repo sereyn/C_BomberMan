@@ -44,10 +44,19 @@ void saveLevel(Bomberman *bbm){
   debug(0, "Level saved!\n");
 }
 
-void loadLevel(){
-  FILE *level = fopen("level", "rb");
-  if(!level)
+void loadLevel(Bomberman *bbm, int fileNumber){
+  int i, j, x, y;
+  char *prefix = "resources/levels/lvl";
+  char *suffix = ".txt";
+  /* Same as in saveLevel */
+  char *path = malloc((strlen(prefix)+strlen(prefix)+5)*sizeof(char));
+  FILE *lvl;
+  sprintf(path, "%s%d%s", prefix, fileNumber, suffix);
+  lvl = fopen(path, "r");
+  if(!lvl)
     exit(EXIT_FAILURE);
-  /* To be continued */
-  fclose(level);
+  debug(0, "Worked\n");
+  /**/
+  fclose(lvl);
+  free(path);
 }

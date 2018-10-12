@@ -1,6 +1,7 @@
 #include <MLV/MLV_all.h>
 #include "utils.h"
 #include "bomberman.h"
+#include "game.h"
 #include "editor.h"
 #include "grid.h"
 #include "inputs.h"
@@ -23,6 +24,7 @@ int main(void){
   /* Creates a grid of 40px per block, dimensions 21x13 and a marginTop of 3*/
   Grid *grid = initGrid(40, newCoord(21, 13), 3);
   Bomberman *bomberman;
+  Game *game;
   Editor *editor;
   debug(0, "Loading...\n");
   /* We call an MLV function which takes a callback meant to switch closed to 1 */
@@ -43,7 +45,8 @@ int main(void){
   */
   bomberman = initBomberman(grid);
   /* We initialise the editor */
-  editor = initEditor(bomberman);
+  /* editor = initEditor(bomberman); */
+  game = initGame(bomberman);
   /*
     Game loop:
     This while keeps looping until the user presses escape or the cross button
@@ -52,7 +55,8 @@ int main(void){
     MLV_clear_window(MLV_COLOR_BLACK);
 
     updateInputs(bomberman->inputs);
-    editorLoop(editor, bomberman);
+    gameLoop(game, bomberman);
+    /* editorLoop(editor, bomberman); */
     drawAll(bomberman);
 
     MLV_actualise_window();
@@ -62,7 +66,8 @@ int main(void){
     Once the code reaches this point, the game is over
     We need to free all the memory allocated during the game process
   */
-  freeEditor(editor);
+  freeGame(game);
+  /* freeEditor(editor); */
   freeBomberman(bomberman);
   MLV_free_window();
   /* If that line doesn't show up, then something went wrong */

@@ -54,7 +54,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 # Dependencies
 
-$(OBJ_DIR)/main.o: $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h $(SRC_DIR)/utils.h $(SRC_DIR)/grid.h $(SRC_DIR)/inputs.h
+$(OBJ_DIR)/main.o: $(SRC_DIR)/game.h $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h $(SRC_DIR)/utils.h $(SRC_DIR)/grid.h $(SRC_DIR)/inputs.h
 
 $(OBJ_DIR)/player.o: $(SRC_DIR)/player.h $(SRC_DIR)/utils.h
 
@@ -73,3 +73,5 @@ $(OBJ_DIR)/utils.o: $(SRC_DIR)/utils.h
 $(OBJ_DIR)/inputs.o: $(SRC_DIR)/inputs.h
 
 $(OBJ_DIR)/grid.o: $(SRC_DIR)/grid.h $(SRC_DIR)/utils.h
+
+$(OBJ_DIR)/game.o: $(SRC_DIR)/game.h $(SRC_DIR)/utils.h $(SRC_DIR)/files.h $(SRC_DIR)/objects.h

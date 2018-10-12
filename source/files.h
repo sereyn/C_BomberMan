@@ -13,6 +13,6 @@
 void saveLevel(Bomberman *bbm);
 
 /* Loads a level */
-void loadLevel();
+void loadLevel(Bomberman *bbm, int fileNumber);
 
 #endif /* FILES */
