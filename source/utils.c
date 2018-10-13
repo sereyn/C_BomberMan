@@ -16,6 +16,10 @@ void debug(int level, char *format, ...){
   }
 }
 
+int sign(int x){
+  return x > 0 ? 1 : (x < 0 ? -1 : 0);
+}
+
 Coord *newCoord(int x, int y){
   Coord *coord = malloc(sizeof(Coord));
   coord->x = x;

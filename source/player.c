@@ -11,23 +11,26 @@ Player *newPlayer(Bomberman *bbm, int number){
     MLV_COLOR_YELLOW
   };
   Player *player = malloc(sizeof(Player));
-  player->size = bbm->grid->size;
+  player->size = bbm->grid->size*4/5;
   /* We set the default position of the player according to its number */
   if(number == 1 || number == 3)
     x = bbm->grid->dimensions->x-2;
   if(number == 2 || number == 3)
     y = bbm->grid->dimensions->y-2;
   /* We fit the player's position according to the grid */
-  x *= player->size;
+  x *= bbm->grid->size;
   y += bbm->grid->marginTop;
-  y *= player->size;
+  y *= bbm->grid->size;
+  /* We place the player at the center of its spawn case */
+  x += (bbm->grid->size-player->size)/2;
+  y += (bbm->grid->size-player->size)/2;
   player->position = malloc(sizeof(Coord));
   player->position->x = x;
   player->position->y = y;
   player->speed = 3;
   /* We give it its color */
   player->color = allColors[number];
-  /* We chooses the right controls for the player depending of its number */
+  /* We choose the right controls for the player depending of its number */
   switch(number){
     case 0:
       player->up = bbm->inputs->up;
@@ -57,7 +60,38 @@ Player *newPlayer(Bomberman *bbm, int number){
   return player;
 }
 
-void updatePlayer(Player *player){
+int playerCollides(Player *player, int x, int y, Bomberman *bbm){
+  int j, i, xColl, yColl;
+  /*
+    (x1, y1) is the top left coordinate of the player
+    (x2, y2) is its bottom right one
+  */
+  int x1 = x, y1 = y;
+  int x2 = x1+player->size, y2 = y1+player->size;
+  /* Same goes fot the object coordinates */
+  int objX1, objY1, objX2, objY2;
+  /* Loop through all the objects */
+  Objects *objList[3];
+  objList[0] = bbm->blocks;
+  objList[1] = bbm->boxes;
+  objList[2] = bbm->spikes;
+  for(j = 0; j < 3; ++j){
+    for(i = 0; i < objList[j]->length; ++i){
+      objX1 = objList[j]->list[i]->x;
+      objY1 = objList[j]->list[i]->y;
+      objX2 = objX1+bbm->grid->size, objY2 = objY1+bbm->grid->size;
+      /* xColl is the horizontal collision, yColl is the vertical one */
+      xColl = x1 < objX2 && objX1 < x2;
+      yColl = y1 < objY2 && objY1 < y2;
+      /* If the player collides both horizontally and vertically, we return 1 */
+      if(xColl && yColl)
+        return 1;
+    }
+  }
+  return 0;
+}
+
+void movePlayer(Player *player, Bomberman *bbm){
   /*
     We sum up the right and left key's state and substract them in a way that the results equals
     1 if only right is pressed
@@ -67,15 +101,58 @@ void updatePlayer(Player *player){
   */
   int xSpeed = isDown(player->right)-isDown(player->left);
   int ySpeed = isDown(player->down)-isDown(player->up);
-  /* We then move the player with a speed factor */
-  player->position->x += player->speed*xSpeed;
-  player->position->y += player->speed*ySpeed;
+  /* Then we multiply that value by a factor player->speed to move faster than a pixel per frame */
+  xSpeed *= player->speed;
+  ySpeed *= player->speed;
+
+  /*
+    Horizontal movement
+    We check if the player would collide in its next position
+  */
+  if(playerCollides(player, player->position->x+xSpeed, player->position->y, bbm)){
+    /*
+      If the player would collide if we simply iterate its x position by xSpeed,
+      we instead increase its position pixel per pixel until it collides one pixel later
+    */
+    while(!playerCollides(player, player->position->x+sign(xSpeed), player->position->y, bbm))
+      player->position->x += sign(xSpeed);
+    /* Then we set its xSpeed to 0 */
+    xSpeed = 0;
+  }
+  /* We can now safely iterate the player x's position by xSpeed */
+  player->position->x += xSpeed;
+
+  /*
+    Vertical movement
+    We apply the same logic as with the horizontal movement
+  */
+  if(playerCollides(player, player->position->x, player->position->y+ySpeed, bbm)){
+    while(!playerCollides(player, player->position->x, player->position->y+sign(ySpeed), bbm))
+      player->position->y += sign(ySpeed);
+    ySpeed = 0;
+  }
+  player->position->y += ySpeed;
+}
+
+void drawPlayer(Player *player){
   /* Renders the player */
-  MLV_draw_filled_rectangle(player->position->x, player->position->y,
-    player->size, player->size, player->color);
+  MLV_draw_filled_rectangle(
+    player->position->x,
+    player->position->y,
+    player->size,
+    player->size,
+    player->color
+  );
+}
+
+void updatePlayer(Player *player, Bomberman *bbm){
+  /* First moves the player, then draws it */
+  movePlayer(player, bbm);
+  drawPlayer(player);
 }
 
 void freePlayer(Player *player){
+  /* Frees all the allocated memory the player knows about */
   free(player->position);
   free(player);
 }

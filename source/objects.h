@@ -10,13 +10,12 @@
   Objects is a structure to represent object-like concepts
   i.e. blocks, bricks, players, ...
   An object has coordinates
-  Every object has in common the sprite and the dimensions
+  Every object has in common the sprite
 */
 typedef struct {
   Coord **list;
   int length;
   MLV_Image *sprite;
-  Coord dimensions;
   char termChar;
 } Objects;
 

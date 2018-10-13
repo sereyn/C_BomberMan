@@ -23,25 +23,22 @@ Game *initGame(Bomberman *bbm){
   /* Now we add the objects that depend of each level */
   loadLevel(bbm, 3);
   /* We initializes the players */
-  for(i = 0; i < 4; ++i){
+  for(i = 0; i < 4; ++i)
     game->players[i] = newPlayer(bbm, i);
-  }
   return game;
 }
 
 void gameLoop(Game *game, Bomberman *bbm){
   int i;
   /* We update the 4 players */
-  for(i = 0; i < 4; ++i){
-    updatePlayer(game->players[i]);
-  }
+  for(i = 0; i < 4; ++i)
+    updatePlayer(game->players[i], bbm);
 }
 
 void freeGame(Game *game){
   int i = 0;
   /* Frees the game */
-  for(; i < 4; ++i){
+  for(; i < 4; ++i)
     freePlayer(game->players[i]);
-  }
   free(game);
 }

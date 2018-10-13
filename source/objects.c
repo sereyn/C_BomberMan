@@ -6,9 +6,6 @@ Objects *initObjects(MLV_Image *sprite, char termChar){
   objects->sprite = sprite;
   objects->termChar = termChar;
   objects->list = NULL;
-  /* For the dimensions, we simply get the ones of the given sprite */
-  objects->dimensions.x = MLV_get_image_width(sprite);
-  objects->dimensions.y = MLV_get_image_height(sprite);
   return objects;
 }
 

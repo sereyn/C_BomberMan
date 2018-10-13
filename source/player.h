@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "bomberman.h"
 #include "inputs.h"
+#include "objects.h"
 
 /* The player structure */
 typedef struct {
@@ -18,8 +19,20 @@ typedef struct {
 /* Creates a new player */
 Player *newPlayer(Bomberman *bbm, int number);
 
-/* Moves and draws the player */
-void updatePlayer(Player *player);
+/*
+  Returns if whether or not a player is colliding with an object at the 'position' coordinates
+  (blocks, boxes or spikes)
+*/
+int playerCollides(Player *player, int x, int y, Bomberman *bbm);
+
+/* Moves the player */
+void movePlayer(Player *player, Bomberman *bbm);
+
+/* Draws the player */
+void drawPlayer(Player *player);
+
+/* Moves and draws the player, has to be called at every frame */
+void updatePlayer(Player *player, Bomberman *bbm);
 
 /* Frees the player memory */
 void freePlayer(Player *player);
