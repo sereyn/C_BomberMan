@@ -60,11 +60,11 @@ $(OBJ_DIR)/player.o: $(SRC_DIR)/player.h $(SRC_DIR)/utils.h $(SRC_DIR)/bomberman
 
 $(OBJ_DIR)/editor.o: $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h $(SRC_DIR)/objects.h $(SRC_DIR)/files.h $(SRC_DIR)/utils.h $(SRC_DIR)/inputs.h
 
-$(OBJ_DIR)/bomberman.o: $(SRC_DIR)/bomberman.h $(SRC_DIR)/objects.h $(SRC_DIR)/sprites.h $(SRC_DIR)/utils.h $(SRC_DIR)/grid.h $(SRC_DIR)/inputs.h
+$(OBJ_DIR)/bomberman.o: $(SRC_DIR)/bomberman.h $(SRC_DIR)/objects.h $(SRC_DIR)/sprites.h $(SRC_DIR)/utils.h $(SRC_DIR)/grid.h $(SRC_DIR)/inputs.h $(SRC_DIR)/animation.h
 
 $(OBJ_DIR)/files.o: $(SRC_DIR)/files.h $(SRC_DIR)/utils.h $(SRC_DIR)/bomberman.h
 
-$(OBJ_DIR)/sprites.o: $(SRC_DIR)/sprites.h
+$(OBJ_DIR)/sprites.o: $(SRC_DIR)/sprites.h $(SRC_DIR)/utils.h
 
 $(OBJ_DIR)/objects.o: $(SRC_DIR)/objects.h $(SRC_DIR)/utils.h $(SRC_DIR)/grid.h
 
@@ -75,3 +75,5 @@ $(OBJ_DIR)/inputs.o: $(SRC_DIR)/inputs.h
 $(OBJ_DIR)/grid.o: $(SRC_DIR)/grid.h $(SRC_DIR)/utils.h
 
 $(OBJ_DIR)/game.o: $(SRC_DIR)/game.h $(SRC_DIR)/utils.h $(SRC_DIR)/files.h $(SRC_DIR)/objects.h $(SRC_DIR)/player.h
+
+$(OBJ_DIR)/animation.o: $(SRC_DIR)/animation.h $(SRC_DIR)/utils.h

@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "grid.h"
 #include "inputs.h"
+#include "animation.h"
 
 /*
   Define the Bomberman structure
@@ -13,7 +14,9 @@
 */
 typedef struct {
   MLV_Image *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow;
+  Animation *aniBomb, *aniFlameCenter, *aniFlameXSide, *aniFlameXTip, *aniFlameYSide, *aniFlameYTip;
   Sprites *sprites;
+  Animations *animations;
   Objects *floors;
   Objects *blocks;
   Objects *boxes;

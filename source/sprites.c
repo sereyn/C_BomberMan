@@ -1,13 +1,13 @@
 #include "sprites.h"
 
-Sprites *initSprites(){
+Sprites *initSprites(void){
   Sprites *sprites = malloc(sizeof(Sprites));
   sprites->length = 0;
   sprites->list = NULL;
   return sprites;
 }
 
-MLV_Image *newSprite(Sprites *sprites, char *fileName, int width, int height){
+MLV_Image *newSprite(Sprites *sprites, char *fileName, Coord *dimensions){
   char *fileDirectory = "resources/sprites/";
   char *path = malloc((strlen(fileDirectory)+strlen(fileName)+1)*sizeof(char));
   MLV_Image *sprite;
@@ -20,7 +20,7 @@ MLV_Image *newSprite(Sprites *sprites, char *fileName, int width, int height){
   sprite = MLV_load_image(path);
   /* We can free path */
   free(path);
-  MLV_resize_image_with_proportions(sprite, width, height);
+  MLV_resize_image_with_proportions(sprite, dimensions->x, dimensions->y);
   /*
     We ask for 1 more slot of memory for our list to save the new sprite
     Then we save that sprite at the end of the list and increment the length
@@ -35,6 +35,6 @@ void freeSprites(Sprites *sprites){
   int i = 0;
   for(; i < sprites->length; ++i)
     MLV_free_image(sprites->list[i]);
-  /* Then frees the array itself */
+  /* Then frees the pseudo array itself */
   free(sprites->list);
 }
