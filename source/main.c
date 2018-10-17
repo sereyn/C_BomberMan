@@ -5,6 +5,7 @@
 #include "editor.h"
 #include "grid.h"
 #include "inputs.h"
+#include "menu.h"
 
 /*
   exitCallback's prototype must be void fun(void *)
@@ -26,6 +27,7 @@ int main(void){
   Bomberman *bomberman;
   Game *game;
   Editor *editor;
+  Menu *menu;
   debug(0, "Loading...\n");
   /* We call an MLV function which takes a callback meant to switch closed to 1 */
   MLV_execute_at_exit(exitCallback, &closed);
@@ -38,6 +40,8 @@ int main(void){
     grid->size*(grid->dimensions->y+grid->marginTop)
   );
   MLV_change_frame_rate(60);
+  /* We initialise the menu */
+  menu = initMenu(0);
   /*
     We initialise bomberman
     This has to be done after the window creation because it prepares the sprites
@@ -47,7 +51,7 @@ int main(void){
   /* We initialise the game */
   game = initGame(bomberman);
   /* We initialise the editor */
-  /* editor = initEditor(bomberman); */
+  editor = initEditor(bomberman);
   /*
     Game loop:
     This while keeps looping until the user presses escape or the cross button
@@ -57,8 +61,9 @@ int main(void){
 
     drawAll(bomberman);
     updateInputs(bomberman->inputs);
-    gameLoop(game, bomberman);
+    /* gameLoop(game, bomberman); */
     /* editorLoop(editor, bomberman); */
+    menuLoop(menu, game, editor, bomberman);
 
     MLV_actualise_window();
     MLV_delay_according_to_frame_rate();
