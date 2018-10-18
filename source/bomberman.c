@@ -46,12 +46,12 @@ void drawAll(Bomberman *bbm){
   drawObjects(bbm->boxes, bbm->grid);
   drawObjects(bbm->spikes, bbm->grid);
   /* Temporarily draw animation for test purposes */
-  drawAnimation(bbm->aniBomb, 0, 0);
+  /*drawAnimation(bbm->aniBomb, 0, 0);
   drawAnimation(bbm->aniFlameCenter, bbm->grid->size, 0);
   drawAnimation(bbm->aniFlameXSide, 2*bbm->grid->size, 0);
   drawAnimation(bbm->aniFlameXTip, 3*bbm->grid->size, 0);
   drawAnimation(bbm->aniFlameYSide, bbm->grid->size, bbm->grid->size);
-  drawAnimation(bbm->aniFlameYTip, bbm->grid->size, 2*bbm->grid->size);
+  drawAnimation(bbm->aniFlameYTip, bbm->grid->size, 2*bbm->grid->size);*/
   /* Prints the equivalent result into the terminal */
   printGrid(bbm->grid);
 }

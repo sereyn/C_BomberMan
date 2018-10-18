@@ -1,7 +1,16 @@
 #include "game.h"
 
 Game *initGame(Bomberman *bbm){
+  int i;
   Game *game = malloc(sizeof(Game));
+  game->created = 0;
+  /* We initializes the players */
+  for(i = 0; i < 4; ++i)
+    game->players[i] = newPlayer(bbm, i);
+  return game;
+}
+
+void createGame(Game *game, Bomberman *bbm){
   int i, j;
   /* We create variables for shorter and clearer code */
   int marginTop = bbm->grid->marginTop;
@@ -22,10 +31,7 @@ Game *initGame(Bomberman *bbm){
   }
   /* Now we add the objects that depend of each level */
   loadLevel(bbm, 3);
-  /* We initializes the players */
-  for(i = 0; i < 4; ++i)
-    game->players[i] = newPlayer(bbm, i);
-  return game;
+  game->created = 1;
 }
 
 void gameLoop(Game *game, Bomberman *bbm){

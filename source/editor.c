@@ -11,6 +11,21 @@ int isForbiddenBlock(int x, int y, int w, int h){
 
 Editor *initEditor(Bomberman *bbm){
   Editor *editor = malloc(sizeof(Editor));
+  editor->created = 0;
+  /* Initialise the item list */
+  editor->items = malloc(sizeof(Items));
+  editor->items->length = 3;
+  editor->items->list = malloc(editor->items->length*sizeof(Objects *));
+  /* Feeds the item list with the available items */
+  editor->items->list[0] = bbm->blocks;
+  editor->items->list[1] = bbm->boxes;
+  editor->items->list[2] = bbm->spikes;
+  /* Sets the default item */
+  editor->items->current = 0;
+  return editor;
+}
+
+void createEditor(Editor *editor, Bomberman *bbm){
   int i, j;
   /* We create variables for shorter and clearer code */
   int size = bbm->grid->size;
@@ -29,21 +44,10 @@ Editor *initEditor(Bomberman *bbm){
         newObject(bbm->floors, newCoord(i*size, (j+marginTop)*size));
     }
   }
-
-  /* Initialise the item list */
-  editor->items = malloc(sizeof(Items));
-  editor->items->length = 3;
-  editor->items->list = malloc(editor->items->length*sizeof(Objects *));
-  /* Feeds the item list with the available items */
-  editor->items->list[0] = bbm->blocks;
-  editor->items->list[1] = bbm->boxes;
-  editor->items->list[2] = bbm->spikes;
-  /* Sets the default item */
-  editor->items->current = 0;
   /* We create the editor's toolbar */
   for(i = 0; i < editor->items->length; ++i)
     newObject(editor->items->list[i], newCoord((2*i+1)*size, size));
-  return editor;
+  editor->created = 1;
 }
 
 void editorLoop(Editor *editor, Bomberman *bbm){

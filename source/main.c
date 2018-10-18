@@ -50,8 +50,10 @@ int main(void){
   bomberman = initBomberman(grid);
   /* We initialise the game */
   game = initGame(bomberman);
+  /**/
   /* We initialise the editor */
   editor = initEditor(bomberman);
+  /**/
   /*
     Game loop:
     This while keeps looping until the user presses escape or the cross button

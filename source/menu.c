@@ -10,28 +10,23 @@ Menu *initMenu(int state){
 }
 
 void menuLoop(Menu *menu, Game *game, Editor *editor, Bomberman *bbm){
-  Coord *dims = bbm->grid->dimensions;
-  int size = bbm->grid->size;
   Player *mainPlayer = game->players[0];
   int ySpeed = isDown(mainPlayer->down)-isDown(mainPlayer->up);
-  char editorText[15] = "  Editor  ";
-  char playText[15] = "  Play  ";
 
   /* ------ Cases: not in menu ------ */
-	if(menu->state == 1)
+	if(menu->state == 1){
+    if(!game->created)
+      createGame(game, bbm);
 		return gameLoop(game, bbm);
-	if(menu->state == 2)
+  }
+	if(menu->state == 2){
+    if(!editor->created)
+      createEditor(editor, bbm);
 		return editorLoop(editor, bbm);
+  }
 
   /* ------ Case: in menu ------ */
 
-  /* Hide game behind menu */
-  MLV_clear_window(MLV_COLOR_BLACK);
-  /* Draw title */
-  MLV_draw_text_with_font(
-    dims->x/2*size,
-    size*.02,
-    "BomberMan", bbm->font, MLV_COLOR_WHITE);
   /* Move the focus */
   if(menu->keyReleased){
     menu->keyReleased = 0;
@@ -46,12 +41,28 @@ void menuLoop(Menu *menu, Game *game, Editor *editor, Bomberman *bbm){
     menu->keyReleased = 1;
     debug(4, "Menu choice: %d\n", menu->stateFocused);
   }
+  /* Draw menu */
+  drawMenu(menu, bbm);
+}
+
+void drawMenu(Menu *menu, Bomberman *bbm){
+  char editorText[15] = "  Editor  ";
+  char playText[15] = "  Play  ";
+  Coord *dims = bbm->grid->dimensions;
+  int size = bbm->grid->size;
   /* Apply text */
   if(menu->stateFocused == 1){
     strcpy(playText, "< Play >");
   }else{
     strcpy(editorText, "< Editor >");
   }
+  /* Hide game behind menu */
+  MLV_clear_window(MLV_COLOR_BLACK);
+  /* Draw title */
+  MLV_draw_text_with_font(
+    dims->x/2*size,
+    size*.02,
+    "BomberMan", bbm->font, MLV_COLOR_WHITE);
   /* Draw  choices */
   MLV_draw_text_with_font(
     dims->x/2*size,

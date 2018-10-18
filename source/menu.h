@@ -16,4 +16,6 @@ Menu *initMenu(int state);
 
 void menuLoop(Menu *menu, Game *game, Editor *editor, Bomberman *bbm);
 
+void drawMenu(Menu *menu, Bomberman *bbm);
+
 #endif /* MENU */

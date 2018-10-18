@@ -8,10 +8,13 @@
 
 typedef struct {
   Player *players[4];
+  int created;
 } Game;
 
 /* Inits the game */
 Game *initGame(Bomberman *bbm);
+
+void createGame(Game *game, Bomberman *bbm);
 
 /* Has to be executed in a game loop: main function of the game */
 void gameLoop(Game *game, Bomberman *bbm);
