@@ -30,7 +30,7 @@ void createGame(Game *game, Bomberman *bbm){
     }
   }
   /* Now we add the objects that depend of each level */
-  loadLevel(bbm, 3);
+  loadLevel(bbm, 1);
   game->created = 1;
 }
 

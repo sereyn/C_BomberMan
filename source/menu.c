@@ -41,6 +41,10 @@ void menuLoop(Menu *menu, Game *game, Editor *editor, Bomberman *bbm){
     menu->keyReleased = 1;
     debug(4, "Menu choice: %d\n", menu->stateFocused);
   }
+  /* On left ctrl, change state */
+  if(isJustDown(bbm->inputs->lctrl)){
+    menu->state = menu->stateFocused;
+  }
   /* Draw menu */
   drawMenu(menu, bbm);
 }
@@ -72,8 +76,4 @@ void drawMenu(Menu *menu, Bomberman *bbm){
     dims->x/2*size,
     size*5,
     editorText, bbm->font, MLV_COLOR_GRAY);
-  /* On left ctrl, change state */
-  if(isJustDown(bbm->inputs->lctrl)){
-    menu->state = menu->stateFocused;
-  }
 }
