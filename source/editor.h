@@ -18,7 +18,6 @@ typedef struct {
 
 typedef struct{
 	Items *items;
-	int created;
 } Editor;
 
 /* Tells if a block is forbidden to the edition or not */
@@ -26,8 +25,6 @@ int isForbiddenBlock(int x, int y, int w, int h);
 
 /* Initialises the editor */
 Editor *initEditor(Bomberman *bbm);
-
-void createEditor(Editor *editor, Bomberman *bbm);
 
 /* Has to be executed in a game loop: main function of the editor */
 void editorLoop(Editor *editor, Bomberman *bbm);

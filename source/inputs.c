@@ -50,6 +50,7 @@ Inputs *initInputs(){
   inputs->v = newInput(inputs, MLV_KEYBOARD_v, 1);
   inputs->b = newInput(inputs, MLV_KEYBOARD_b, 1);
   inputs->n = newInput(inputs, MLV_KEYBOARD_n, 1);
+  inputs->enter = newInput(inputs, MLV_KEYBOARD_RETURN, 1);
   return inputs;
 }
 

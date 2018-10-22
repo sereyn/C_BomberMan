@@ -10,8 +10,12 @@ int isForbiddenBlock(int x, int y, int w, int h){
 }
 
 Editor *initEditor(Bomberman *bbm){
+  int i, j;
+  /* We create variables for shorter and clearer code */
+  int size = bbm->grid->size;
+  Coord *dims = bbm->grid->dimensions;
+  int marginTop = bbm->grid->marginTop;
   Editor *editor = malloc(sizeof(Editor));
-  editor->created = 0;
   /* Initialise the item list */
   editor->items = malloc(sizeof(Items));
   editor->items->length = 3;
@@ -22,15 +26,6 @@ Editor *initEditor(Bomberman *bbm){
   editor->items->list[2] = bbm->spikes;
   /* Sets the default item */
   editor->items->current = 0;
-  return editor;
-}
-
-void createEditor(Editor *editor, Bomberman *bbm){
-  int i, j;
-  /* We create variables for shorter and clearer code */
-  int size = bbm->grid->size;
-  Coord *dims = bbm->grid->dimensions;
-  int marginTop = bbm->grid->marginTop;
   /* We loop through the whole board */
   debug(1, "Filling the editor grid\n");
   for(i = 0; i < dims->x; ++i){
@@ -47,7 +42,7 @@ void createEditor(Editor *editor, Bomberman *bbm){
   /* We create the editor's toolbar */
   for(i = 0; i < editor->items->length; ++i)
     newObject(editor->items->list[i], newCoord((2*i+1)*size, size));
-  editor->created = 1;
+  return editor;
 }
 
 void editorLoop(Editor *editor, Bomberman *bbm){
@@ -131,7 +126,10 @@ void editorLoop(Editor *editor, Bomberman *bbm){
 }
 
 void freeEditor(Editor *editor){
-  free(editor->items->list);
-  free(editor->items);
-  free(editor);
+  if(editor){
+    free(editor->items->list);
+    free(editor->items);
+    free(editor);
+    editor = NULL;
+  }
 }

@@ -1,21 +1,27 @@
 #ifndef MENU
 #define MENU
 
-#include "game.h"
-#include "editor.h"
 #include "bomberman.h"
+#include "utils.h"
+
+typedef enum {
+  oGame, oEditor
+} Option;
+
+char *optionToString(Option option);
 
 typedef struct{
-  int state; /* 0:menu 1:game 2:editor */
-  int stateFocused;
-  int keyReleased;
-  int statesLength;
+  Option cursor;
+  /* Has to be unsigned because used in comparaison with an enum (Option) */
+  unsigned int optionsNumber;
 } Menu;
 
-Menu *initMenu(int state);
+Menu *initMenu();
 
-void menuLoop(Menu *menu, Game *game, Editor *editor, Bomberman *bbm);
+void menuLoop(Menu *menu, Bomberman *bbm);
 
 void drawMenu(Menu *menu, Bomberman *bbm);
+
+void freeMenu(Menu *menu);
 
 #endif /* MENU */

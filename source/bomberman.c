@@ -34,6 +34,8 @@ Bomberman *initBomberman(Grid *grid){
   bbm->font = MLV_load_font("resources/fonts/font1.ttf", bbm->grid->size/2);
   /* Loads the keys */
   bbm->inputs = initInputs();
+  /* Set the default state on the menu (so that the game starts by displaying the menu) */
+  bbm->state = sMenu;
   return bbm;
 }
 

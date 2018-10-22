@@ -8,6 +8,10 @@
 #include "inputs.h"
 #include "animation.h"
 
+typedef enum {
+  sMenu, sGame, sEditor
+} State;
+
 /*
   Define the Bomberman structure
   It groups all the important stuff the game needs so that we can simply pass it as a parameter
@@ -24,6 +28,7 @@ typedef struct {
   Grid *grid;
   MLV_Font *font;
   Inputs *inputs;
+  State state;
 } Bomberman;
 
 /* Initialises a Bomberman instance */

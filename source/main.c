@@ -1,11 +1,11 @@
 #include <MLV/MLV_all.h>
 #include "utils.h"
 #include "bomberman.h"
+#include "menu.h"
 #include "game.h"
 #include "editor.h"
 #include "grid.h"
 #include "inputs.h"
-#include "menu.h"
 
 /*
   exitCallback's prototype must be void fun(void *)
@@ -24,10 +24,12 @@ int main(void){
   int closed = 0;
   /* Creates a grid of 40px per block, dimensions 21x13 and a marginTop of 3*/
   Grid *grid = initGrid(40, newCoord(21, 13), 3);
+
   Bomberman *bomberman;
-  Game *game;
-  Editor *editor;
-  Menu *menu;
+
+  Menu *menu = NULL;
+  Game *game = NULL;
+  Editor *editor = NULL;
   debug(0, "Loading...\n");
   /* We call an MLV function which takes a callback meant to switch closed to 1 */
   MLV_execute_at_exit(exitCallback, &closed);
@@ -40,33 +42,41 @@ int main(void){
     grid->size*(grid->dimensions->y+grid->marginTop)
   );
   MLV_change_frame_rate(60);
-  /* We initialise the menu */
-  menu = initMenu(0);
   /*
     We initialise bomberman
     This has to be done after the window creation because it prepares the sprites
     (we don't need to free the grid since freeBomberman will do it for us)
   */
   bomberman = initBomberman(grid);
-  /* We initialise the game */
-  game = initGame(bomberman);
-  /**/
-  /* We initialise the editor */
-  editor = initEditor(bomberman);
-  /**/
   /*
     Game loop:
     This while keeps looping until the user presses escape or the cross button
   */
   while(!isDown(bomberman->inputs->escape) && !closed){
     MLV_clear_window(MLV_COLOR_BLACK);
-
+    /* We draw everything (some content may be drawn in the subLoops though) */
     drawAll(bomberman);
+    /* Depending of the current state, we execute the according loop */
+    switch(bomberman->state){
+      case sMenu:
+        if(!menu)
+          menu = initMenu();
+        menuLoop(menu, bomberman);
+        break;
+      case sGame:
+        if(!game)
+          game = initGame(bomberman);
+        gameLoop(game, bomberman);
+        break;
+      case sEditor:
+        if(!editor)
+          editor = initEditor(bomberman);
+        editorLoop(editor, bomberman);
+        break;
+    }
+    /* We update the inputs at every frame */
     updateInputs(bomberman->inputs);
-    /* gameLoop(game, bomberman); */
-    /* editorLoop(editor, bomberman); */
-    menuLoop(menu, game, editor, bomberman);
-
+    /* We then render the screen and wait 1/FPS seconds */
     MLV_actualise_window();
     MLV_delay_according_to_frame_rate();
   }
@@ -74,8 +84,9 @@ int main(void){
     Once the code reaches this point, the game is over
     We need to free all the memory allocated during the game process
   */
+  freeMenu(menu);
   freeGame(game);
-  /* freeEditor(editor); */
+  freeEditor(editor);
   freeBomberman(bomberman);
   MLV_free_window();
   /* If that line doesn't show up, then something went wrong */

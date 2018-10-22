@@ -1,79 +1,66 @@
 #include "menu.h"
 
-Menu *initMenu(int state){
+char *optionToString(Option option){
+  switch(option){
+    case oGame:
+      return "Play";
+    case oEditor:
+      return "Editor";
+  }
+  return "";
+}
+
+Menu *initMenu(){
+  /* We initialize the menu */
   Menu *menu = malloc(sizeof(Menu));
-  menu->state = state;
-  menu->stateFocused = 1;
-  menu->keyReleased = 1;
-  menu->statesLength = 2;
+  menu->cursor = oGame;
+  menu->optionsNumber = 2;
   return menu;
 }
 
-void menuLoop(Menu *menu, Game *game, Editor *editor, Bomberman *bbm){
-  Player *mainPlayer = game->players[0];
-  int ySpeed = isDown(mainPlayer->down)-isDown(mainPlayer->up);
-
-  /* ------ Cases: not in menu ------ */
-	if(menu->state == 1){
-    if(!game->created)
-      createGame(game, bbm);
-		return gameLoop(game, bbm);
-  }
-	if(menu->state == 2){
-    if(!editor->created)
-      createEditor(editor, bbm);
-		return editorLoop(editor, bbm);
-  }
-
-  /* ------ Case: in menu ------ */
-
-  /* Move the focus */
-  if(menu->keyReleased){
-    menu->keyReleased = 0;
-    if(ySpeed < 0 && menu->stateFocused > 1){
-      menu->stateFocused -= 1;
-    }else if(ySpeed > 0 && menu->stateFocused < 2){
-      menu->stateFocused += 1;
-    }else{
-      menu->keyReleased = 1;
-    }
-  }else if(ySpeed == 0){
-    menu->keyReleased = 1;
-    debug(4, "Menu choice: %d\n", menu->stateFocused);
-  }
-  /* On left ctrl, change state */
-  if(isJustDown(bbm->inputs->lctrl)){
-    menu->state = menu->stateFocused;
-  }
-  /* Draw menu */
+void menuLoop(Menu *menu, Bomberman *bbm){
+  /* We move the cursor if the user presses up or down */
+  if(isJustDown(bbm->inputs->down))
+    menu->cursor += menu->cursor < menu->optionsNumber-1;
+  if(isJustDown(bbm->inputs->up))
+    menu->cursor -= menu->cursor > 0;
+  /* We draw the menu */
   drawMenu(menu, bbm);
+  /* If the user presses enter, we select their choice */
+  if(isJustDown(bbm->inputs->enter)){
+    debug(4, "Menu choice: '%s'\n", optionToString(menu->cursor));
+    /* bbm->state fits menu->cursor+1 so we enjoy its benefits */
+    bbm->state = menu->cursor+1;
+  }
 }
 
 void drawMenu(Menu *menu, Bomberman *bbm){
-  char editorText[15] = "  Editor  ";
-  char playText[15] = "  Play  ";
-  Coord *dims = bbm->grid->dimensions;
+  unsigned int i = 0;
   int size = bbm->grid->size;
-  /* Apply text */
-  if(menu->stateFocused == 1){
-    strcpy(playText, "< Play >");
-  }else{
-    strcpy(editorText, "< Editor >");
+  int marginLeft = 2, marginTop = 3;
+  char *optionText;
+  /* Show the title */
+  MLV_draw_text_with_font(
+    marginLeft*size, marginTop*size,
+    "BOMBERMAN", bbm->font, MLV_COLOR_WHITE);
+  /* Show all the options */
+  for(; i < menu->optionsNumber; ++i){
+    optionText = malloc(15*sizeof(char));
+    /* Copy the current option into optionText */
+    strcpy(optionText, optionToString(i));
+    /* If the cursor is currently selecting this option, we concat to this string an arrow */
+    if(i == menu->cursor)
+      strcat(optionText, " <");
+    MLV_draw_text_with_font(
+      marginLeft*size, (marginTop+4+i)*size,
+      optionText, bbm->font, MLV_COLOR_GRAY);
+    free(optionText);
   }
-  /* Hide game behind menu */
-  MLV_clear_window(MLV_COLOR_BLACK);
-  /* Draw title */
-  MLV_draw_text_with_font(
-    dims->x/2*size,
-    size*.02,
-    "BomberMan", bbm->font, MLV_COLOR_WHITE);
-  /* Draw  choices */
-  MLV_draw_text_with_font(
-    dims->x/2*size,
-    size*4,
-    playText, bbm->font, MLV_COLOR_GRAY);
-  MLV_draw_text_with_font(
-    dims->x/2*size,
-    size*5,
-    editorText, bbm->font, MLV_COLOR_GRAY);
+}
+
+void freeMenu(Menu *menu){
+  if(menu){
+    free(menu);
+    menu = NULL;
+  }
 }

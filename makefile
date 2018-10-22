@@ -78,4 +78,4 @@ $(OBJ_DIR)/game.o: $(SRC_DIR)/game.h $(SRC_DIR)/utils.h $(SRC_DIR)/files.h $(SRC
 
 $(OBJ_DIR)/animation.o: $(SRC_DIR)/animation.h $(SRC_DIR)/utils.h
 
-$(OBJ_DIR)/menu.o: $(SRC_DIR)/menu.h $(SRC_DIR)/game.h $(SRC_DIR)/editor.h $(SRC_DIR)/bomberman.h
+$(OBJ_DIR)/menu.o: $(SRC_DIR)/menu.h $(SRC_DIR)/utils.h $(SRC_DIR)/bomberman.h
