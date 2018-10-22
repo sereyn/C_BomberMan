@@ -20,7 +20,7 @@ typedef struct {
 typedef struct {
   Input *s, *lctrl, *rctrl, *escape, *lclick, *rclick, *lshift, *rshift,
   *up, *left, *down, *right, *z, *q, *d, *o, *k, *l, *m, *g, *v, *b, *n,
-  *enter;
+  *enter, *e, *p, *h;
   Input **list;
   int length;
 } Inputs;

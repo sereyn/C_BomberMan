@@ -21,9 +21,11 @@ Bomberman *initBomberman(Grid *grid){
   bbm->aniBomb = newAnimation(bbm->animations, "bomb/bomb%d.png", spriteDims, .03, 0);
   bbm->aniFlameCenter = newAnimation(bbm->animations, "flame/center%d.png", spriteDims, .2, 0);
   bbm->aniFlameXSide = newAnimation(bbm->animations, "flame/side%d.png", spriteDims, .2, 0);
-  bbm->aniFlameXTip = newAnimation(bbm->animations, "flame/tip%d.png", spriteDims, .2, 0);
   bbm->aniFlameYSide = newAnimation(bbm->animations, "flame/side%d.png", spriteDims, .2, -90);
-  bbm->aniFlameYTip = newAnimation(bbm->animations, "flame/tip%d.png", spriteDims, .2, -90);
+  bbm->aniFlameRightTip = newAnimation(bbm->animations, "flame/tip%d.png", spriteDims, .2, 0);
+  bbm->aniFlameLeftTip = newAnimation(bbm->animations, "flame/tip%d.png", spriteDims, .2, 180);
+  bbm->aniFlameUpTip = newAnimation(bbm->animations, "flame/tip%d.png", spriteDims, .2, 90);
+  bbm->aniFlameDownTip = newAnimation(bbm->animations, "flame/tip%d.png", spriteDims, .2, -90);
   free(spriteDims);
   /* Initialises the objects according to their sprites */
   bbm->floors = initObjects(bbm->sprFloor, 'F');
@@ -47,13 +49,6 @@ void drawAll(Bomberman *bbm){
   drawObjects(bbm->blocks, bbm->grid);
   drawObjects(bbm->boxes, bbm->grid);
   drawObjects(bbm->spikes, bbm->grid);
-  /* Temporarily draw animation for test purposes */
-  /*drawAnimation(bbm->aniBomb, 0, 0);
-  drawAnimation(bbm->aniFlameCenter, bbm->grid->size, 0);
-  drawAnimation(bbm->aniFlameXSide, 2*bbm->grid->size, 0);
-  drawAnimation(bbm->aniFlameXTip, 3*bbm->grid->size, 0);
-  drawAnimation(bbm->aniFlameYSide, bbm->grid->size, bbm->grid->size);
-  drawAnimation(bbm->aniFlameYTip, bbm->grid->size, 2*bbm->grid->size);*/
   /* Prints the equivalent result into the terminal */
   printGrid(bbm->grid);
 }

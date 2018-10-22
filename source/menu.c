@@ -56,6 +56,17 @@ void drawMenu(Menu *menu, Bomberman *bbm){
       optionText, bbm->font, MLV_COLOR_GRAY);
     free(optionText);
   }
+  /* Temporarily draw animations for test purposes */
+  drawAnimation(bbm->aniBomb, size*15, size*5);
+  drawAnimation(bbm->aniFlameCenter, size*14, size*4);
+  drawAnimation(bbm->aniFlameXSide, size*13, size*4);
+  drawAnimation(bbm->aniFlameXSide, size*15, size*4);
+  drawAnimation(bbm->aniFlameYSide, size*14, size*3);
+  drawAnimation(bbm->aniFlameYSide, size*14, size*5);
+  drawAnimation(bbm->aniFlameRightTip, size*16, size*4);
+  drawAnimation(bbm->aniFlameLeftTip, size*12, size*4);
+  drawAnimation(bbm->aniFlameDownTip, size*14, size*6);
+  drawAnimation(bbm->aniFlameUpTip, size*14, size*2);
 }
 
 void freeMenu(Menu *menu){

@@ -74,8 +74,9 @@ int main(void){
         editorLoop(editor, bomberman);
         break;
     }
-    /* We update the inputs at every frame */
+    /* We update the inputs and animations at every frame */
     updateInputs(bomberman->inputs);
+    updateAnimations(bomberman->animations);
     /* We then render the screen and wait 1/FPS seconds */
     MLV_actualise_window();
     MLV_delay_according_to_frame_rate();

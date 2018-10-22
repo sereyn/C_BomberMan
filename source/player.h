@@ -13,7 +13,7 @@ typedef struct {
   int speed;
   MLV_Color color;
   int size;
-  Input *up, *left, *down, *right;
+  Input *up, *left, *down, *right, *action;
 } Player;
 
 /* Creates a new player */

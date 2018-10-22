@@ -27,7 +27,11 @@ Player *newPlayer(Bomberman *bbm, int number){
   player->position = malloc(sizeof(Coord));
   player->position->x = x;
   player->position->y = y;
-  player->speed = 3;
+  /*
+    We use a speed relative to the grid's size so that we can change it without altering its apparent speed
+    However, since it is forced to be an integer, it can look different if we choose a too small grid size
+  */
+  player->speed = 3*bbm->grid->size/40;
   /* We give it its color */
   player->color = allColors[number];
   /* We choose the right controls for the player depending of its number */
@@ -37,24 +41,28 @@ Player *newPlayer(Bomberman *bbm, int number){
       player->left = bbm->inputs->left;
       player->down = bbm->inputs->down;
       player->right = bbm->inputs->right;
+      player->action = bbm->inputs->rshift;
       break;
     case 1:
       player->up = bbm->inputs->z;
       player->left = bbm->inputs->q;
       player->down = bbm->inputs->s;
       player->right = bbm->inputs->d;
+      player->action = bbm->inputs->e;
       break;
     case 2:
       player->up = bbm->inputs->o;
       player->left = bbm->inputs->k;
       player->down = bbm->inputs->l;
       player->right = bbm->inputs->m;
+      player->action = bbm->inputs->p;
       break;
     case 3:
       player->up = bbm->inputs->g;
       player->left = bbm->inputs->v;
       player->down = bbm->inputs->b;
       player->right = bbm->inputs->n;
+      player->action = bbm->inputs->h;
       break;
   }
   return player;

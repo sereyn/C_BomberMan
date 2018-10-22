@@ -6,7 +6,7 @@
 #include "utils.h"
 #include "grid.h"
 #include "inputs.h"
-#include "animation.h"
+#include "animations.h"
 
 typedef enum {
   sMenu, sGame, sEditor
@@ -18,7 +18,8 @@ typedef enum {
 */
 typedef struct {
   MLV_Image *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow;
-  Animation *aniBomb, *aniFlameCenter, *aniFlameXSide, *aniFlameXTip, *aniFlameYSide, *aniFlameYTip;
+  Animation *aniBomb, *aniFlameCenter, *aniFlameXSide, *aniFlameYSide,
+  *aniFlameRightTip, *aniFlameLeftTip, *aniFlameUpTip, *aniFlameDownTip;
   Sprites *sprites;
   Animations *animations;
   Objects *floors;

@@ -1,4 +1,4 @@
-#include "animation.h"
+#include "animations.h"
 
 Animations *initAnimations(void){
   Animations *animations = malloc(sizeof(Animations));
@@ -51,9 +51,6 @@ Animation *newAnimation(Animations *animations, char *filePattern, Coord *dimens
 
 void drawAnimation(Animation *animation, int x, int y){
   MLV_draw_image(animation->list[(int)animation->index], x, y);
-  animation->index += animation->speed;
-  if(animation->index >= animation->length)
-    animation->index = 0;
 }
 
 void freeAnimation(Animation *animation){
@@ -63,6 +60,15 @@ void freeAnimation(Animation *animation){
     MLV_free_image(animation->list[i]);
   free(animation->list);
   free(animation);
+}
+
+void updateAnimations(Animations *animations){
+  int i = 0;
+  for(; i < animations->length; ++i){
+    animations->list[i]->index += animations->list[i]->speed;
+    if(animations->list[i]->index >= animations->list[i]->length)
+      animations->list[i]->index = 0;
+  }
 }
 
 void freeAnimations(Animations *animations){

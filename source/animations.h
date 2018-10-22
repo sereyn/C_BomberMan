@@ -1,5 +1,5 @@
-#ifndef ANIMATION
-#define ANIMATION
+#ifndef ANIMATIONS
+#define ANIMATIONS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +36,10 @@ void drawAnimation(Animation *animation, int x, int y);
 /* Frees the animation */
 void freeAnimation(Animation *animation);
 
+/* Update all the animations */
+void updateAnimations(Animations *animations);
+
 /* Frees all the animations */
 void freeAnimations(Animations *animations);
 
-#endif /* ANIMATION */
+#endif /* ANIMATIONS */
