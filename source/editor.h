@@ -9,15 +9,15 @@
 #include "inputs.h"
 
 typedef struct {
-	int length;
-	/* The full list of items available for the player */
-	Objects **list;
-	/* The current item the user will paint the map with */
-	int current;
+  int length;
+  /* The full list of items available for the player */
+  Objects **list;
+  /* The current item the user will paint the map with */
+  int current;
 } Items;
 
 typedef struct{
-	Items *items;
+  Items *items;
 } Editor;
 
 /* Tells if a block is forbidden to the edition or not */
@@ -29,7 +29,10 @@ Editor *initEditor(Bomberman *bbm);
 /* Has to be executed in a game loop: main function of the editor */
 void editorLoop(Editor *editor, Bomberman *bbm);
 
-/* Frees the allocated memory */
-void freeEditor(Editor *editor);
+/*
+  Frees the allocated memory
+  Has to be a pointer of pointer
+*/
+void freeEditor(Editor **editor);
 
 #endif /* EDITOR */

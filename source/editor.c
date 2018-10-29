@@ -125,11 +125,12 @@ void editorLoop(Editor *editor, Bomberman *bbm){
   }
 }
 
-void freeEditor(Editor *editor){
-  if(editor){
-    free(editor->items->list);
-    free(editor->items);
-    free(editor);
-    editor = NULL;
+void freeEditor(Editor **editor){
+  /* We make it being a pointer of pointer so that we can set it to point on NULL */
+  if(*editor){
+    free((*editor)->items->list);
+    free((*editor)->items);
+    free(*editor);
+    *editor = NULL;
   }
 }

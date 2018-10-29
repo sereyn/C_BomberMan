@@ -24,7 +24,7 @@ Game *initGame(Bomberman *bbm){
     }
   }
   /* Now we add the objects that depend of each level */
-  loadLevel(bbm, 1);
+  loadLevel(bbm, bbm->level);
   return game;
 }
 
@@ -35,13 +35,14 @@ void gameLoop(Game *game, Bomberman *bbm){
     updatePlayer(game->players[i], bbm);
 }
 
-void freeGame(Game *game){
+void freeGame(Game **game){
+  /* We make it being a pointer of pointer so that we can set it to point on NULL */
   int i = 0;
-  if(game){
+  if(*game){
     /* Frees the game */
     for(; i < 4; ++i)
-      freePlayer(game->players[i]);
-    free(game);
-    game = NULL;
+      freePlayer((*game)->players[i]);
+    free(*game);
+    *game = NULL;
   }
 }

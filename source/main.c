@@ -50,12 +50,21 @@ int main(void){
   bomberman = initBomberman(grid);
   /*
     Game loop:
-    This while keeps looping until the user presses escape or the cross button
+    This while keeps looping until either closed (cross button) or bomberman->closed becomes 1
   */
-  while(!isDown(bomberman->inputs->escape) && !closed){
+  while(!bomberman->closed && !closed){
     MLV_clear_window(MLV_COLOR_BLACK);
-    /* We draw everything (some content may be drawn in the subLoops though) */
-    drawAll(bomberman);
+
+    bombermanLoop(bomberman);
+
+    /* Depending of the current state, we free the unwanted content */
+    if(bomberman->state != sMenu)
+      freeMenu(&menu);
+    if(bomberman->state != sGame)
+      freeGame(&game);
+    if(bomberman->state != sEditor)
+      freeEditor(&editor);
+
     /* Depending of the current state, we execute the according loop */
     switch(bomberman->state){
       case sMenu:
@@ -74,9 +83,7 @@ int main(void){
         editorLoop(editor, bomberman);
         break;
     }
-    /* We update the inputs and animations at every frame */
-    updateInputs(bomberman->inputs);
-    updateAnimations(bomberman->animations);
+    
     /* We then render the screen and wait 1/FPS seconds */
     MLV_actualise_window();
     MLV_delay_according_to_frame_rate();
@@ -85,9 +92,9 @@ int main(void){
     Once the code reaches this point, the game is over
     We need to free all the memory allocated during the game process
   */
-  freeMenu(menu);
-  freeGame(game);
-  freeEditor(editor);
+  freeMenu(&menu);
+  freeGame(&game);
+  freeEditor(&editor);
   freeBomberman(bomberman);
   MLV_free_window();
   /* If that line doesn't show up, then something went wrong */

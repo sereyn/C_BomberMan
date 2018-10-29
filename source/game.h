@@ -16,7 +16,10 @@ Game *initGame(Bomberman *bbm);
 /* Has to be executed in a game loop: main function of the game */
 void gameLoop(Game *game, Bomberman *bbm);
 
-/* Frees the game */
-void freeGame(Game *game);
+/*
+  Frees the game
+  Has to be a pointer of pointer
+*/
+void freeGame(Game **game);
 
 #endif /* GAME */

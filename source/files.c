@@ -1,5 +1,25 @@
 #include "files.h"
 
+int countLevels(){
+  int fileNumber = 0;
+  char *prefix = "resources/levels/lvl";
+  char *suffix = ".txt";
+  /*
+    We alloc the needed memory to path for it to prefix+fileNumber+suffix
+    The +5 lets the fileNumber be a 4 digit number (base 10)
+    Why 4 and not 5? That's because the last memory slot if dedicated for the \0 at the end
+  */
+  char *path = malloc((strlen(prefix)+strlen(prefix)+5)*sizeof(char));
+  /*
+    While the file path exists, we iterate fileNumber
+    We check if a file exists using access, from unistd.h
+  */
+  do
+    sprintf(path, "%s%d%s", prefix, fileNumber++, suffix);
+  while(access(path, F_OK) != -1);
+  return fileNumber-1;
+}
+
 void saveLevel(Bomberman *bbm){
   int fileNumber = 0, i, j, x, y;
   char *prefix = "resources/levels/lvl";

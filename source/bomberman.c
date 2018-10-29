@@ -1,5 +1,20 @@
 #include "bomberman.h"
 
+void initAllObjects(Bomberman *bbm){
+  /* Initialises the objects according to their sprites */
+  bbm->floors = initObjects(bbm->sprFloor, 'F');
+  bbm->blocks = initObjects(bbm->sprBlock, 'B');
+  bbm->boxes = initObjects(bbm->sprBox, 'C');
+  bbm->spikes = initObjects(bbm->sprSpike, 'S');
+}
+
+void freeAllObjects(Bomberman *bbm){
+  freeObjects(bbm->floors);
+  freeObjects(bbm->blocks);
+  freeObjects(bbm->boxes);
+  freeObjects(bbm->spikes);
+}
+
 Bomberman *initBomberman(Grid *grid){
   Coord *spriteDims = newCoord(grid->size, grid->size);
   Bomberman *bbm = malloc(sizeof(Bomberman));
@@ -27,17 +42,18 @@ Bomberman *initBomberman(Grid *grid){
   bbm->aniFlameUpTip = newAnimation(bbm->animations, "flame/tip%d.png", spriteDims, .2, 90);
   bbm->aniFlameDownTip = newAnimation(bbm->animations, "flame/tip%d.png", spriteDims, .2, -90);
   free(spriteDims);
-  /* Initialises the objects according to their sprites */
-  bbm->floors = initObjects(bbm->sprFloor, 'F');
-  bbm->blocks = initObjects(bbm->sprBlock, 'B');
-  bbm->boxes = initObjects(bbm->sprBox, 'C');
-  bbm->spikes = initObjects(bbm->sprSpike, 'S');
+  /* Inits the objects */
+  initAllObjects(bbm);
   /* Loads the font */
   bbm->font = MLV_load_font("resources/fonts/font1.ttf", bbm->grid->size/2);
   /* Loads the keys */
   bbm->inputs = initInputs();
   /* Set the default state on the menu (so that the game starts by displaying the menu) */
   bbm->state = sMenu;
+  /* Set the closed pseudo boolean to 0 by default */
+  bbm->closed = 0;
+  /* Set the level by default to play */
+  bbm->level = 0;
   return bbm;
 }
 
@@ -53,15 +69,40 @@ void drawAll(Bomberman *bbm){
   printGrid(bbm->grid);
 }
 
+void setState(Bomberman *bbm, State newState){
+  /* We first destroy all the objects by freeing and re initializing them */
+  freeAllObjects(bbm);
+  initAllObjects(bbm);
+  /* Then we set its new state */
+  bbm->state = newState;
+}
+
+void bombermanLoop(Bomberman *bbm){
+  /* We draw everything (some content may be drawn in the subLoops though) */
+  drawAll(bbm);
+  /* We update the inputs and animations at every frame */
+  updateInputs(bbm->inputs);
+  updateAnimations(bbm->animations);
+  /* Check if the user presses escape */
+  if(isJustDown(bbm->inputs->escape)){
+    switch(bbm->state){
+      /* If it presses escape on the title screen, we quit the game */
+      case sMenu:
+        bbm->closed = 1;
+        break;
+      /* Overwise we get back to the title screen */
+      default:
+        setState(bbm, sMenu);
+    }
+  }
+}
+
 void freeBomberman(Bomberman *bbm){
   debug(0, "Free the allocated memory\n");
   /* Free all the allocated memory bomberman knows about */
   freeSprites(bbm->sprites);
   freeAnimations(bbm->animations);
-  freeObjects(bbm->floors);
-  freeObjects(bbm->blocks);
-  freeObjects(bbm->boxes);
-  freeObjects(bbm->spikes);
+  freeAllObjects(bbm);
   MLV_free_font(bbm->font);
   freeInputs(bbm->inputs);
   freeGrid(bbm->grid);

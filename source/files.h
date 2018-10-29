@@ -9,6 +9,9 @@
 #include "bomberman.h"
 #include "objects.h"
 
+/* Counts how many levels exist */
+int countLevels();
+
 /* Saves a level */
 void saveLevel(Bomberman *bbm);
 

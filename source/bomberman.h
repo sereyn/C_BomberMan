@@ -30,13 +30,27 @@ typedef struct {
   MLV_Font *font;
   Inputs *inputs;
   State state;
+  int closed;
+  int level;
 } Bomberman;
+
+/* Initializes all the bomberman objects (floors, blocks, boxes and spikes) */
+void initAllObjects(Bomberman *bbm);
+
+/* Frees all of them */
+void freeAllObjects(Bomberman *bbm);
 
 /* Initialises a Bomberman instance */
 Bomberman *initBomberman(Grid *grid);
 
 /* Draws the whole game */
 void drawAll(Bomberman *bbm);
+
+/* Changes the state of the program (menu, game or editor) */
+void setState(Bomberman *bbm, State newState);
+
+/* Manages the most important updates */
+void bombermanLoop(Bomberman *bbm);
 
 /* This function's purpose is to free the allocated memory the structure knows about */
 void freeBomberman(Bomberman *bbm);
