@@ -7,6 +7,7 @@
 #include "grid.h"
 #include "inputs.h"
 #include "animations.h"
+#include "bombs.h"
 
 typedef enum {
   sMenu, sGame, sEditor
@@ -17,8 +18,8 @@ typedef enum {
   It groups all the important stuff the game needs so that we can simply pass it as a parameter
 */
 typedef struct {
-  MLV_Image *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow;
-  Animation *aniBomb, *aniFlameCenter, *aniFlameXSide, *aniFlameYSide,
+  MLV_Image *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow, *sprBomb;
+  Animation *aniFlameCenter, *aniFlameXSide, *aniFlameYSide,
   *aniFlameRightTip, *aniFlameLeftTip, *aniFlameUpTip, *aniFlameDownTip;
   Sprites *sprites;
   Animations *animations;
@@ -26,6 +27,7 @@ typedef struct {
   Objects *blocks;
   Objects *boxes;
   Objects *spikes;
+  Bombs *bombs;
   Grid *grid;
   MLV_Font *font;
   Inputs *inputs;

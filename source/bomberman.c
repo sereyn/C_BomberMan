@@ -6,6 +6,8 @@ void initAllObjects(Bomberman *bbm){
   bbm->blocks = initObjects(bbm->sprBlock, 'B');
   bbm->boxes = initObjects(bbm->sprBox, 'C');
   bbm->spikes = initObjects(bbm->sprSpike, 'S');
+  /* Bombs is basically an object */
+  bbm->bombs = initBombs(bbm->sprBomb);
 }
 
 void freeAllObjects(Bomberman *bbm){
@@ -13,6 +15,7 @@ void freeAllObjects(Bomberman *bbm){
   freeObjects(bbm->blocks);
   freeObjects(bbm->boxes);
   freeObjects(bbm->spikes);
+  freeBombs(bbm->bombs);
 }
 
 Bomberman *initBomberman(Grid *grid){
@@ -31,9 +34,9 @@ Bomberman *initBomberman(Grid *grid){
   bbm->sprBox = newSprite(bbm->sprites, "box.png", spriteDims);
   bbm->sprSpike = newSprite(bbm->sprites, "spike.png", spriteDims);
   bbm->sprArrow = newSprite(bbm->sprites, "arrow.png", spriteDims);
+  bbm->sprBomb = newSprite(bbm->sprites, "bomb.png", spriteDims);
   /* Loads the animations */
   bbm->animations = initAnimations();
-  bbm->aniBomb = newAnimation(bbm->animations, "bomb/bomb%d.png", spriteDims, .03, 0);
   bbm->aniFlameCenter = newAnimation(bbm->animations, "flame/center%d.png", spriteDims, .2, 0);
   bbm->aniFlameXSide = newAnimation(bbm->animations, "flame/side%d.png", spriteDims, .2, 0);
   bbm->aniFlameYSide = newAnimation(bbm->animations, "flame/side%d.png", spriteDims, .2, -90);
@@ -80,6 +83,8 @@ void setState(Bomberman *bbm, State newState){
 void bombermanLoop(Bomberman *bbm){
   /* We draw everything (some content may be drawn in the subLoops though) */
   drawAll(bbm);
+  /* We update the bombs (evaluates the lifespan of each and renders them) */
+  updateBombs(bbm->bombs);
   /* We update the inputs and animations at every frame */
   updateInputs(bbm->inputs);
   updateAnimations(bbm->animations);

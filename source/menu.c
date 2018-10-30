@@ -79,7 +79,6 @@ void drawMenu(Menu *menu, Bomberman *bbm){
   }
   free(levelText);
   /* Temporarily draw animations for test purposes */
-  drawAnimation(bbm->aniBomb, size*15, size*5);
   drawAnimation(bbm->aniFlameCenter, size*14, size*4);
   drawAnimation(bbm->aniFlameXSide, size*13, size*4);
   drawAnimation(bbm->aniFlameXSide, size*15, size*4);

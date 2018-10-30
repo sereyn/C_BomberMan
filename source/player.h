@@ -6,6 +6,7 @@
 #include "bomberman.h"
 #include "inputs.h"
 #include "objects.h"
+#include "bombs.h"
 
 /* The player structure */
 typedef struct {
@@ -27,6 +28,9 @@ int playerCollides(Player *player, int x, int y, Bomberman *bbm);
 
 /* Moves the player */
 void movePlayer(Player *player, Bomberman *bbm);
+
+/* Manages the attacks of the player */
+void attackPlayer(Player *player, Bomberman *bbm);
 
 /* Draws the player */
 void drawPlayer(Player *player);

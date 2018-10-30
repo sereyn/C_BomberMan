@@ -142,6 +142,19 @@ void movePlayer(Player *player, Bomberman *bbm){
   player->position->y += ySpeed;
 }
 
+void attackPlayer(Player *player, Bomberman *bbm){
+  int size = bbm->grid->size;
+  int x, y;
+  if(isJustDown(player->action)){
+    x = player->position->x;
+    y = player->position->y;
+    /* We resize the bomb at the center of its ceil */
+    x = (x+size/2)/size*size;
+    y = (y+size/2)/size*size;
+    newBomb(bbm->bombs, newCoord(x, y));
+  }
+}
+
 void drawPlayer(Player *player){
   /* Renders the player */
   MLV_draw_filled_rectangle(
@@ -154,8 +167,9 @@ void drawPlayer(Player *player){
 }
 
 void updatePlayer(Player *player, Bomberman *bbm){
-  /* First moves the player, then draws it */
+  /* First moves the player, attacks and then draws it */
   movePlayer(player, bbm);
+  attackPlayer(player, bbm);
   drawPlayer(player);
 }
 
