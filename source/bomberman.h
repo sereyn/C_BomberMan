@@ -1,14 +1,13 @@
 #ifndef BOMBERMAN
 #define BOMBERMAN
 
-#include "sprites.h"
 #include "objects.h"
 #include "utils.h"
 #include "grid.h"
 #include "inputs.h"
-#include "animations.h"
-#include "bombs.h"
+#include "sprites.h"
 
+/* The different states the game can be in */
 typedef enum {
   sMenu, sGame, sEditor
 } State;
@@ -18,16 +17,14 @@ typedef enum {
   It groups all the important stuff the game needs so that we can simply pass it as a parameter
 */
 typedef struct {
-  MLV_Image *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow, *sprBomb;
-  Animation *aniFlameCenter, *aniFlameXSide, *aniFlameYSide,
-  *aniFlameRightTip, *aniFlameLeftTip, *aniFlameUpTip, *aniFlameDownTip;
+  /* Sprites */
   Sprites *sprites;
-  Animations *animations;
-  Objects *floors;
-  Objects *blocks;
-  Objects *boxes;
-  Objects *spikes;
-  Bombs *bombs;
+  Sprite *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow, *sprBomb,
+  *sprFlameCenter, *sprFlameXSide, *sprFlameYSide, *sprFlameRightTip,
+  *sprFlameLeftTip, *sprFlameUpTip, *sprFlameDownTip;
+  /* Objects */
+  Objects *floors, *blocks, *boxes, *spikes, *bombs;
+  /* Grid, font, inputs, state, ... */
   Grid *grid;
   MLV_Font *font;
   Inputs *inputs;
@@ -45,8 +42,8 @@ void freeAllObjects(Bomberman *bbm);
 /* Initialises a Bomberman instance */
 Bomberman *initBomberman(Grid *grid);
 
-/* Draws the whole game */
-void drawAll(Bomberman *bbm);
+/* Updates all the objects */
+void updateAllObjects(Bomberman *bbm);
 
 /* Changes the state of the program (menu, game or editor) */
 void setState(Bomberman *bbm, State newState);

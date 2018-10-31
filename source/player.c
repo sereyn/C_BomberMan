@@ -85,8 +85,8 @@ int playerCollides(Player *player, int x, int y, Bomberman *bbm){
   objList[2] = bbm->spikes;
   for(j = 0; j < 3; ++j){
     for(i = 0; i < objList[j]->length; ++i){
-      objX1 = objList[j]->list[i]->x;
-      objY1 = objList[j]->list[i]->y;
+      objX1 = objList[j]->list[i]->position->x;
+      objY1 = objList[j]->list[i]->position->y;
       objX2 = objX1+bbm->grid->size, objY2 = objY1+bbm->grid->size;
       /* xColl is the horizontal collision, yColl is the vertical one */
       xColl = x1 < objX2 && objX1 < x2;
@@ -151,7 +151,7 @@ void attackPlayer(Player *player, Bomberman *bbm){
     /* We resize the bomb at the center of its ceil */
     x = (x+size/2)/size*size;
     y = (y+size/2)/size*size;
-    newBomb(bbm->bombs, newCoord(x, y));
+    newObject(bbm->bombs, newCoord(x, y));
   }
 }
 

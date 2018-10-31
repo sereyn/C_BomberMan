@@ -52,7 +52,7 @@ void editorLoop(Editor *editor, Bomberman *bbm){
   Coord *dims = bbm->grid->dimensions;
   int marginTop = bbm->grid->marginTop;
   /* We draw the arrow on top of the selected item */
-  MLV_draw_image(bbm->sprArrow, (2*editor->items->current+1)*size, 0);
+  drawSprite(bbm->sprArrow, (2*editor->items->current+1)*size, 0, 0);
   /* We draw the informative text */
   MLV_draw_text_with_font(
     dims->x/2*size,
@@ -93,8 +93,8 @@ void editorLoop(Editor *editor, Bomberman *bbm){
       */
       for(j = 0; j < editor->items->length; ++j){
         for(i = editor->items->list[j]->length-1; i >= 0 ; --i){
-          if(mouseX == editor->items->list[j]->list[i]->x/size
-          && mouseY == editor->items->list[j]->list[i]->y/size){
+          if(mouseX == editor->items->list[j]->list[i]->position->x/size
+          && mouseY == editor->items->list[j]->list[i]->position->y/size){
             deleteObject(editor->items->list[j], i);
             debug(1, "Deleted item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
               mouseX, mouseY, editor->items->list[j]->length);

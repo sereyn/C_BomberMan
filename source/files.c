@@ -53,8 +53,8 @@ void saveLevel(Bomberman *bbm){
   for(j = 0; j < 3; ++j){
     fprintf(lvl, "%c\n", objChars[j]);
     for(i = 0; i < objList[j]->length; ++i){
-      x = objList[j]->list[i]->x/bbm->grid->size;
-      y = objList[j]->list[i]->y/bbm->grid->size;
+      x = objList[j]->list[i]->position->x/bbm->grid->size;
+      y = objList[j]->list[i]->position->y/bbm->grid->size;
       if(x > 0 && x < bbm->grid->dimensions->x-1
       && y > bbm->grid->marginTop && y < bbm->grid->marginTop+bbm->grid->dimensions->y-1)
         fprintf(lvl, "%d;%d\n", x, y);

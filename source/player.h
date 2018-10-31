@@ -6,7 +6,6 @@
 #include "bomberman.h"
 #include "inputs.h"
 #include "objects.h"
-#include "bombs.h"
 
 /* The player structure */
 typedef struct {

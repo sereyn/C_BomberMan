@@ -1,27 +1,41 @@
 #ifndef SPRITES
 #define SPRITES
 
-#include <MLV/MLV_all.h>
-#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <MLV/MLV_all.h>
 #include "utils.h"
 
-/*
-  We define a Sprites structure
-  It's purpose is to save all the MLV_Image in an array so that we can easily free them all at the end
-*/
-
+/* The basic Sprite structure (a list of images) */
 typedef struct {
   MLV_Image **list;
   int length;
+} Sprite;
+
+/* Draws the sprite to the screen at the coordinates (x, y) */
+void drawSprite(Sprite *sprite, int x, int y, int index);
+
+/* Frees one sprite */
+void freeSprite(Sprite *sprite);
+
+/* The Sprites structure's purpose is to get an exhaustive list of all the Sprite structures */
+typedef struct {
+  Sprite **list;
+  int length;
 } Sprites;
 
+/* Initializes a Sprites, now ready to contain Sprite structures */
 Sprites *initSprites(void);
 
-/* Creates a new sprite from the image file 'fileName' and resize it */
-MLV_Image *newSprite(Sprites *sprites, char *fileName, Coord *dimensions);
+/*
+  When creating a new Sprite, you need to provide the string of the file pattern
+  (i.e. "bomb%d.png" if your sprite is "bomb0.png", "bomb1.png", ..., "bomb5.png")
+*/
+Sprite *newSprite(Sprites *sprites, char *filePattern, Coord *dimensions, double rotation);
 
-/* Frees the sprites (the whole purpose) */
+/* Frees all the sprites */
 void freeSprites(Sprites *sprites);
 
 #endif /* SPRITES */
