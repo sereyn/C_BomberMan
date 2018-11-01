@@ -5,27 +5,29 @@ void freeObject(Object *object){
   free(object);
 }
 
-Objects *initObjects(Sprite *sprite, char termChar){
+Objects *initObjects(Sprite *defSprite, char termChar){
   Objects *objects = malloc(sizeof(Objects));
   objects->length = 0;
-  objects->sprite = sprite;
+  objects->defSprite = defSprite;
   objects->termChar = termChar;
   objects->list = NULL;
   return objects;
 }
 
-void newObject(Objects *objects, Coord *position){
+Object *newObject(Objects *objects, Coord *position){
   /* We create the new object */
   Object *newObj = malloc(sizeof(Object));
   newObj->sprIndex = 0;
-  newObj->sprSpeed = .1;
+  newObj->sprSpeed = 1;
   newObj->position = position;
+  newObj->sprite = objects->defSprite;
   /*
     We ask for 1 more slot of memory for our list to save the new position
     Then we save that position at the end of the list and increment the length
   */
   objects->list = realloc(objects->list, (objects->length+1)*sizeof(Coord *));
   objects->list[objects->length++] = newObj;
+  return newObj;
 }
 
 void deleteObject(Objects *objects, int index){
@@ -63,10 +65,10 @@ void updateObjects(Objects *objects, Grid *grid){
     y = curObj->position->y;
     /* We increase the sprite index according to the speed and the maximum index */
     curObj->sprIndex += curObj->sprSpeed;
-    while(curObj->sprIndex >= objects->sprite->length)
-      curObj->sprIndex -= (double)objects->sprite->length;
+    while(curObj->sprIndex >= objects->list[i]->sprite->length)
+      curObj->sprIndex -= (double)objects->list[i]->sprite->length;
     /* Normal (window) rendering */
-    drawSprite(objects->sprite, x, y, (int)curObj->sprIndex);
+    drawSprite(objects->list[i]->sprite, x, y, (int)curObj->sprIndex);
     /* Terminal rendering */
     termX = x/grid->size;
     termY = y/grid->size-grid->marginTop;

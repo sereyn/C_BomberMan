@@ -16,6 +16,7 @@ typedef struct {
   Coord *position;
   double sprIndex;
   double sprSpeed;
+  Sprite *sprite;
 } Object;
 
 /* Frees an object */
@@ -23,20 +24,20 @@ void freeObject(Object *object);
 
 /*
   Objects is a structure to store all the objects
-  Every object has in common the sprite
+  defSprite is the sprite by default, can be changed for each instance
 */
 typedef struct {
   Object **list;
   int length;
-  Sprite *sprite;
+  Sprite *defSprite;
   char termChar;
 } Objects;
 
 /* Initialises the objects according to the given sprite */
-Objects *initObjects(Sprite *sprite, char termChar);
+Objects *initObjects(Sprite *defSprite, char termChar);
 
 /* Creates a new objects' instance at the coordinates x and y */
-void newObject(Objects *objects, Coord *position);
+Object *newObject(Objects *objects, Coord *position);
 
 /* Deletes the i-th object from the list */
 void deleteObject(Objects *objects, int index);

@@ -145,13 +145,16 @@ void movePlayer(Player *player, Bomberman *bbm){
 void attackPlayer(Player *player, Bomberman *bbm){
   int size = bbm->grid->size;
   int x, y;
+  Object *bomb;
   if(isJustDown(player->action)){
     x = player->position->x;
     y = player->position->y;
     /* We resize the bomb at the center of its ceil */
     x = (x+size/2)/size*size;
     y = (y+size/2)/size*size;
-    newObject(bbm->bombs, newCoord(x, y));
+    /* We create a bomb and set its sprite speed slow enough */
+    bomb = newObject(bbm->bombs, newCoord(x, y));
+    bomb->sprSpeed = .03;
   }
 }
 

@@ -7,6 +7,7 @@ void initAllObjects(Bomberman *bbm){
   bbm->boxes = initObjects(bbm->sprBox, 'C');
   bbm->spikes = initObjects(bbm->sprSpike, 'S');
   bbm->bombs = initObjects(bbm->sprBomb, 'E');
+  bbm->flames = initObjects(bbm->sprFlameCenter, 'G');
 }
 
 void freeAllObjects(Bomberman *bbm){
@@ -15,6 +16,7 @@ void freeAllObjects(Bomberman *bbm){
   freeObjects(bbm->boxes);
   freeObjects(bbm->spikes);
   freeObjects(bbm->bombs);
+  freeObjects(bbm->flames);
 }
 
 Bomberman *initBomberman(Grid *grid){
@@ -55,26 +57,99 @@ Bomberman *initBomberman(Grid *grid){
 }
 
 void updateAllObjects(Bomberman *bbm){
-  int i;
+  int i, j, k, l, size = bbm->grid->size;
+  int x, y, x2, y2;
+  int flameDestroyed[4];
+  int flameLength = 2;
+  Object *flame;
+  /* We make these 2 arrays for simplifying a coming for loop */
+  Sprite *sprFlameSide[2], *sprFlameTip[4];
+  sprFlameSide[0] = bbm->sprFlameXSide;
+  sprFlameSide[1] = bbm->sprFlameYSide;
+  sprFlameTip[0] = bbm->sprFlameRightTip;
+  sprFlameTip[1] = bbm->sprFlameDownTip;
+  sprFlameTip[2] = bbm->sprFlameLeftTip;
+  sprFlameTip[3] = bbm->sprFlameUpTip;
   /* Fills the grid with zeros */
   resetGrid(bbm->grid);
-  /* Draws all the objects (which will also prepare the grid) */
+  /* Update the objects (draws them, prepare the terminal grid to print them, ...) */
   updateObjects(bbm->floors, bbm->grid);
   updateObjects(bbm->blocks, bbm->grid);
-  updateObjects(bbm->boxes, bbm->grid);
   updateObjects(bbm->spikes, bbm->grid);
   /*
-    For the bombs, we also check if the animation is over and, if that's the case we remove it
+    For the bombs, we also check if the animation is over
+    If that's the case we remove it and create the flames
     We do this loop backward to avoid skipping a bomb to remove
   */
   updateObjects(bbm->bombs, bbm->grid);
   for(i = bbm->bombs->length-1; i >= 0; --i){
-    if((int)bbm->bombs->list[i]->sprIndex == bbm->bombs->sprite->length-1){
-      /* Need to create flames here and now */
-      debug(0, "Need to create flames now!\n");
+    if((int)bbm->bombs->list[i]->sprIndex == bbm->bombs->defSprite->length-1){
+      x = bbm->bombs->list[i]->position->x;
+      y = bbm->bombs->list[i]->position->y;
+      /*
+        flameDestroyed represents the directions in which the flame encountered some blocks
+        We fill it with zeroes
+      */
+      for(j = 0; j < 4; ++j)
+        flameDestroyed[j] = 0;
+      /*
+        We create the flames
+        We have a double for loop: one for the distance from the center and the other for the direction
+      */
+      for(k = 0; k <= flameLength; ++k){
+        for(j = 0; j < 4; ++j){
+          /* We check if the flame has been destroyed already */
+          if(flameDestroyed[j])
+            continue;
+          /* 1.57 is an approximation of PI/2 */
+          x2 = x+size*k*round(cos((double)j*1.57));
+          y2 = y+size*k*round(sin((double)j*1.57));
+          /* We check if that place is taken by a block */
+          for(l = 0; l < bbm->blocks->length; ++l){
+            if(bbm->blocks->list[l]->position->x == x2 && bbm->blocks->list[l]->position->y == y2){
+              flameDestroyed[j] = 1;
+              break;
+            }
+          }
+          /* We repeat the same process but with boxes, and if a box is in the place we delete it */
+          for(l = bbm->boxes->length-1; l >= 0; --l){
+            if(bbm->boxes->list[l]->position->x == x2 && bbm->boxes->list[l]->position->y == y2){
+              flameDestroyed[j] = 1;
+              deleteObject(bbm->boxes, l);
+              /* We create a flame where the box got destroyed */
+              flame = newObject(bbm->flames, newCoord(x2, y2));
+              flame->sprSpeed = .3;
+              flame->sprite = sprFlameTip[j];
+              break;
+            }
+          }
+          /* Again, we check if the flame has been destroyed */
+          if(flameDestroyed[j])
+            continue;
+          /* Finally we can create the flame */
+          flame = newObject(bbm->flames, newCoord(x2, y2));
+          flame->sprSpeed = .3;
+          /* If k is 0, then we're at the center and we don't need to loop through all the directions */
+          if(k == 0)
+            break;
+          /* If k is flameLength, we're on the tip of the flames */
+          if(k == flameLength)
+            flame->sprite = sprFlameTip[j];
+          /* Otherwise we're on a side */
+          else
+            flame->sprite = sprFlameSide[j%2];
+        }
+      }
       deleteObject(bbm->bombs, i);
     }
   }
+  /* Same goes for flames: destroyed once the sprite is over */
+  updateObjects(bbm->flames, bbm->grid);
+  for(i = bbm->flames->length-1; i >= 0; --i){
+    if((int)bbm->flames->list[i]->sprIndex == bbm->flames->list[i]->sprite->length-1)
+      deleteObject(bbm->flames, i);
+  }
+  updateObjects(bbm->boxes, bbm->grid);
   /* Prints the equivalent result into the terminal */
   printGrid(bbm->grid);
 }

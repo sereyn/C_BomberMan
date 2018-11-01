@@ -6,6 +6,7 @@
 #include "grid.h"
 #include "inputs.h"
 #include "sprites.h"
+#include <math.h>
 
 /* The different states the game can be in */
 typedef enum {
@@ -23,7 +24,7 @@ typedef struct {
   *sprFlameCenter, *sprFlameXSide, *sprFlameYSide, *sprFlameRightTip,
   *sprFlameLeftTip, *sprFlameUpTip, *sprFlameDownTip;
   /* Objects */
-  Objects *floors, *blocks, *boxes, *spikes, *bombs;
+  Objects *floors, *blocks, *boxes, *spikes, *bombs, *flames;
   /* Grid, font, inputs, state, ... */
   Grid *grid;
   MLV_Font *font;
