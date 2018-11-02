@@ -7,6 +7,7 @@
 #include "objects.h"
 #include "objectsProps.h"
 #include "inputs.h"
+#include <stdlib.h>
 
 /* The different states the game can be in */
 typedef enum {
@@ -22,7 +23,8 @@ typedef struct {
   Sprites *sprites;
   Sprite *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow, *sprBomb,
   *sprFlameCenter, *sprFlameXSide, *sprFlameYSide, *sprFlameRightTip,
-  *sprFlameLeftTip, *sprFlameUpTip, *sprFlameDownTip;
+  *sprFlameLeftTip, *sprFlameUpTip, *sprFlameDownTip,
+  *sprPlayerDown[4], *sprPlayerUp[4], *sprPlayerLeft[4], *sprPlayerRight[4];
   /* Objects */
   Objects *floors, *blocks, *boxes, *spikes, *bombs, *flames, *players;
   /* Grid, font, inputs, state, ... */

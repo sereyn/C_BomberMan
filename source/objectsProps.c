@@ -37,7 +37,7 @@ void initPlayer(int index, void *bbmVoid){
   int x = 1, y = 1;
   PlayerVars *playerVars = malloc(sizeof(PlayerVars));
   playerVars->number = index;
-  playerVars->size = bbm->grid->size*4/5;
+  playerVars->size = bbm->grid->size;/**4/5;*/
   playerVars->bombThrown = 0;
   playerVars->bombMax = 1;
   /* We set the default position of the player according to its number */
@@ -90,6 +90,8 @@ void initPlayer(int index, void *bbmVoid){
       break;
   }
   player->variables = playerVars;
+  player->sprite = bbm->sprPlayerDown[index];
+  player->sprSpeed = .05;
 }
 
 /* Updates */
