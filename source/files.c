@@ -1,6 +1,6 @@
 #include "files.h"
 
-int countLevels(){
+int countLevels(void){
   int fileNumber = 0;
   char *prefix = "resources/levels/lvl";
   char *suffix = ".txt";

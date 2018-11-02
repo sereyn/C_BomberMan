@@ -25,16 +25,14 @@ typedef struct {
   int length;
 } Inputs;
 
-Input *newInput(Inputs *inputs, int inputCode, int isKey);
+Inputs *initInputs(void);
 
-int isDown(Input *input);
+int isDown(Input *);
 
-int isJustDown(Input *input);
+int isJustDown(Input *);
 
-Inputs *initInputs();
+void updateInputs(Inputs *);
 
-void updateInputs(Inputs *inputs);
-
-void freeInputs(Inputs *inputs);
+void freeInputs(Inputs *);
 
 #endif /* INPUTS */

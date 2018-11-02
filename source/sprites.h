@@ -15,10 +15,7 @@ typedef struct {
 } Sprite;
 
 /* Draws the sprite to the screen at the coordinates (x, y) */
-void drawSprite(Sprite *sprite, int x, int y, int index);
-
-/* Frees one sprite */
-void freeSprite(Sprite *sprite);
+void drawSprite(Sprite *, int x, int y, int index);
 
 /* The Sprites structure's purpose is to get an exhaustive list of all the Sprite structures */
 typedef struct {
@@ -33,9 +30,9 @@ Sprites *initSprites(void);
   When creating a new Sprite, you need to provide the string of the file pattern
   (i.e. "bomb%d.png" if your sprite is "bomb0.png", "bomb1.png", ..., "bomb5.png")
 */
-Sprite *newSprite(Sprites *sprites, char *filePattern, Coord *dimensions, double rotation);
+Sprite *newSprite(Sprites *, char *filePattern, Coord *dimensions, double rotation);
 
 /* Frees all the sprites */
-void freeSprites(Sprites *sprites);
+void freeSprites(Sprites *);
 
 #endif /* SPRITES */

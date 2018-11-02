@@ -10,12 +10,12 @@
 #include "objects.h"
 
 /* Counts how many levels exist */
-int countLevels();
+int countLevels(void);
 
 /* Saves a level */
-void saveLevel(Bomberman *bbm);
+void saveLevel(Bomberman *);
 
 /* Loads a level */
-void loadLevel(Bomberman *bbm, int fileNumber);
+void loadLevel(Bomberman *, int fileNumber);
 
 #endif /* FILES */

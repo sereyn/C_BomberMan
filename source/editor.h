@@ -20,19 +20,16 @@ typedef struct{
   Items *items;
 } Editor;
 
-/* Tells if a block is forbidden to the edition or not */
-int isForbiddenBlock(int x, int y, int w, int h);
-
 /* Initialises the editor */
-Editor *initEditor(Bomberman *bbm);
+Editor *initEditor(Bomberman *);
 
 /* Has to be executed in a game loop: main function of the editor */
-void editorLoop(Editor *editor, Bomberman *bbm);
+void editorLoop(Editor *, Bomberman *);
 
 /*
   Frees the allocated memory
   Has to be a pointer of pointer
 */
-void freeEditor(Editor **editor);
+void freeEditor(Editor **);
 
 #endif /* EDITOR */

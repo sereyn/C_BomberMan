@@ -1,16 +1,20 @@
 #include "objects.h"
+#include "bomberman.h"
 
 void freeObject(Object *object){
   free(object->position);
   free(object);
 }
 
-Objects *initObjects(Sprite *defSprite, char termChar){
+Objects *initObjects(Sprite *defSprite, char termChar, void *bbmVoid){
   Objects *objects = malloc(sizeof(Objects));
   objects->length = 0;
   objects->defSprite = defSprite;
   objects->termChar = termChar;
   objects->list = NULL;
+  objects->initialisation = NULL;
+  objects->update = NULL;
+  objects->bbmVoid = bbmVoid;
   return objects;
 }
 
@@ -21,12 +25,16 @@ Object *newObject(Objects *objects, Coord *position){
   newObj->sprSpeed = 1;
   newObj->position = position;
   newObj->sprite = objects->defSprite;
+  newObj->variables = NULL;
   /*
     We ask for 1 more slot of memory for our list to save the new position
     Then we save that position at the end of the list and increment the length
   */
   objects->list = realloc(objects->list, (objects->length+1)*sizeof(Coord *));
   objects->list[objects->length++] = newObj;
+  /* Now that everything is ready, we call the init function if it exists */
+  if(objects->initialisation)
+    (*(objects->initialisation))(objects->length-1, objects->bbmVoid);
   return newObj;
 }
 
@@ -54,27 +62,33 @@ void deleteObject(Objects *objects, int index){
   }
 }
 
-void updateObjects(Objects *objects, Grid *grid){
+void updateObjects(Objects *objects){
+  /* Now that we know about the 'Bomberman' structure, we can convert it */
+  Bomberman *bbm = objects->bbmVoid;
   /* We loop through all the objects to update them all */
-  int i = 0, x, y, termX, termY;
+  int i, x, y, termX, termY;
   /* The current object we're dealing with */
   Object *curObj;
-  for(; i < objects->length; ++i){
+  for(i = objects->length-1; i >= 0; --i){
     curObj = objects->list[i];
     x = curObj->position->x;
     y = curObj->position->y;
     /* We increase the sprite index according to the speed and the maximum index */
     curObj->sprIndex += curObj->sprSpeed;
-    while(curObj->sprIndex >= objects->list[i]->sprite->length)
+    while(curObj->sprIndex >= curObj->sprite->length)
       curObj->sprIndex -= (double)objects->list[i]->sprite->length;
     /* Normal (window) rendering */
-    drawSprite(objects->list[i]->sprite, x, y, (int)curObj->sprIndex);
+    drawSprite(curObj->sprite, x, y, (int)curObj->sprIndex);
     /* Terminal rendering */
-    termX = x/grid->size;
-    termY = y/grid->size-grid->marginTop;
-    /* We don't print the objects in the hub (too high) in the terminal*/
-    if(termY > -1)
-      grid->grid[termY][termX] = objects->termChar;
+    termX = x/bbm->grid->size;
+    termY = y/bbm->grid->size-bbm->grid->marginTop;
+    /* We don't print the objects in the hub (too high) in the terminal */
+    if(termX > -1 && termX < bbm->grid->dimensions->x
+    && termY > -1 && termY < bbm->grid->dimensions->y)
+      bbm->grid->grid[termY][termX] = objects->termChar;
+    /* If the object has an update function, we execute it */    
+    if(objects->update)
+      (*(objects->update))(i, bbm);
   }
 }
 

@@ -9,8 +9,6 @@ typedef enum {
   oGame, oEditor
 } Option;
 
-char *optionToString(Option option);
-
 typedef struct{
   int level;
   int levelsNumber;
@@ -19,13 +17,11 @@ typedef struct{
   unsigned int optionsNumber;
 } Menu;
 
-Menu *initMenu();
+Menu *initMenu(void);
 
-void menuLoop(Menu *menu, Bomberman *bbm);
-
-void drawMenu(Menu *menu, Bomberman *bbm);
+void menuLoop(Menu *, Bomberman *);
 
 /* Has to be a pointer of pointer */
-void freeMenu(Menu **menu);
+void freeMenu(Menu **);
 
 #endif /* MENU */

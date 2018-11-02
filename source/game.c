@@ -1,15 +1,14 @@
 #include "game.h"
 
-Game *initGame(Bomberman *bbm){
+void initGame(Bomberman *bbm){
   int i, j;
   /* We create variables for shorter and clearer code */
   int marginTop = bbm->grid->marginTop;
   Coord *dims = bbm->grid->dimensions;
   int size = bbm->grid->size;
-  Game *game = malloc(sizeof(Game));
   /* We initializes the players */
   for(i = 0; i < 4; ++i)
-    game->players[i] = newPlayer(bbm, i);
+    newObject(bbm->players, newCoord(0, 0));
   /* We create the objects that will always be in the same place */
   debug(1, "Filling the game grid\n");
   for(i = 0; i < dims->x; ++i){
@@ -25,24 +24,4 @@ Game *initGame(Bomberman *bbm){
   }
   /* Now we add the objects that depend of each level */
   loadLevel(bbm, bbm->level);
-  return game;
-}
-
-void gameLoop(Game *game, Bomberman *bbm){
-  int i;
-  /* We update the 4 players */
-  for(i = 0; i < 4; ++i)
-    updatePlayer(game->players[i], bbm);
-}
-
-void freeGame(Game **game){
-  /* We make it being a pointer of pointer so that we can set it to point on NULL */
-  int i = 0;
-  if(*game){
-    /* Frees the game */
-    for(; i < 4; ++i)
-      freePlayer((*game)->players[i]);
-    free(*game);
-    *game = NULL;
-  }
 }

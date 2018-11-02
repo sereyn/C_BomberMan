@@ -10,7 +10,7 @@ char *optionToString(Option option){
   return "";
 }
 
-Menu *initMenu(){
+Menu *initMenu(void){
   /* We initialize the menu */
   Menu *menu = malloc(sizeof(Menu));
   menu->level = 0;
@@ -18,32 +18,6 @@ Menu *initMenu(){
   menu->cursor = oGame;
   menu->optionsNumber = 2;
   return menu;
-}
-
-void menuLoop(Menu *menu, Bomberman *bbm){
-  /* We move the cursor if the user presses up or down */
-  if(isJustDown(bbm->inputs->down))
-    menu->cursor += menu->cursor < menu->optionsNumber-1;
-  if(isJustDown(bbm->inputs->up))
-    menu->cursor -= menu->cursor > 0;
-  /* If the user is currently selecting the 'Game option' */
-  if(menu->cursor == oGame){
-    /* We change the level if he presses right or left */
-    if(isJustDown(bbm->inputs->right))
-      menu->level += menu->level < menu->levelsNumber-1;
-    if(isJustDown(bbm->inputs->left))
-      menu->level -= menu->level > 0;
-  }
-  /* We draw the menu */
-  drawMenu(menu, bbm);
-  /* If the user presses enter, we select their choice */
-  if(isJustDown(bbm->inputs->enter)){
-    debug(4, "Menu choice: '%s'\n", optionToString(menu->cursor));
-    /* We set bbm->level to be menu->level so that it starts the accurate level */
-    bbm->level = menu->level;
-    /* bbm->state fits menu->cursor+1 so we enjoy its benefits */
-    setState(bbm, menu->cursor+1);
-  }
 }
 
 void drawMenu(Menu *menu, Bomberman *bbm){
@@ -78,6 +52,32 @@ void drawMenu(Menu *menu, Bomberman *bbm){
     free(optionText);
   }
   free(levelText);
+}
+
+void menuLoop(Menu *menu, Bomberman *bbm){
+  /* We move the cursor if the user presses up or down */
+  if(isJustDown(bbm->inputs->down))
+    menu->cursor += menu->cursor < menu->optionsNumber-1;
+  if(isJustDown(bbm->inputs->up))
+    menu->cursor -= menu->cursor > 0;
+  /* If the user is currently selecting the 'Game option' */
+  if(menu->cursor == oGame){
+    /* We change the level if he presses right or left */
+    if(isJustDown(bbm->inputs->right))
+      menu->level += menu->level < menu->levelsNumber-1;
+    if(isJustDown(bbm->inputs->left))
+      menu->level -= menu->level > 0;
+  }
+  /* We draw the menu */
+  drawMenu(menu, bbm);
+  /* If the user presses enter, we select their choice */
+  if(isJustDown(bbm->inputs->enter)){
+    debug(4, "Menu choice: '%s'\n", optionToString(menu->cursor));
+    /* We set bbm->level to be menu->level so that it starts the accurate level */
+    bbm->level = menu->level;
+    /* bbm->state fits menu->cursor+1 so we enjoy its benefits */
+    setState(bbm, menu->cursor+1);
+  }
 }
 
 void freeMenu(Menu **menu){

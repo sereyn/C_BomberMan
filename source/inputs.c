@@ -21,7 +21,7 @@ int isJustDown(Input *input){
   return input->state && !input->previousState;
 }
 
-Inputs *initInputs(){
+Inputs *initInputs(void){
   /* Some basic initialisation */
   Inputs *inputs = malloc(sizeof(Inputs));
   inputs->list = malloc(sizeof(Input *));

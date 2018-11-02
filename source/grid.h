@@ -14,11 +14,11 @@ typedef struct {
 Grid *initGrid(int size, Coord *dimensions, int marginTop);
 
 /* Fills the terminal grid with zeros */
-void resetGrid(Grid *grid);
+void resetGrid(Grid *);
 
 /* Prints the grid in the terminal for debugging */
-void printGrid(Grid *grid);
+void printGrid(Grid *);
 
-void freeGrid(Grid *grid);
+void freeGrid(Grid *);
 
 #endif /* GRID */

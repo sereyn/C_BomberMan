@@ -1,12 +1,12 @@
 #ifndef BOMBERMAN
 #define BOMBERMAN
 
-#include "objects.h"
 #include "utils.h"
 #include "grid.h"
-#include "inputs.h"
 #include "sprites.h"
-#include <math.h>
+#include "objects.h"
+#include "objectsProps.h"
+#include "inputs.h"
 
 /* The different states the game can be in */
 typedef enum {
@@ -24,7 +24,7 @@ typedef struct {
   *sprFlameCenter, *sprFlameXSide, *sprFlameYSide, *sprFlameRightTip,
   *sprFlameLeftTip, *sprFlameUpTip, *sprFlameDownTip;
   /* Objects */
-  Objects *floors, *blocks, *boxes, *spikes, *bombs, *flames;
+  Objects *floors, *blocks, *boxes, *spikes, *bombs, *flames, *players;
   /* Grid, font, inputs, state, ... */
   Grid *grid;
   MLV_Font *font;
@@ -34,25 +34,16 @@ typedef struct {
   int level;
 } Bomberman;
 
-/* Initializes all the bomberman objects (floors, blocks, boxes and spikes) */
-void initAllObjects(Bomberman *bbm);
-
-/* Frees all of them */
-void freeAllObjects(Bomberman *bbm);
-
 /* Initialises a Bomberman instance */
-Bomberman *initBomberman(Grid *grid);
-
-/* Updates all the objects */
-void updateAllObjects(Bomberman *bbm);
+Bomberman *initBomberman(Grid *);
 
 /* Changes the state of the program (menu, game or editor) */
-void setState(Bomberman *bbm, State newState);
+void setState(Bomberman *, State);
 
 /* Manages the most important updates */
-void bombermanLoop(Bomberman *bbm);
+void bombermanLoop(Bomberman *);
 
 /* This function's purpose is to free the allocated memory the structure knows about */
-void freeBomberman(Bomberman *bbm);
+void freeBomberman(Bomberman *);
 
 #endif /* BOMBERMAN */

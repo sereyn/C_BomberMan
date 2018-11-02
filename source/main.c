@@ -28,7 +28,7 @@ int main(void){
   Bomberman *bomberman;
 
   Menu *menu = NULL;
-  Game *game = NULL;
+  int game = 0;
   Editor *editor = NULL;
   debug(0, "Loading...\n");
   /* We call an MLV function which takes a callback meant to switch closed to 1 */
@@ -61,7 +61,7 @@ int main(void){
     if(bomberman->state != sMenu)
       freeMenu(&menu);
     if(bomberman->state != sGame)
-      freeGame(&game);
+      game = 0;
     if(bomberman->state != sEditor)
       freeEditor(&editor);
 
@@ -73,9 +73,8 @@ int main(void){
         menuLoop(menu, bomberman);
         break;
       case sGame:
-        if(!game)
-          game = initGame(bomberman);
-        gameLoop(game, bomberman);
+        if(!game++)
+          initGame(bomberman);
         break;
       case sEditor:
         if(!editor)
@@ -93,7 +92,6 @@ int main(void){
     We need to free all the memory allocated during the game process
   */
   freeMenu(&menu);
-  freeGame(&game);
   freeEditor(&editor);
   freeBomberman(bomberman);
   MLV_free_window();
