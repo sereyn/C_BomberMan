@@ -12,7 +12,7 @@ typedef struct {
   int bombMax; /* Maximum of bomb that can be thrown at once */
   Input *up, *left, *down, *right, *action;
   int number;
-  int size; /* Hitbox */
+  Sprite *sprites[4];
 } PlayerVars;
 
 /* Initialisations */
@@ -37,7 +37,6 @@ void initPlayer(int index, void *bbmVoid){
   int x = 1, y = 1;
   PlayerVars *playerVars = malloc(sizeof(PlayerVars));
   playerVars->number = index;
-  playerVars->size = bbm->grid->size;/**4/5;*/
   playerVars->bombThrown = 0;
   playerVars->bombMax = 1;
   /* We set the default position of the player according to its number */
@@ -49,9 +48,6 @@ void initPlayer(int index, void *bbmVoid){
   x *= bbm->grid->size;
   y += bbm->grid->marginTop;
   y *= bbm->grid->size;
-  /* We place the player at the center of its spawn case */
-  x += (bbm->grid->size-playerVars->size)/2;
-  y += (bbm->grid->size-playerVars->size)/2;
   player->position->x = x;
   player->position->y = y;
   /*
@@ -89,9 +85,13 @@ void initPlayer(int index, void *bbmVoid){
       playerVars->action = bbm->inputs->h;
       break;
   }
+  playerVars->sprites[0] = bbm->sprPlayerRight[index];
+  playerVars->sprites[1] = bbm->sprPlayerDown[index];
+  playerVars->sprites[2] = bbm->sprPlayerLeft[index];
+  playerVars->sprites[3] = bbm->sprPlayerUp[index];
   player->variables = playerVars;
-  player->sprite = bbm->sprPlayerDown[index];
-  player->sprSpeed = .05;
+  player->sprite = playerVars->sprites[1];
+  player->sprSpeed = .1;
 }
 
 /* Updates */
@@ -185,15 +185,14 @@ void updateFlame(int index, void *bbmVoid){
   Returns if whether or not a player is colliding with an object at the 'position' coordinates
   (blocks, boxes or spikes)
 */
-int playerCollides(Object *player, int x, int y, Bomberman *bbm){
-  PlayerVars *playerVars = player->variables;
+int playerCollides(Object *player, Bomberman *bbm){
   int j, i, xColl, yColl;
   /*
     (x1, y1) is the top left coordinate of the player
     (x2, y2) is its bottom right one
   */
-  int x1 = x, y1 = y;
-  int x2 = x1+playerVars->size, y2 = y1+playerVars->size;
+  int x1 = player->position->x, y1 = player->position->y;
+  int x2 = x1+bbm->grid->size, y2 = y1+bbm->grid->size;
   /* Same goes fot the object coordinates */
   int objX1, objY1, objX2, objY2;
   /* Loop through all the objects */
@@ -219,6 +218,9 @@ int playerCollides(Object *player, int x, int y, Bomberman *bbm){
 
 void movePlayer(Object *player, Bomberman *bbm){
   PlayerVars *playerVars = player->variables;
+  int x0, y0, i = 0, minDistance = 0;
+  int distance[8] = {0};
+  int direction;
   /*
     We sum up the right and left key's state and substract them in a way that the results equals
     1 if only right is pressed
@@ -228,37 +230,51 @@ void movePlayer(Object *player, Bomberman *bbm){
   */
   int xSpeed = isDown(playerVars->right)-isDown(playerVars->left);
   int ySpeed = isDown(playerVars->down)-isDown(playerVars->up);
+  if(xSpeed != 0 || ySpeed != 0){
+    direction = round(2.*atan2((double)ySpeed, (double)xSpeed)/3.14);
+    while(direction < 0)
+      direction += 4;
+    player->sprite = playerVars->sprites[direction%4]; 
+  }else
+    player->sprIndex = 0;
   /* Then we multiply that value by a factor player->speed to move faster than a pixel per frame */
   xSpeed *= playerVars->speed;
   ySpeed *= playerVars->speed;
-
-  /*
-    Horizontal movement
-    We check if the player would collide in its next position
-  */
-  if(playerCollides(player, player->position->x+xSpeed, player->position->y, bbm)){
-    /*
-      If the player would collide if we simply iterate its x position by xSpeed,
-      we instead increase its position pixel per pixel until it collides one pixel later
-    */
-    while(!playerCollides(player, player->position->x+sign(xSpeed), player->position->y, bbm))
-      player->position->x += sign(xSpeed);
-    /* Then we set its xSpeed to 0 */
-    xSpeed = 0;
-  }
-  /* We can now safely iterate the player x's position by xSpeed */
+  /* We move the player accordingly to its speeds */
   player->position->x += xSpeed;
-
-  /*
-    Vertical movement
-    We apply the same logic as with the horizontal movement
-  */
-  if(playerCollides(player, player->position->x, player->position->y+ySpeed, bbm)){
-    while(!playerCollides(player, player->position->x, player->position->y+sign(ySpeed), bbm))
-      player->position->y += sign(ySpeed);
-    ySpeed = 0;
-  }
   player->position->y += ySpeed;
+  /* Collision check */
+  if(playerCollides(player, bbm)){
+    /* We are in a wall, what direction is the shortest to quit the collision? */
+    x0 = player->position->x;
+    y0 = player->position->y;
+    for(; i < 8; ++i){
+      while(playerCollides(player, bbm)){
+        /*
+          We move in that direction while it collides
+          and increment the distance in that direction.
+          1.57 is an approximation of PI/4
+        */
+        player->position->x += round(cos((double)i*.79));
+        player->position->y += round(sin((double)i*.79));
+        distance[i]++;
+      }
+      /*
+        If the current distance is strictly lower that the previous min distance
+        OR if it's equal but the current one is not diagonal,
+        we set the minDistance to the current one
+      */
+      if(distance[i] < distance[minDistance]
+      || (distance[i] == distance[minDistance] && i%2 == 0))
+        minDistance = i;
+      /* We reposition the player where it collided to check other directions */
+      player->position->x = x0;
+      player->position->y = y0;
+    }
+    /* Now we can finally move 'distance' steps in the best direction */
+    player->position->x += round(cos((double)minDistance*.79))*distance[minDistance];
+    player->position->y += round(sin((double)minDistance*.79))*distance[minDistance];
+  }
 }
 
 void attackPlayer(Object *player, Bomberman *bbm){
