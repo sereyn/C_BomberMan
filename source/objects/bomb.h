@@ -3,6 +3,7 @@
 
 #include "../objects.h"
 #include "../sprites.h"
+#include "player.h"
 #include <math.h>
 
 typedef struct {

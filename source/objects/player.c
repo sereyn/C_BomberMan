@@ -1,5 +1,4 @@
 #include "player.h"
-#include "bomb.h"
 #include "../bomberman.h"
 
 void initPlayer(int index, void *bbmVoid){

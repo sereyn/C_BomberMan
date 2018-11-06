@@ -4,6 +4,7 @@
 #include "../objects.h"
 #include "../sprites.h"
 #include "../inputs.h"
+#include "bomb.h"
 #include <math.h>
 
 typedef struct {
