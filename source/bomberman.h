@@ -5,9 +5,12 @@
 #include "grid.h"
 #include "sprites.h"
 #include "objects.h"
-#include "objectsProps.h"
 #include "inputs.h"
 #include <stdlib.h>
+
+#include "objects/player.h"
+#include "objects/bomb.h"
+#include "objects/flame.h"
 
 /* The different states the game can be in */
 typedef enum {
