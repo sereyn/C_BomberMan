@@ -95,7 +95,7 @@ void editorLoop(Editor *editor, Bomberman *bbm){
         for(i = editor->items->list[j]->length-1; i >= 0 ; --i){
           if(mouseX == editor->items->list[j]->list[i]->position->x/size
           && mouseY == editor->items->list[j]->list[i]->position->y/size){
-            deleteObject(editor->items->list[j], i);
+            deleteObject(editor->items->list[j]->list[i]);
             debug(1, "Deleted item:\nx=%d\ny=%d\nNumber of this item=%d\n\n",
               mouseX, mouseY, editor->items->list[j]->length);
           }

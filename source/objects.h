@@ -20,6 +20,7 @@ typedef struct {
   double sprSpeed;
   Sprite *sprite;
   void *variables;
+  int deleted;
 } Object;
 
 /*
@@ -50,7 +51,7 @@ Objects *initObjects(Sprite *defSprite, char termChar, void *bbmVoid);
 Object *newObject(Objects *, Coord *position);
 
 /* Deletes the i-th object from the list */
-void deleteObject(Objects *, int index);
+void deleteObject(Object *);
 
 /*
   Updates all the objets

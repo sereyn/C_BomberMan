@@ -12,5 +12,5 @@ void updateFlame(int index, void *bbmVoid){
   Bomberman *bbm = bbmVoid;
   Object *flame = bbm->flames->list[index];
   if((int)flame->sprIndex == flame->sprite->length-1)
-    deleteObject(bbm->flames, index);
+    deleteObject(flame);
 }

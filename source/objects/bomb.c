@@ -58,7 +58,7 @@ void updateBomb(int index, void *bbmVoid){
           box = bbm->boxes->list[k];
           if(box->position->x == x2 && box->position->y == y2){
             flameDestroyed[j] = 1;
-            deleteObject(bbm->boxes, k);
+            deleteObject(bbm->boxes->list[k]);
             /* We create a flame where the box got destroyed */
             flame = newObject(bbm->flames, newCoord(x2, y2));
             flame->sprite = sprFlameTip[j];
@@ -83,6 +83,6 @@ void updateBomb(int index, void *bbmVoid){
     }
     playerVars = bbm->players->list[bombVars->player]->variables;
     playerVars->bombThrown--;
-    deleteObject(bbm->bombs, index);
+    deleteObject(bomb);
   }
 }

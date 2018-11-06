@@ -25,6 +25,7 @@ Object *newObject(Objects *objects, Coord *position){
   newObj->sprSpeed = 1;
   newObj->position = position;
   newObj->sprite = objects->defSprite;
+  newObj->deleted = 0;
   newObj->variables = NULL;
   /*
     We ask for 1 more slot of memory for our list to save the new position
@@ -38,57 +39,53 @@ Object *newObject(Objects *objects, Coord *position){
   return newObj;
 }
 
-void deleteObject(Objects *objects, int index){
-  int i = index;
-  /* If the user asks to remove an object with a negative or too high index, something went wrong */
-  if(index < 0 || index >= objects->length){
-    debug(0, "Error: cannot remove the object %d in a list of length %d!\n", index, objects->length);
-  }else{
-    /*
-      First we free the object to delete
-    */
-    freeObject(objects->list[index]);
-    /*
-      We loop from the index-th object the last one
-      For each iteration, we make the object being equal to its next one
-    */
-    for(; i < objects->length-1; ++i)
-      objects->list[i] = objects->list[i+1];
-    /*
-      We then have a not desired object at the list's end
-      Also we decrement the length
-    */
-    objects->list = realloc(objects->list, (--objects->length)*sizeof(Coord));
-  }
+void deleteObject(Object *object){
+  object->deleted = 1;
 }
 
 void updateObjects(Objects *objects){
   /* Now that we know about the 'Bomberman' structure, we can convert it */
   Bomberman *bbm = objects->bbmVoid;
-  /* We loop through all the objects to update them all */
-  int i, x, y, termX, termY;
+  int i, j, x, y, termX, termY;
   /* The current object we're dealing with */
   Object *curObj;
-  for(i = objects->length-1; i >= 0; --i){
+  /* We loop through all the objects to update them all */
+  for(i = 0; i < objects->length; ++i){
     curObj = objects->list[i];
-    x = curObj->position->x;
-    y = curObj->position->y;
-    /* We increase the sprite index according to the speed and the maximum index */
-    curObj->sprIndex += curObj->sprSpeed;
-    while(curObj->sprIndex >= curObj->sprite->length)
-      curObj->sprIndex -= (double)objects->list[i]->sprite->length;
-    /* Normal (window) rendering */
-    drawSprite(curObj->sprite, x, y, (int)curObj->sprIndex);
-    /* Terminal rendering */
-    termX = x/bbm->grid->size;
-    termY = y/bbm->grid->size-bbm->grid->marginTop;
-    /* We don't print the objects in the hub (too high) in the terminal */
-    if(termX > -1 && termX < bbm->grid->dimensions->x
-    && termY > -1 && termY < bbm->grid->dimensions->y)
-      bbm->grid->grid[termY][termX] = objects->termChar;
-    /* If the object has an update function, we execute it */    
-    if(objects->update)
-      (*(objects->update))(i, bbm);
+    if(!curObj->deleted){
+      x = curObj->position->x;
+      y = curObj->position->y;
+      /* We increase the sprite index according to the speed and the maximum index */
+      curObj->sprIndex += curObj->sprSpeed;
+      while(curObj->sprIndex >= curObj->sprite->length)
+        curObj->sprIndex -= (double)objects->list[i]->sprite->length;
+      /* Normal (window) rendering */
+      drawSprite(curObj->sprite, x, y, (int)curObj->sprIndex);
+      /* Terminal rendering */
+      termX = x/bbm->grid->size;
+      termY = y/bbm->grid->size-bbm->grid->marginTop;
+      /* We don't print the objects in the hub (too high) in the terminal */
+      if(termX > -1 && termX < bbm->grid->dimensions->x
+      && termY > -1 && termY < bbm->grid->dimensions->y)
+        bbm->grid->grid[termY][termX] = objects->termChar;
+      /* If the object has an update function, we execute it */    
+      if(objects->update)
+        (*(objects->update))(i, bbm);
+    }
+  }
+  /*
+    We loop them again to remove the ones to delete
+    We make sure to do that after the first loop so that no object can be skipped
+    because of a deleted object
+  */
+  for(i = objects->length-1; i >= 0; --i){
+    if(objects->list[i]->deleted){
+      freeObject(objects->list[i]);
+      objects->length--;
+      for(j = i; j < objects->length; ++j)
+        objects->list[j] = objects->list[j+1];
+      objects->list = realloc(objects->list, objects->length*sizeof(Coord));
+    }
   }
 }
 
