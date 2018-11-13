@@ -66,6 +66,8 @@ void saveLevel(Bomberman *bbm){
 
 void loadLevel(Bomberman *bbm, int fileNumber){
   int i, x, y;
+  int xBonus, yBonus;
+  int bonusMargin = (bbm->grid->size-bbm->bonus->defSprite->dimensions->x)/2;
   char objChar;
   char *prefix = "resources/levels/lvl";
   char *suffix = ".txt";
@@ -85,6 +87,11 @@ void loadLevel(Bomberman *bbm, int fileNumber){
       if(objChar == "bcs"[i]){
         while(fscanf(lvl, "%d;%d", &x, &y) == 2){
           newObject(objList[i], newCoord(x*bbm->grid->size, y*bbm->grid->size));
+          if(objChar == 'c' && rand()%100 < 20){
+            xBonus = x*bbm->grid->size+bonusMargin;
+            yBonus = y*bbm->grid->size+bonusMargin;
+            newObject(bbm->bonus, newCoord(xBonus, yBonus));
+          }
         }
       }
     }

@@ -13,10 +13,10 @@ void initBomb(int index, void *bbmVoid){
 void updateBomb(int index, void *bbmVoid){
   Bomberman *bbm = bbmVoid;
   int x, y, x2, y2, i, j, k;
-  int flameLength = 2;
   Object *flame, *block, *box, *bomb = bbm->bombs->list[index];
   BombVars *bombVars = bomb->variables;
-  PlayerVars *playerVars;
+  PlayerVars *playerVars = bbm->players->list[bombVars->player]->variables;
+  int flameLength = playerVars->flameLength;
   /*
     flameDestroyed represents the directions in which the flame encountered some blocks
     We fill it with zeroes
@@ -81,7 +81,6 @@ void updateBomb(int index, void *bbmVoid){
           flame->sprite = sprFlameSide[j%2];
       }
     }
-    playerVars = bbm->players->list[bombVars->player]->variables;
     playerVars->bombThrown--;
     deleteObject(bomb);
   }

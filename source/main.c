@@ -1,3 +1,4 @@
+#include <time.h>
 #include <MLV/MLV_all.h>
 #include "utils.h"
 #include "bomberman.h"
@@ -30,6 +31,7 @@ int main(void){
   Menu *menu = NULL;
   int game = 0;
   Editor *editor = NULL;
+  srand(time(NULL));
   debug(0, "Loading...\n");
   /* We call an MLV function which takes a callback meant to switch closed to 1 */
   MLV_execute_at_exit(exitCallback, &closed);

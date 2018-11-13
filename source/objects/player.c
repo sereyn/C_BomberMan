@@ -9,6 +9,7 @@ void initPlayer(int index, void *bbmVoid){
   playerVars->number = index;
   playerVars->bombThrown = 0;
   playerVars->bombMax = 1;
+  playerVars->flameLength = 1;
   /* We set the default position of the player according to its number */
   if(index == 1 || index == 3)
     x = bbm->grid->dimensions->x-2;
@@ -24,7 +25,7 @@ void initPlayer(int index, void *bbmVoid){
     We use a speed relative to the grid's size so that we can change it without altering its apparent speed
     However, since it is forced to be an integer, it can look different if we choose a too small grid size
   */
-  playerVars->speed = 3*bbm->grid->size/40;
+  playerVars->speed = 2.*((double)bbm->grid->size)/40.;
   switch(index){
     case 0:
       playerVars->up = bbm->inputs->up;
@@ -111,10 +112,10 @@ void movePlayer(Object *player, Bomberman *bbm){
     0 otherwise
     The same logic is applied to the vertical movement
   */
-  int xSpeed = isDown(playerVars->right)-isDown(playerVars->left);
-  int ySpeed = isDown(playerVars->down)-isDown(playerVars->up);
+  double xSpeed = (double)(isDown(playerVars->right)-isDown(playerVars->left));
+  double ySpeed = (double)(isDown(playerVars->down)-isDown(playerVars->up));
   if(xSpeed != 0 || ySpeed != 0){
-    direction = round(2.*atan2((double)ySpeed, (double)xSpeed)/3.14);
+    direction = round(2.*atan2(ySpeed, xSpeed)/3.14);
     while(direction < 0)
       direction += 4;
     player->sprite = playerVars->sprites[direction%4]; 
@@ -124,8 +125,8 @@ void movePlayer(Object *player, Bomberman *bbm){
   xSpeed *= playerVars->speed;
   ySpeed *= playerVars->speed;
   /* We move the player accordingly to its speeds */
-  player->position->x += xSpeed;
-  player->position->y += ySpeed;
+  player->position->x += (int)xSpeed;
+  player->position->y += (int)ySpeed;
   /* Collision check */
   if(playerCollides(player, bbm)){
     /* We are in a wall, what direction is the shortest to quit the collision? */

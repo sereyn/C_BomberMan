@@ -12,6 +12,7 @@
 typedef struct {
   MLV_Image **list;
   int length;
+  Coord *dimensions;
 } Sprite;
 
 /* Draws the sprite to the screen at the coordinates (x, y) */

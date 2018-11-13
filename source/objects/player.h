@@ -8,7 +8,8 @@
 #include <math.h>
 
 typedef struct {
-  int speed;
+  int flameLength;
+  double speed;
   int bombThrown; /* How many bomb have been thrown */
   int bombMax; /* Maximum of bomb that can be thrown at once */
   Input *up, *left, *down, *right, *action;

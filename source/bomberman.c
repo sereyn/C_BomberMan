@@ -4,6 +4,7 @@ void initAllSprites(Bomberman *bbm){
   int i;
   char path[50];
   Coord *spriteDims = newCoord(bbm->grid->size, bbm->grid->size);
+  Coord *spriteDimsBonus = newCoord(bbm->grid->size*2/3, bbm->grid->size*2/3);
   /* Loads the sprites */
   debug(0, "Loading sprites...\n");
   bbm->sprites = initSprites();
@@ -20,6 +21,9 @@ void initAllSprites(Bomberman *bbm){
   bbm->sprFlameLeftTip = newSprite(bbm->sprites, "flame/tip%d.png", spriteDims, 180);
   bbm->sprFlameUpTip = newSprite(bbm->sprites, "flame/tip%d.png", spriteDims, 90);
   bbm->sprFlameDownTip = newSprite(bbm->sprites, "flame/tip%d.png", spriteDims, -90);
+  bbm->sprBonusFlame = newSprite(bbm->sprites, "bonus/flame%d.png", spriteDimsBonus, 0);
+  bbm->sprBonusBomb = newSprite(bbm->sprites, "bonus/bomb%d.png", spriteDimsBonus, 0);
+  bbm->sprBonusSpeed = newSprite(bbm->sprites, "bonus/speed%d.png", spriteDimsBonus, 0);
   /* Players */
   for(i = 0; i < 4; ++i){
     sprintf(path, "%s%d%s", "players/", i, "/down%d.png");
@@ -51,6 +55,9 @@ void initAllObjects(Bomberman *bbm){
   bbm->players = initObjects(bbm->sprPlayerDown[0], 'P', bbm);
   bbm->players->initialisation = &initPlayer;
   bbm->players->update = &updatePlayer;
+  bbm->bonus = initObjects(bbm->sprBonusBomb, 'I', bbm);
+  bbm->bonus->initialisation = &initBonus;
+  bbm->bonus->update = &updateBonus;
 }
 
 void freeAllObjects(Bomberman *bbm){
@@ -61,6 +68,7 @@ void freeAllObjects(Bomberman *bbm){
   freeObjects(bbm->bombs);
   freeObjects(bbm->flames);
   freeObjects(bbm->players);
+  freeObjects(bbm->bonus);
 }
 
 Bomberman *initBomberman(Grid *grid){
@@ -94,6 +102,7 @@ void bombermanLoop(Bomberman *bbm){
   updateObjects(bbm->spikes);
   updateObjects(bbm->bombs);
   updateObjects(bbm->flames);
+  updateObjects(bbm->bonus);
   updateObjects(bbm->boxes);
   updateObjects(bbm->players);
   updateInputs(bbm->inputs);

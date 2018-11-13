@@ -10,6 +10,7 @@ void freeSprite(Sprite *sprite){
   for(; i < sprite->length; ++i)
     MLV_free_image(sprite->list[i]);
   free(sprite->list);
+  free(sprite->dimensions);
   free(sprite);
 }
 
@@ -53,6 +54,7 @@ Sprite *newSprite(Sprites *sprites, char *filePattern, Coord *dimensions, double
   sprite->length = i-1;
   free(currentFile);
   free(fullCurrentFile);
+  sprite->dimensions = newCoord(dimensions->x, dimensions->y);
   /* We add the sprite in sprites */
   sprites->list = realloc(sprites->list, (sprites->length+1)*sizeof(Sprite *));
   sprites->list[sprites->length++] = sprite;

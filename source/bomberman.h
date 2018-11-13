@@ -11,6 +11,7 @@
 #include "objects/player.h"
 #include "objects/bomb.h"
 #include "objects/flame.h"
+#include "objects/bonus.h"
 
 /* The different states the game can be in */
 typedef enum {
@@ -26,10 +27,10 @@ typedef struct {
   Sprites *sprites;
   Sprite *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow, *sprBomb,
   *sprFlameCenter, *sprFlameXSide, *sprFlameYSide, *sprFlameRightTip,
-  *sprFlameLeftTip, *sprFlameUpTip, *sprFlameDownTip,
+  *sprFlameLeftTip, *sprFlameUpTip, *sprFlameDownTip, *sprBonusFlame, *sprBonusBomb, *sprBonusSpeed,
   *sprPlayerDown[4], *sprPlayerUp[4], *sprPlayerLeft[4], *sprPlayerRight[4];
   /* Objects */
-  Objects *floors, *blocks, *boxes, *spikes, *bombs, *flames, *players;
+  Objects *floors, *blocks, *boxes, *spikes, *bombs, *flames, *players, *bonus;
   /* Grid, font, inputs, state, ... */
   Grid *grid;
   MLV_Font *font;
