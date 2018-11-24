@@ -29,7 +29,7 @@ int main(void){
   Bomberman *bomberman;
 
   Menu *menu = NULL;
-  int game = 0;
+  Game *game = NULL;
   Editor *editor = NULL;
   srand(time(NULL));
   debug(0, "Loading...\n");
@@ -63,7 +63,7 @@ int main(void){
     if(bomberman->state != sMenu)
       freeMenu(&menu);
     if(bomberman->state != sGame)
-      game = 0;
+      freeGame(&game);
     if(bomberman->state != sEditor)
       freeEditor(&editor);
 
@@ -75,8 +75,9 @@ int main(void){
         menuLoop(menu, bomberman);
         break;
       case sGame:
-        if(!game++)
-          initGame(bomberman);
+        if(!game)
+          game = initGame(bomberman);
+        gameLoop(game, bomberman);
         break;
       case sEditor:
         if(!editor)
@@ -94,6 +95,7 @@ int main(void){
     We need to free all the memory allocated during the game process
   */
   freeMenu(&menu);
+  freeGame(&game);
   freeEditor(&editor);
   freeBomberman(bomberman);
   MLV_free_window();

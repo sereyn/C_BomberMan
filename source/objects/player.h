@@ -5,6 +5,7 @@
 #include "../sprites.h"
 #include "../inputs.h"
 #include "bomb.h"
+#include "flame.h"
 #include <math.h>
 
 typedef struct {
@@ -15,6 +16,8 @@ typedef struct {
   Input *up, *left, *down, *right, *action;
   int number;
   Sprite *sprites[4];
+  int dead;
+  int score;
 } PlayerVars;
 
 void initPlayer(int index, void *bbmVoid);

@@ -65,6 +65,7 @@ void updateBonus(int index, void *bbmVoid){
         playerVars->speed += .5;
         break;
     }
+    playerVars->score -= 10;
     deleteObject(bonus);
   }
 }

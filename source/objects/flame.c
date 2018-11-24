@@ -4,6 +4,9 @@
 void initFlame(int index, void *bbmVoid){
   Bomberman *bbm = bbmVoid;
   Object *flame = bbm->flames->list[index];
+  FlameVars *flameVars = malloc(sizeof(FlameVars));
+  flameVars->player = 0;
+  flame->variables = flameVars;
   flame->sprSpeed = .3;
 }
 

@@ -99,3 +99,37 @@ void loadLevel(Bomberman *bbm, int fileNumber){
   fclose(lvl);
   free(path);
 }
+
+Leaderboard loadLeaderboard(void){
+  Leaderboard leaderboard;
+  int i = 0, player, score;
+  FILE *file;
+  for(; i < 10; ++i){
+    leaderboard.score[i] = 0;
+    leaderboard.player[i] = 0;
+  }
+  file = fopen("resources/leaderboard.txt", "r");
+  if(!file)
+    debug(0, "No leaderboard yet\n");
+  else{
+    for(i = 0; fscanf(file, "%d;%d", &player, &score) == 2 && i < 10; ++i){
+      leaderboard.score[i] = score;
+      leaderboard.player[i] = player;
+    }
+    fclose(file);
+  }
+  return leaderboard;
+}
+
+void saveLeaderboard(Leaderboard leaderboard){
+  int i = 0;
+  FILE *file = fopen("resources/leaderboard.txt", "w");
+  if(!file)
+    exit(EXIT_FAILURE);
+  for(; i < 10; ++i){
+    if(leaderboard.player[i] == 0)
+      break;
+    fprintf(file, "%d;%d\n", leaderboard.player[i], leaderboard.score[i]);
+  }
+  fclose(file);
+}

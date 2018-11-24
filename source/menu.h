@@ -4,6 +4,7 @@
 #include "bomberman.h"
 #include "utils.h"
 #include "files.h"
+#include <MLV/MLV_all.h>
 
 typedef enum {
   oGame, oEditor

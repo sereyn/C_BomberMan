@@ -60,6 +60,8 @@ void initPlayer(int index, void *bbmVoid){
   playerVars->sprites[1] = bbm->sprPlayerDown[index];
   playerVars->sprites[2] = bbm->sprPlayerLeft[index];
   playerVars->sprites[3] = bbm->sprPlayerUp[index];
+  playerVars->dead = 0;
+  playerVars->score = 0;
   player->variables = playerVars;
   player->sprite = playerVars->sprites[1];
   player->sprSpeed = .1;
@@ -181,9 +183,45 @@ void attackPlayer(Object *player, Bomberman *bbm){
   }
 }
 
+void checkPlayerDeath(Object *player, Bomberman *bbm){
+  PlayerVars *playerVars = player->variables, *playerVars2;
+  FlameVars *flameVars;
+  int flameX1, flameY1, flameX2, flameY2;
+  int x1 = player->position->x, y1 = player->position->y;
+  int x2 = x1+bbm->grid->size, y2 = y1+bbm->grid->size;
+  int xColl, yColl;
+  int i = 0;
+  for(; i < bbm->flames->length; ++i){
+    flameX1 = bbm->flames->list[i]->position->x;
+    flameY1 = bbm->flames->list[i]->position->y;
+    flameX2 = flameX1+bbm->grid->size;
+    flameY2 = flameY1+bbm->grid->size;
+    /* xColl is the horizontal collision, yColl is the vertical one */
+    xColl = x1 < flameX2 && flameX1 < x2;
+    yColl = y1 < flameY2 && flameY1 < y2;
+    /* If the player collides both horizontally and vertically, we return 1 */
+    if(xColl && yColl){
+      playerVars->dead = 1;
+      /* We remove 50 points to the dead player */
+      playerVars->score -= 50;
+      /* We add 50 points to the killer */
+      flameVars = bbm->flames->list[i]->variables;
+      playerVars2 = bbm->players->list[flameVars->player]->variables;
+      playerVars2->score += 40;
+      break;
+    }
+  }
+}
+
 void updatePlayer(int index, void *bbmVoid){
   Bomberman *bbm = bbmVoid;
   Object *player = bbm->players->list[index];
-  movePlayer(player, bbm);
-  attackPlayer(player, bbm);
+  PlayerVars *playerVars = player->variables;
+  if(playerVars->dead)
+    player->sprite = bbm->sprPlayerDead;
+  else{
+    movePlayer(player, bbm);
+    attackPlayer(player, bbm);
+    checkPlayerDeath(player, bbm);
+  }
 }

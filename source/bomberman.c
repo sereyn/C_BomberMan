@@ -34,7 +34,10 @@ void initAllSprites(Bomberman *bbm){
     bbm->sprPlayerLeft[i] = newSprite(bbm->sprites, path, spriteDims, 0);
     sprintf(path, "%s%d%s", "players/", i, "/right%d.png");
     bbm->sprPlayerRight[i] = newSprite(bbm->sprites, path, spriteDims, 0);
-  }free(spriteDims);
+  }
+  bbm->sprPlayerDead = newSprite(bbm->sprites, "players/dead%d.png", spriteDims, 0);
+  free(spriteDims);
+  free(spriteDimsBonus);
 }
 
 void initAllObjects(Bomberman *bbm){

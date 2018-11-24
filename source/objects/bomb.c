@@ -16,6 +16,7 @@ void updateBomb(int index, void *bbmVoid){
   Object *flame, *block, *box, *bomb = bbm->bombs->list[index];
   BombVars *bombVars = bomb->variables;
   PlayerVars *playerVars = bbm->players->list[bombVars->player]->variables;
+  FlameVars *flameVars;
   int flameLength = playerVars->flameLength;
   /*
     flameDestroyed represents the directions in which the flame encountered some blocks
@@ -62,6 +63,10 @@ void updateBomb(int index, void *bbmVoid){
             /* We create a flame where the box got destroyed */
             flame = newObject(bbm->flames, newCoord(x2, y2));
             flame->sprite = sprFlameTip[j];
+            flameVars = flame->variables;
+            flameVars->player = bombVars->player;
+            /* We add a score of 5 to the player who destroyed the box */
+            playerVars->score += 5;
             break;
           }
         }
@@ -70,6 +75,8 @@ void updateBomb(int index, void *bbmVoid){
           continue;
         /* Finally we can create the flame */
         flame = newObject(bbm->flames, newCoord(x2, y2));
+        flameVars = flame->variables;
+        flameVars->player = bombVars->player;
         /* If i is 0, then we're at the center and we don't need to loop through all the directions */
         if(i == 0)
           break;

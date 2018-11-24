@@ -9,6 +9,11 @@
 #include "bomberman.h"
 #include "objects.h"
 
+typedef struct {
+  int score[10];
+  int player[10];
+} Leaderboard;
+
 /* Counts how many levels exist */
 int countLevels(void);
 
@@ -17,5 +22,9 @@ void saveLevel(Bomberman *);
 
 /* Loads a level */
 void loadLevel(Bomberman *, int fileNumber);
+
+Leaderboard loadLeaderboard(void);
+
+void saveLeaderboard(Leaderboard);
 
 #endif /* FILES */
