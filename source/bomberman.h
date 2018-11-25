@@ -38,6 +38,7 @@ typedef struct {
   State state;
   int closed;
   int level;
+  int numberPlayers;
 } Bomberman;
 
 /* Initialises a Bomberman instance */

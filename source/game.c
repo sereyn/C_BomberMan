@@ -11,7 +11,7 @@ Game *initGame(Bomberman *bbm){
   game->highScore = 0;
   game->gameIsOver = 0;
   /* We initializes the players */
-  for(i = 0; i < 4; ++i)
+  for(i = 0; i < bbm->numberPlayers; ++i)
     newObject(bbm->players, newCoord(0, 0));
   /* We create the objects that will always be in the same place */
   debug(1, "Filling the game grid\n");
@@ -66,7 +66,7 @@ void gameIsOver(Game *game, Bomberman *bbm){
     if(game->leaderboard.player[i] == 0)
       break;
     scoreText = malloc(100*sizeof(char));
-    sprintf(scoreText, "%d) Player %d : score = %d",
+    sprintf(scoreText, "%d) Player %d: score = %d",
       i+1,
       game->leaderboard.player[i],
       game->leaderboard.score[i]
@@ -111,7 +111,7 @@ void gameLoop(Game *game, Bomberman *bbm){
       /* We only draw the stats of a player if it exists */
       if(i < bbm->players->length){
         playerText = malloc(25*sizeof(char));
-        sprintf(playerText, "Player %d :", i+1);
+        sprintf(playerText, "Player %d:", i+1);
         MLV_draw_text_with_font(currentX+10, 10, playerText, bbm->font, MLV_COLOR_BLACK);
         free(playerText);
         playerVars = bbm->players->list[i]->variables;
@@ -120,7 +120,7 @@ void gameLoop(Game *game, Bomberman *bbm){
           sprPlayer = bbm->sprPlayerDead;
         drawSprite(sprPlayer, currentX+10, bbm->grid->size+10, 0);
         scoreText = malloc(25*sizeof(char));
-        sprintf(scoreText, "Score : %d", playerVars->score);
+        sprintf(scoreText, "Score: %d", playerVars->score);
         MLV_draw_text_with_font(currentX+10, bbm->grid->size*2+10, scoreText, bbm->font, MLV_COLOR_BLACK);
         free(scoreText);
       }

@@ -2,8 +2,10 @@
 
 char *optionToString(Option option){
   switch(option){
-    case oGame:
-      return "Play";
+    case oNewGame:
+      return "New Game";
+    case oLoadGame:
+      return "Load Game";
     case oEditor:
       return "Editor";
   }
@@ -14,70 +16,137 @@ Menu *initMenu(void){
   /* We initialize the menu */
   Menu *menu = malloc(sizeof(Menu));
   menu->level = 0;
-  menu->levelsNumber = countLevels();
-  menu->cursor = oGame;
-  menu->optionsNumber = 2;
+  menu->numberLevels = countLevels();
+  menu->numberPlayers = 2;
+  menu->cursor = oNewGame;
+  menu->numberOptions = 3;
+  menu->numberOptions2 = 4;
+  menu->canLoadGame = 0;
+  menu->phase = 0;
   return menu;
 }
 
 void drawMenu(Menu *menu, Bomberman *bbm){
-  unsigned int i = 0;
+  MLV_Color textColor = MLV_COLOR_WHITE;
+  unsigned int i;
   int size = bbm->grid->size;
   int marginLeft = 2, marginTop = 3;
-  char *levelText = malloc(20*sizeof(char));
   char *optionText;
-  /*
-    Set the current level formatted in 'LevelText'
-    (we add one because it feels more natural for users to start counting at 1
-  */
-  sprintf(levelText, ": level[%d]", menu->level+1);
-  /* Show the title */
+  /* We show the title */
   MLV_draw_text_with_font(
     marginLeft*size, marginTop*size,
     "BOMBERMAN", bbm->font, MLV_COLOR_WHITE);
-  /* Show all the options */
-  for(; i < menu->optionsNumber; ++i){
-    optionText = malloc(25*sizeof(char));
-    /* Copy the current option into optionText */
-    strcpy(optionText, optionToString(i));
-    /* If the option is set to "Game", we append the level number to the string */
-    if(i == oGame)
-      strcat(optionText, levelText);
-    /* If the cursor is currently selecting this option, we concat to this string an arrow */
-    if(i == menu->cursor)
-      strcat(optionText, " <");
-    MLV_draw_text_with_font(
-      marginLeft*size, (marginTop+4+i)*size,
-      optionText, bbm->font, MLV_COLOR_GRAY);
-    free(optionText);
+  /* Now it all depends of on which phase of the menu we are on */
+  if(menu->phase == 0){
+    /* Phase 0: We show all the options */
+    for(i = 0; i < menu->numberOptions; ++i){
+      optionText = malloc(25*sizeof(char));
+      sprintf(optionText, "%s%s", optionToString(i), i == menu->cursor ? " <" : "");
+      if(i == oLoadGame && !menu->canLoadGame)
+        textColor = MLV_COLOR_DARK_GRAY;
+      else
+        textColor = MLV_COLOR_WHITE;
+      MLV_draw_text_with_font(
+        marginLeft*size, (marginTop+4+i)*size,
+        optionText, bbm->font, textColor);
+      free(optionText);
+    }
+  }else if(menu->phase == 1){
+    /* Phase 1 */
+    for(i = 0; i < menu->numberOptions2; ++i){
+      optionText = malloc(25*sizeof(char));
+      /*
+        We set the current level formatted in 'LevelText'
+        (we add one because it feels more natural for users to start counting at 1
+      */
+      switch(i){
+        case oNumberPlayers:
+          sprintf(optionText, "%s%d", "Number of players: ", menu->numberPlayers);
+          break;
+        case oLevel:
+          sprintf(optionText, "%s%d", "Level: ", menu->level+1);
+          break;
+        case oStart:
+          sprintf(optionText, "%s", "Start");
+          break;
+        case oBack:
+          sprintf(optionText, "%s", "Back");
+          break;
+      }
+      sprintf(optionText, "%s%s", optionText, i == menu->cursor ? " <" : "");
+      MLV_draw_text_with_font(
+        marginLeft*size, (marginTop+4+i)*size,
+        optionText, bbm->font, textColor);
+      free(optionText);
+    }
   }
-  free(levelText);
 }
 
 void menuLoop(Menu *menu, Bomberman *bbm){
-  /* We move the cursor if the user presses up or down */
-  if(isJustDown(bbm->inputs->down))
-    menu->cursor += menu->cursor < menu->optionsNumber-1;
-  if(isJustDown(bbm->inputs->up))
-    menu->cursor -= menu->cursor > 0;
-  /* If the user is currently selecting the 'Game option' */
-  if(menu->cursor == oGame){
-    /* We change the level if he presses right or left */
-    if(isJustDown(bbm->inputs->right))
-      menu->level += menu->level < menu->levelsNumber-1;
-    if(isJustDown(bbm->inputs->left))
-      menu->level -= menu->level > 0;
+  if(menu->phase == 0){
+    /* We move the cursor if the user presses up or down */
+    if(isJustDown(bbm->inputs->down))
+      menu->cursor += menu->cursor < menu->numberOptions-1;
+    if(isJustDown(bbm->inputs->up))
+      menu->cursor -= menu->cursor > 0;
+    /* If the cursor is on Load Game and we can't, we skip the selection */
+    if(menu->cursor == oLoadGame && !menu->canLoadGame){
+      menu->cursor += isJustDown(bbm->inputs->down)-isJustDown(bbm->inputs->up);
+    }
+    if(isJustDown(bbm->inputs->enter)){
+      debug(4, "Menu choice: '%s'\n", optionToString(menu->cursor));
+      switch(menu->cursor){
+        case oNewGame:
+          menu->phase = 1;
+          menu->cursor = oStart;
+          break;
+        case oLoadGame:
+          debug(4, "Load game...\n");
+          /* Load game */
+          break;
+        case oEditor:
+          setState(bbm, sEditor);
+          break;
+      }
+    }
+  }else if(menu->phase == 1){
+    /* We move the cursor if the user presses up or down */
+    if(isJustDown(bbm->inputs->down))
+      menu->cursor += menu->cursor < menu->numberOptions2-1;
+    if(isJustDown(bbm->inputs->up))
+      menu->cursor -= menu->cursor > 0;
+    switch(menu->cursor){
+      case oNumberPlayers:
+        if(isJustDown(bbm->inputs->right))
+          menu->numberPlayers += menu->numberPlayers < 4;
+        if(isJustDown(bbm->inputs->left))
+          menu->numberPlayers -= menu->numberPlayers > 2;
+        break;
+      case oLevel:
+        if(isJustDown(bbm->inputs->right))
+          menu->level += menu->level < menu->numberLevels-1;
+        if(isJustDown(bbm->inputs->left))
+          menu->level -= menu->level > 0;
+        break;
+      case oStart:
+        if(isJustDown(bbm->inputs->enter)){
+          debug(4, "Start the game!\n");
+          bbm->level = menu->level;
+          bbm->numberPlayers = menu->numberPlayers;
+          setState(bbm, sGame);
+        }
+        break;
+      case oBack:
+        if(isJustDown(bbm->inputs->enter)){
+          debug(4, "Back to phase 0\n");
+          menu->phase = 0;
+          menu->cursor = oNewGame;
+        }
+        break;
+    }
   }
   /* We draw the menu */
   drawMenu(menu, bbm);
-  /* If the user presses enter, we select their choice */
-  if(isJustDown(bbm->inputs->enter)){
-    debug(4, "Menu choice: '%s'\n", optionToString(menu->cursor));
-    /* We set bbm->level to be menu->level so that it starts the accurate level */
-    bbm->level = menu->level;
-    /* bbm->state fits menu->cursor+1 so we enjoy its benefits */
-    setState(bbm, menu->cursor+1);
-  }
 }
 
 void freeMenu(Menu **menu){

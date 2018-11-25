@@ -7,15 +7,27 @@
 #include <MLV/MLV_all.h>
 
 typedef enum {
-  oGame, oEditor
+  oNewGame, oLoadGame, oEditor
 } Option;
+
+typedef enum {
+  oNumberPlayers, oLevel, oStart, oBack
+} Option2;
 
 typedef struct{
   int level;
-  int levelsNumber;
-  Option cursor;
+  int numberLevels;
+  unsigned int cursor;
   /* Has to be unsigned because used in comparaison with an enum (Option) */
-  unsigned int optionsNumber;
+  unsigned int numberOptions;
+  unsigned int numberOptions2;
+  int numberPlayers;
+  int canLoadGame;
+  /*
+    Phase 0 is the choise between "new game", "load game" or "editor"
+    while phase 1 is how many players and what level you want before starting a new game
+  */
+  int phase;
 } Menu;
 
 Menu *initMenu(void);

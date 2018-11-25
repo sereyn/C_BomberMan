@@ -34,7 +34,7 @@ int collisionWithPlayer(int index, Bomberman *bbm){
   int xColl;
   int yColl;
   Object *player;
-  for(; i < 4; ++i){
+  for(; i < bbm->numberPlayers; ++i){
     player = bbm->players->list[i];
     px1 = player->position->x, py1 = player->position->y;
     px2 = px1+bbm->grid->size, py2 = py1+bbm->grid->size;
