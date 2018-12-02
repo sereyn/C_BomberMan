@@ -3,6 +3,7 @@
 
 #include "utils.h"
 #include "files.h"
+#include "inputs.h"
 #include "objects.h"
 #include "objects/player.h"
 #include "sprites.h"

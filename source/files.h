@@ -23,8 +23,19 @@ void saveLevel(Bomberman *);
 /* Loads a level */
 void loadLevel(Bomberman *, int fileNumber);
 
+/* Reads the leaderboard */
 Leaderboard loadLeaderboard(void);
 
+/* Saves the leaderboard */
 void saveLeaderboard(Leaderboard);
+
+/* Checkes wether or not a game is saved */
+int gameExists(void);
+
+/* Saves the game */
+void saveGame(Bomberman *);
+
+/* Loads the game */
+void loadGame(Bomberman *);
 
 #endif /* FILES */

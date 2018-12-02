@@ -168,6 +168,11 @@ void gameLoop(Game *game, Bomberman *bbm){
       saveLeaderboard(game->leaderboard);
     }
   }
+  /* If the user presses CTRL+S, we save the game and go back to the menu */
+  if((isDown(bbm->inputs->lctrl) || isDown(bbm->inputs->rctrl)) && isJustDown(bbm->inputs->s)){
+    saveGame(bbm);
+    setState(bbm, sMenu);
+  }  
 }
 
 void freeGame(Game **game){

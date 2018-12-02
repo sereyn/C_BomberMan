@@ -122,6 +122,7 @@ void editorLoop(Editor *editor, Bomberman *bbm){
   /* We check if the user pressed ctrl+S */
   if((isDown(bbm->inputs->lctrl) || isDown(bbm->inputs->rctrl)) && isJustDown(bbm->inputs->s)){
     saveLevel(bbm);
+    setState(bbm, sMenu);
   }
 }
 

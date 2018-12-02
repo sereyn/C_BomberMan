@@ -1,4 +1,8 @@
 #include "files.h"
+#include "objects/bomb.h"
+#include "objects/flame.h"
+#include "objects/bonus.h"
+#include "objects/player.h"
 
 int countLevels(void){
   int fileNumber = 0;
@@ -132,4 +136,92 @@ void saveLeaderboard(Leaderboard leaderboard){
     fprintf(file, "%d;%d\n", leaderboard.player[i], leaderboard.score[i]);
   }
   fclose(file);
+}
+
+int gameExists(void){
+  return (access("resources/game.txt", F_OK) != -1);
+}
+
+void saveGame(Bomberman *bbm){
+  int i, j, x, y;
+  BombVars *bombVars;
+  FlameVars *flameVars;
+  BonusVars *bonusVars;
+  PlayerVars *playerVars;
+  FILE *fGame;
+  char objKeywords[7][10];
+  Objects *objList[7];
+  Object *obj;
+  sprintf(objKeywords[0], "blocks");
+  sprintf(objKeywords[1], "boxes");
+  sprintf(objKeywords[2], "spikes");
+  sprintf(objKeywords[3], "bombs");
+  sprintf(objKeywords[4], "flames");
+  sprintf(objKeywords[5], "bonus");
+  sprintf(objKeywords[6], "players");
+  objList[0] = bbm->blocks;
+  objList[1] = bbm->boxes;
+  objList[2] = bbm->spikes;
+  objList[3] = bbm->bombs;
+  objList[4] = bbm->flames;
+  objList[5] = bbm->bonus;
+  objList[6] = bbm->players;
+  if(!(fGame = fopen("resources/game.txt", "w")))
+    exit(EXIT_FAILURE);
+  for(j = 0; j < 7; ++j){
+    fprintf(fGame, "%s\n", objKeywords[j]);
+    for(i = 0; i < objList[j]->length; ++i){
+      obj = objList[j]->list[i];
+      x = obj->position->x;
+      y = obj->position->y;
+      if(j != 6){
+        /*
+          If we're not saving the player coordinates,
+          we divide them by the grid size since they're already mapped to the grid
+        */
+        x /= bbm->grid->size;
+        y /= bbm->grid->size;
+      }
+      fprintf(fGame, "%d;%d", x, y);
+      /* We add extra informations to save depending of the object */
+      switch(j){
+        case 3: /* bomb */
+          bombVars = obj->variables;
+          fprintf(fGame, ";%d;%f",
+            bombVars->player,
+            obj->sprIndex
+          );
+          break;
+        case 4: /* flame */
+          flameVars = obj->variables;
+          fprintf(fGame, ";%d;%f",
+            flameVars->player,
+            obj->sprIndex
+          );
+          break;
+        case 5: /* bonus */
+          bonusVars = obj->variables;
+          fprintf(fGame, ";%d", bonusVars->bonusType);
+          break;
+        case 6: /* player */
+          playerVars = obj->variables;
+          fprintf(fGame, ";%d;%d;%d;%d;%d;%f",
+            playerVars->score,
+            playerVars->flameLength,
+            playerVars->bombThrown,
+            playerVars->bombMax,
+            playerVars->dead,
+            playerVars->speed
+          );
+          break;
+      }
+      fprintf(fGame, "\n");
+    }
+  }
+  fclose(fGame);
+  debug(0, "Game saved!\n");
+}
+
+void loadGame(Bomberman *bbm){
+  debug(0, "Loading game...\n");
 }

@@ -4,6 +4,7 @@
 #include "bomberman.h"
 #include "utils.h"
 #include "files.h"
+#include "inputs.h"
 #include <MLV/MLV_all.h>
 
 typedef enum {

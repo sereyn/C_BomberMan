@@ -21,7 +21,7 @@ Menu *initMenu(void){
   menu->cursor = oNewGame;
   menu->numberOptions = 3;
   menu->numberOptions2 = 4;
-  menu->canLoadGame = 0;
+  menu->canLoadGame = gameExists();
   menu->phase = 0;
   return menu;
 }
@@ -101,8 +101,7 @@ void menuLoop(Menu *menu, Bomberman *bbm){
           menu->cursor = oStart;
           break;
         case oLoadGame:
-          debug(4, "Load game...\n");
-          /* Load game */
+          loadGame(bbm);
           break;
         case oEditor:
           setState(bbm, sEditor);
