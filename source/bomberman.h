@@ -36,9 +36,7 @@ typedef struct {
   MLV_Font *font;
   Inputs *inputs;
   State state;
-  int closed;
-  int level;
-  int numberPlayers;
+  int closed, level, numberPlayers, loading;
 } Bomberman;
 
 /* Initialises a Bomberman instance */

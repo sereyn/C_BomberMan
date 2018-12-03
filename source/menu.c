@@ -101,6 +101,7 @@ void menuLoop(Menu *menu, Bomberman *bbm){
           menu->cursor = oStart;
           break;
         case oLoadGame:
+          bbm->loading = 1;
           loadGame(bbm);
           break;
         case oEditor:
@@ -132,6 +133,7 @@ void menuLoop(Menu *menu, Bomberman *bbm){
           debug(4, "Start the game!\n");
           bbm->level = menu->level;
           bbm->numberPlayers = menu->numberPlayers;
+          bbm->loading = 0;
           setState(bbm, sGame);
         }
         break;

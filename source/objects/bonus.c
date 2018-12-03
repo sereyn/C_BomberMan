@@ -8,12 +8,12 @@ void initBonus(int index, void *bbmVoid){
   BonusVars *bonusVars = malloc(sizeof(BonusVars));
   switch(rand()%3){
     case 0:
-      bonusVars->bonusType = bBomb;
-      bonus->sprite = bbm->sprBonusBomb;
-      break;
-    case 1:
       bonusVars->bonusType = bFlame;
       bonus->sprite = bbm->sprBonusFlame;
+      break;
+    case 1:
+      bonusVars->bonusType = bBomb;
+      bonus->sprite = bbm->sprBonusBomb;
       break;
     case 2:
       bonusVars->bonusType = bSpeed;

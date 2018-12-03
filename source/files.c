@@ -7,9 +7,8 @@
 int countLevels(void){
   int fileNumber = 0;
   char *prefix = "resources/levels/lvl";
-  char *suffix = ".txt";
   /*
-    We alloc the needed memory to path for it to prefix+fileNumber+suffix
+    We alloc the needed memory to path for it to prefix+fileNumber
     The +5 lets the fileNumber be a 4 digit number (base 10)
     Why 4 and not 5? That's because the last memory slot if dedicated for the \0 at the end
   */
@@ -19,7 +18,7 @@ int countLevels(void){
     We check if a file exists using access, from unistd.h
   */
   do
-    sprintf(path, "%s%d%s", prefix, fileNumber++, suffix);
+    sprintf(path, "%s%d", prefix, fileNumber++);
   while(access(path, F_OK) != -1);
   return fileNumber-1;
 }
@@ -27,10 +26,9 @@ int countLevels(void){
 void saveLevel(Bomberman *bbm){
   int fileNumber = 0, i, j, x, y;
   char *prefix = "resources/levels/lvl";
-  char *suffix = ".txt";
   FILE *lvl;
   /*
-    We alloc the needed memory to path for it to prefix+fileNumber+suffix
+    We alloc the needed memory to path for it to prefix+fileNumber
     The +5 lets the fileNumber be a 4 digit number (base 10)
     Why 4 and not 5? That's because the last memory slot if dedicated for the \0 at the end
   */
@@ -46,7 +44,7 @@ void saveLevel(Bomberman *bbm){
     We check if a file exists using access, from unistd.h
   */
   do
-    sprintf(path, "%s%d%s", prefix, fileNumber++, suffix);
+    sprintf(path, "%s%d", prefix, fileNumber++);
   while(access(path, F_OK) != -1);
   lvl = fopen(path, "w");
   /* We can free path */
@@ -74,15 +72,14 @@ void loadLevel(Bomberman *bbm, int fileNumber){
   int bonusMargin = (bbm->grid->size-bbm->bonus->defSprite->dimensions->x)/2;
   char objChar;
   char *prefix = "resources/levels/lvl";
-  char *suffix = ".txt";
   /* Same as in saveLevel */
-  char *path = malloc((strlen(prefix)+strlen(prefix)+5)*sizeof(char));
+  char *path = malloc((strlen(prefix)+5)*sizeof(char));
   FILE *lvl;
   Objects *objList[3];
   objList[0] = bbm->blocks;
   objList[1] = bbm->boxes;
   objList[2] = bbm->spikes;
-  sprintf(path, "%s%d%s", prefix, fileNumber, suffix);
+  sprintf(path, "%s%d", prefix, fileNumber);
   lvl = fopen(path, "r");
   if(!lvl)
     exit(EXIT_FAILURE);
@@ -112,7 +109,7 @@ Leaderboard loadLeaderboard(void){
     leaderboard.score[i] = 0;
     leaderboard.player[i] = 0;
   }
-  file = fopen("resources/leaderboard.txt", "r");
+  file = fopen("resources/leaderboard", "r");
   if(!file)
     debug(0, "No leaderboard yet\n");
   else{
@@ -127,7 +124,7 @@ Leaderboard loadLeaderboard(void){
 
 void saveLeaderboard(Leaderboard leaderboard){
   int i = 0;
-  FILE *file = fopen("resources/leaderboard.txt", "w");
+  FILE *file = fopen("resources/leaderboard", "w");
   if(!file)
     exit(EXIT_FAILURE);
   for(; i < 10; ++i){
@@ -139,7 +136,7 @@ void saveLeaderboard(Leaderboard leaderboard){
 }
 
 int gameExists(void){
-  return (access("resources/game.txt", F_OK) != -1);
+  return (access("resources/game", F_OK) != -1);
 }
 
 void saveGame(Bomberman *bbm){
@@ -166,7 +163,7 @@ void saveGame(Bomberman *bbm){
   objList[4] = bbm->flames;
   objList[5] = bbm->bonus;
   objList[6] = bbm->players;
-  if(!(fGame = fopen("resources/game.txt", "w")))
+  if(!(fGame = fopen("resources/game", "w")))
     exit(EXIT_FAILURE);
   for(j = 0; j < 7; ++j){
     fprintf(fGame, "%s\n", objKeywords[j]);
@@ -223,5 +220,119 @@ void saveGame(Bomberman *bbm){
 }
 
 void loadGame(Bomberman *bbm){
+  int i, j, size = bbm->grid->size;
+  int marginTop = bbm->grid->marginTop;
+  Coord *dims = bbm->grid->dimensions;
+  int x, y, player, bonusType, score, flameLength, bombThrown, bombMax, dead;
+  int bonusMargin = (size-bbm->bonus->defSprite->dimensions->x)/2;
+  double sprIndex, speed;
+  BombVars *bombVars;
+  FlameVars *flameVars;
+  BonusVars *bonusVars;
+  PlayerVars *playerVars;
+  FILE *fGame;
+  char objKeywords[7][10];
+  char objKeyword[10];
+  Objects *objList[7];
+  Object *obj;
+  sprintf(objKeywords[0], "blocks");
+  sprintf(objKeywords[1], "boxes");
+  sprintf(objKeywords[2], "spikes");
+  sprintf(objKeywords[3], "bombs");
+  sprintf(objKeywords[4], "flames");
+  sprintf(objKeywords[5], "bonus");
+  sprintf(objKeywords[6], "players");
+  /* We set the number of players to 0 and will increment it as reading the file */
+  bbm->numberPlayers = 0;
+  setState(bbm, sGame);
+  /*
+    We make sure to make the objList after we change the state
+    because bbm can change its pointers
+  */
+  objList[0] = bbm->blocks;
+  objList[1] = bbm->boxes;
+  objList[2] = bbm->spikes;
+  objList[3] = bbm->bombs;
+  objList[4] = bbm->flames;
+  objList[5] = bbm->bonus;
+  objList[6] = bbm->players;
+  for(i = 0; i < dims->x; ++i){
+    for(j = 0; j < dims->y; ++j)
+      newObject(bbm->floors, newCoord(i*size, (j+marginTop)*size));
+  }
   debug(0, "Loading game...\n");
+  if(!(fGame = fopen("resources/game", "r")))
+    exit(EXIT_FAILURE);
+  for(j = 0; j < 7; ++j){
+    /* We read a keyword */
+    if(fscanf(fGame, "%s", objKeyword) == 1){
+      /* If nothing went wrong */
+      if(strcmp(objKeyword, objKeywords[j]) == 0){
+        /* We check what we are reading (j) */
+        switch(j){
+          case 0: /* block */
+          case 1: /* box */
+          case 2: /* spike */
+            while(fscanf(fGame, "%d;%d", &x, &y) == 2)
+              newObject(objList[j], newCoord(x*size, y*size));
+            break;
+          case 3: /* bomb */
+            while(fscanf(fGame, "%d;%d;%d;%lf", &x, &y, &player, &sprIndex) == 4){
+              obj = newObject(objList[j], newCoord(x*size, y*size));
+              obj->sprIndex = sprIndex;
+              bombVars = obj->variables;
+              bombVars->player = player;
+            }
+            break;
+          case 4: /* flame */
+            while(fscanf(fGame, "%d;%d;%d;%lf", &x, &y, &player, &sprIndex) == 4){
+              obj = newObject(objList[j], newCoord(x*size, y*size));
+              obj->sprIndex = sprIndex;
+              flameVars = obj->variables;
+              flameVars->player = player;
+            }
+            break;
+          case 5: /* bonus */
+            while(fscanf(fGame, "%d;%d;%d", &x, &y, &bonusType) == 3){
+              obj = newObject(objList[j], newCoord(x*size, y*size));
+              obj->position->x += bonusMargin;
+              obj->position->y += bonusMargin;
+              bonusVars = obj->variables;
+              bonusVars->bonusType = bonusType;
+              switch(bonusType){
+                case 0:
+                  obj->sprite = bbm->sprBonusFlame;
+                  break;
+                case 1:
+                  obj->sprite = bbm->sprBonusBomb;
+                  break;
+                case 2:
+                  obj->sprite = bbm->sprBonusSpeed;
+                  break;
+              }
+            }
+            break;
+          case 6: /* player */
+            while(fscanf(fGame, "%d;%d;%d;%d;%d;%d;%d;%lf", &x, &y,
+              &score, &flameLength, &bombThrown, &bombMax, &dead, &speed) == 8){
+              obj = newObject(objList[j], newCoord(0, 0));
+              obj->position->x = x;
+              obj->position->y = y;
+              playerVars = obj->variables;
+              playerVars->score = score;
+              playerVars->flameLength = flameLength;
+              playerVars->bombThrown = bombThrown;
+              playerVars->bombMax = bombMax;
+              playerVars->dead = dead;
+              playerVars->speed = speed;
+              bbm->numberPlayers++;
+            }
+            break;
+        }
+      }
+    }
+  }
+  fclose(fGame);
+  /* Finally we remove the file */
+  remove("resources/game");
 }
