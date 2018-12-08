@@ -63,7 +63,7 @@ La seconde est un tout autre algorithme de collision :
 \State $angleOfMinDistance \gets 0$
 \For{$angle = 0; angle < 360; angle \gets angle+45$}
 \State $currentDistance \gets 0$
-\While {$\texttt{playerIsColliding}()$}
+\While {$\texttt{playerIsColliding}() \textbf{and} \texttt{currentDistance} \leq speed$}
 \State $newPosition \gets tempPosition + \texttt{vector}(1, angle))$
 \State $\texttt{movePlayerTo}(newPosition)$
 \State $currentDistance \gets currentDistance+1$
