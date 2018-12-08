@@ -135,7 +135,8 @@ void movePlayer(Object *player, Bomberman *bbm){
     x0 = player->position->x;
     y0 = player->position->y;
     for(; i < 8; ++i){
-      while(playerCollides(player, bbm)){
+      /* We loop unti the player doesn't collide anymore or if the loop went for too long */
+      while(playerCollides(player, bbm) && distance[i] < (int)(playerVars->speed)+2){
         /*
           We move in that direction while it collides
           and increment the distance in that direction.

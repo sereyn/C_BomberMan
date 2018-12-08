@@ -61,7 +61,7 @@ void editorLoop(Editor *editor, Bomberman *bbm){
   MLV_draw_text_with_font(
     (dims->x/2-3)*size,
     size*1,
-    "Maintain [SHIFT] to create multiple blocks.", bbm->font, MLV_COLOR_WHITE);
+    "Hold [SHIFT] to create multiple blocks.", bbm->font, MLV_COLOR_WHITE);
   MLV_draw_text_with_font(
     (dims->x/2-2.2)*size,
     size*2,

@@ -114,13 +114,15 @@ void bombermanLoop(Bomberman *bbm){
   /* Check if the user presses escape */
   if(isJustDown(bbm->inputs->escape)){
     switch(bbm->state){
-      /* If it presses escape on the title screen, we quit the game */
+      /* If he presses escape on the title screen, we quit the game */
       case sMenu:
         bbm->closed = 1;
         break;
-      /* Overwise we get back to the title screen */
-      default:
+      /* If he presses escape on the editor, we get back to the title screen */
+      case sEditor:
         setState(bbm, sMenu);
+      default:
+        break;
     }
   }
 }
