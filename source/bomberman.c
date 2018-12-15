@@ -5,6 +5,7 @@ void initAllSprites(Bomberman *bbm){
   char path[50];
   Coord *spriteDims = newCoord(bbm->grid->size, bbm->grid->size);
   Coord *spriteDimsBonus = newCoord(bbm->grid->size*2/3, bbm->grid->size*2/3);
+  Coord *titleScreenDims = newCoord(bbm->grid->size*15, bbm->grid->size*8);
   /* Loads the sprites */
   debug(0, "Loading sprites...\n");
   bbm->sprites = initSprites();
@@ -36,8 +37,10 @@ void initAllSprites(Bomberman *bbm){
     bbm->sprPlayerRight[i] = newSprite(bbm->sprites, path, spriteDims, 0);
   }
   bbm->sprPlayerDead = newSprite(bbm->sprites, "players/dead%d.png", spriteDims, 0);
+  bbm->sprTitleScreen = newSprite(bbm->sprites, "titlescreen%d.png", titleScreenDims, 0);
   free(spriteDims);
   free(spriteDimsBonus);
+  free(titleScreenDims);
 }
 
 void initAllObjects(Bomberman *bbm){

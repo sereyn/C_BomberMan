@@ -2,6 +2,7 @@
 #define MENU
 
 #include "bomberman.h"
+#include "sprites.h"
 #include "utils.h"
 #include "files.h"
 #include "inputs.h"

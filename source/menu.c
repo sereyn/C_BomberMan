@@ -30,12 +30,12 @@ void drawMenu(Menu *menu, Bomberman *bbm){
   MLV_Color textColor = MLV_COLOR_WHITE;
   unsigned int i;
   int size = bbm->grid->size;
-  int marginLeft = 2, marginTop = 3;
+  int marginLeft = 9, marginTop = 7;
   char *optionText;
   /* We show the title */
-  MLV_draw_text_with_font(
-    marginLeft*size, marginTop*size,
-    "BOMBERMAN", bbm->font, MLV_COLOR_WHITE);
+  drawSprite(bbm->sprTitleScreen,
+    size+(size*bbm->grid->dimensions->x-bbm->sprTitleScreen->dimensions->x)/2,
+    size*2, 0);
   /* Now it all depends of on which phase of the menu we are on */
   if(menu->phase == 0){
     /* Phase 0: We show all the options */

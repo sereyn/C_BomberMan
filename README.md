@@ -8,6 +8,10 @@ Projet universitaire, codé en C, réalisé à l'aide des librairies MLV et SDL.
 
 Il vous faudra installer la [librairie MLV](http://www-igm.univ-mlv.fr/~boussica/mlv/).
 
+### Terminal
+
+Le jeu est entièrement jouable dans le terminal (à l'exception de l'écran titre), pour se faire il suffit de changer dans le fichier `utils.h` la variable `DEBUG_LEVEL` en n'importe quel entier plus grand que `5`. Pour n'afficher aucun message dans le terminal, mettre cette valeur à `0`.
+
 ### Compiler le projet
 
 Utilisez `make` depuis le dossier racine afin de compiler et lancer le jeu.

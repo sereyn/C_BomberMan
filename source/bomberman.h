@@ -28,7 +28,9 @@ typedef struct {
   Sprite *sprBlock, *sprFloor, *sprBox, *sprSpike, *sprArrow, *sprBomb,
   *sprFlameCenter, *sprFlameXSide, *sprFlameYSide, *sprFlameRightTip,
   *sprFlameLeftTip, *sprFlameUpTip, *sprFlameDownTip, *sprBonusFlame, *sprBonusBomb, *sprBonusSpeed,
-  *sprPlayerDown[4], *sprPlayerUp[4], *sprPlayerLeft[4], *sprPlayerRight[4], *sprPlayerDead;
+  *sprPlayerDown[4], *sprPlayerUp[4], *sprPlayerLeft[4], *sprPlayerRight[4],
+  *sprPlayerDead, *sprTitleScreen;
+
   /* Objects */
   Objects *floors, *blocks, *boxes, *spikes, *bombs, *flames, *players, *bonus;
   /* Grid, font, inputs, state, ... */
